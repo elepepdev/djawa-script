@@ -1,53 +1,99 @@
 [English](./README.md) | [Bahasa Indonesia](./README-ID.md)
----
-# DjawaScript Project
 
-JawaScript is a transpiler for a simple programming language inspired by Javanese and other programming languages, such as jaksel-script.
+---
+
+# DjawaScript
+
+**DjawaScript** is a transpiler-based programming language inspired by Javanese, with JavaScript as its parent language. Write code using Javanese words — DjawaScript compiles it into valid JavaScript.
+
+> Source files use the `.jawa` extension. The CLI tool is named `djawa`.
+
+---
 
 ## Table of Contents
 
-- [Language Features](#language-features)
+- [Quick Start](#quick-start)
+- [Core Concepts](#core-concepts)
   - [Code Blocks: `terus` & `mbari`](#code-blocks-terus--mbari)
   - [Comments](#comments)
   - [Variables](#variables)
-  - [Console and User Input](#console-and-user-input)
   - [Data Types](#data-types)
-  - [Optional Type System](#optional-type-system)
+  - [Console & User Input](#console--user-input)
+- [Type System (Optional)](#type-system-optional)
 - [Control Flow](#control-flow)
+  - [Conditionals: `lek`, `lek misale`, `liyane`](#conditionals-lek-lek-misale-liyane)
   - [Ternary Operator: `ta` & `lek gak`](#ternary-operator-ta--lek-gak)
-  - [Functions](#functions)
+  - [Loops](#loops)
+  - [Switch Statement: `pilih`](#switch-statement-pilih)
+- [Functions](#functions)
+  - [Regular Functions: `gawe`](#regular-functions-gawe)
   - [Arrow Functions: `lakoni`](#arrow-functions-lakoni)
-  - [Error Handling](#error-handling)
-  - [Asynchronous Operations](#asynchronous-operations)
-  - [Tuple (Immutable Pair Data)](#tuple-immutable-pair-data)
-- [Jawascript Unique Features](#jawascript-unique-features)
-  - [Null/Undefined Checks: `iku ono` & `iku ilang`](#nullundefined-checks-iku-ono--iku-ilang)
-- [Operators and Comparators](#operators-and-comparators)
+  - [Generator Functions: `tenangan` & `asilno`](#generator-functions)
+  - [Async Functions: `tenangan` & `enteni`](#async-functions-tenangan--enteni)
+- [Error Handling](#error-handling)
+- [Operators & Comparators](#operators--comparators)
+  - [Arithmetic & Assignment Operators](#arithmetic--assignment-operators)
+  - [Comparison & Logical Operators](#comparison--logical-operators)
+  - [Special Operators](#special-operators)
   - [Optional Chaining: `.mungkin.`](#optional-chaining-mungkin)
-  - [Nullish Coalescing Operator: `utowoYenKosong`](#nullish-coalescing-operator-utowoyenkosong)
+  - [Nullish Coalescing: `utowoYenKosong`](#nullish-coalescing-utowoyenkosong)
   - [Bitwise Operators](#bitwise-operators)
+- [Unique Features](#unique-features)
+  - [Null/Undefined Checks: `iku ono` & `iku ilang`](#nullundefined-checks-iku-ono--iku-ilang)
+  - [Tuple (Immutable Data)](#tuple-immutable-data)
 - [Special Keywords](#special-keywords)
-- [Module System: `jupukno` & `metokno`](#module-system-jupukno--metokno)
-  - [Re-exporting as Namespace: `metokno kabeh dadi ...`](#re-exporting-as-namespace-metokno-kabeh-dadi)
-  - [Dynamic Imports: `jupukno(...)`](#dynamic-imports-jupukno)
-- [Class & Inheritance (OOP)](#class--inheritance-oop)
-- [Metaprogramming: `Perantara` (Proxy) and `Pantulan` (Reflect)](#metaprogramming-perantara-proxy-and-pantulan-reflect)
-- [Built-in Functions](#built-in-functions)
-  - [Global Values](#global-values)
-  - [Global Constructors](#global-constructors)
-  - [`Mtk` Object (for `Math`)](#mtk-object-for-math)
-  - [`Tanggalan` Object (for `Date`)](#tanggalan-object-for-date)
-  - [`DataJSON` Object (for `JSON`)](#datajson-object-for-json)
+- [Object-Oriented Programming (OOP)](#object-oriented-programming-oop)
+- [Module System](#module-system)
+- [Metaprogramming: `Perantara` & `Pantulan`](#metaprogramming-perantara--pantulan)
+- [Built-in Library](#built-in-library)
+  - [Global Values & Constructors](#global-values--constructors)
+  - [`Mtk` — Math Object](#mtk--math-object)
+  - [`Tanggalan` — Date Object](#tanggalan--date-object)
+  - [`DataJSON` — JSON Object](#datajson--json-object)
   - [Global Functions](#global-functions)
   - [Promise Methods: `.banjur` & `.nyekel`](#promise-methods-banjur--nyekel)
-  - [Array & String Methods](#array--string-methods)
-- [CLI Usage](#cli-usage)
+  - [Array Methods](#array-methods)
+  - [String Methods](#string-methods)
+  - [Shared Array & String Methods](#shared-array--string-methods)
+- [CLI Reference](#cli-reference)
 
-Code is written in files with the `.jawa` extension.
+---
+
+## Quick Start
+
+**1. Install via npm:**
+```bash
+npm install -g @jawirhytam/jawirscript
+```
+
+Or install the latest version from GitHub:
+```bash
+npm install -g https://github.com/gegesteorngoding/djawa-script
+```
+
+**2. Create a new file:**
+```bash
+djawa make hello
+```
+
+**3. Write your first program (`hello.jawa`):**
+```jawascript
+iki iku jeneng yoiku "Dunia"
+cetakno("Halo, " tambah jeneng tambah "!")
+```
+
+**4. Run it:**
+```bash
+djawa run hello.jawa
+```
+
+---
+
+## Core Concepts
 
 ### Code Blocks: `terus` & `mbari`
 
-Jawascript is a block-based language. All code blocks (for functions, loops, conditionals, etc.) must start with the `terus` keyword and end with the `mbari` keyword.
+DjawaScript is a **block-based** language. Every code block — whether for a function, loop, or conditional — must open with `terus` and close with `mbari`. Think of them as the `{` and `}` of DjawaScript.
 
 ```jawascript
 lek (tenan) terus
@@ -57,13 +103,21 @@ mbari
 
 ### Comments
 
-- **Single-line comments:** Start with `//`.
-- **Multi-line comments:** Start with `/*` and end with `*/`.
+```jawascript
+// This is a single-line comment
+
+/*
+  This is a
+  multi-line comment
+*/
+```
 
 ### Variables
 
-- `iki iku`: For declaring a constant variable (cannot be reassigned).
-- `jarno`: For declaring a mutable variable (can be reassigned).
+| Keyword | JavaScript Equivalent | Description |
+| :--- | :--- | :--- |
+| `iki iku` | `const` | Constant — cannot be reassigned |
+| `jarno` | `let` | Mutable — can be reassigned |
 
 ```jawascript
 // Constant variable
@@ -71,27 +125,43 @@ iki iku name yoiku "Budi"
 
 // Mutable variable
 jarno age yoiku 25
-age yoiku age tambah 1 // age is now 26
+age yoiku age tambah 1  // age is now 26
 ```
 
-### Console and User Input
+### Data Types
 
-Jawascript provides the `cetakno` object (equivalent to JavaScript's `console`) for logging and debugging, and `takon` for user input.
+| DjawaScript | JavaScript | Description |
+| :--- | :--- | :--- |
+| `tenan` | `true` | Boolean true |
+| `gak` | `false` | Boolean false |
+| `kosong` | `null` | Null value |
+| `oraDidefinisikan` | `undefined` | Undefined value |
 
-| Method | Description |
-| :--- | :--- |
-| `cetakno(...)` | Prints output to the console. |
-| `cetakno.peringatan(...)` | Logs a warning message to the console. |
-| `cetakno.kesalahan(...)` | Logs an error message to the console. |
-| `cetakno.info(...)` | Logs an informational message to the console. |
-| `cetakno.debug(...)` | Logs a debug message to the console. |
-| `cetakno.tabel(data)` | Displays tabular data as a table. |
-| `cetakno.hitung(label)` | Logs the number of times that `count()` has been invoked with a given label. |
-| `cetakno.waktu(label)` | Starts a timer you can use to track how long an operation takes. |
-| `cetakno.akhirWaktu(label)` | Stops a timer that was previously started by calling `cetakno.waktu()`. |
-| `cetakno.grup(label)` | Creates a new inline group in the console. |
-| `cetakno.akhirGrup()` | Ends the current inline group in the console. |
-| `takon(message)` | Prompts the user for input and returns the value. |
+```jawascript
+jarno isLearning yoiku tenan
+jarno score yoiku 100
+jarno message yoiku "Sugeng sinau!"
+jarno nothing yoiku kosong
+```
+
+### Console & User Input
+
+The `cetakno` object is DjawaScript's equivalent of JavaScript's `console`. Use `takon` to prompt for user input.
+
+| Method | JavaScript Equivalent | Description |
+| :--- | :--- | :--- |
+| `cetakno(...)` | `console.log(...)` | Print output to the console |
+| `cetakno.peringatan(...)` | `console.warn(...)` | Log a warning message |
+| `cetakno.kesalahan(...)` | `console.error(...)` | Log an error message |
+| `cetakno.info(...)` | `console.info(...)` | Log an informational message |
+| `cetakno.debug(...)` | `console.debug(...)` | Log a debug message |
+| `cetakno.tabel(data)` | `console.table(data)` | Display data as a table |
+| `cetakno.hitung(label)` | `console.count(label)` | Log how many times this line has been called |
+| `cetakno.waktu(label)` | `console.time(label)` | Start a timer |
+| `cetakno.akhirWaktu(label)` | `console.timeEnd(label)` | Stop a timer and print elapsed time |
+| `cetakno.grup(label)` | `console.group(label)` | Start a collapsible group in the console |
+| `cetakno.akhirGrup()` | `console.groupEnd()` | End the current console group |
+| `takon(message)` | `prompt(message)` | Prompt the user for input |
 
 ```jawascript
 cetakno("Hello World!")
@@ -101,186 +171,123 @@ cetakno("Welcome, " tambah yourName)
 
 cetakno.peringatan("This is a warning!")
 cetakno.kesalahan("This is an error!")
-cetakno.waktu("myOperation")
-// ... some code ...
-cetakno.akhirWaktu("myOperation")
+
+cetakno.waktu("myTimer")
+// ... some operations ...
+cetakno.akhirWaktu("myTimer")
 ```
 
-### Data Types
+---
 
-Keywords for primitive data types and values.
+## Type System (Optional)
 
-- `tenan`: Represents the boolean value `true`.
-- `gak`: Represents the boolean value `false`.
-- `kosong`: Represents a `null` value.
-- `oraDidefinisikan`: Represents an `undefined` value.
+DjawaScript supports an **optional static type system** similar to TypeScript. Adding type annotations is not required, but it helps catch bugs early and makes code easier to understand.
 
-```jawascript
-jarno isStillLearning yoiku tenan
-lek (isStillLearning plek tenan) terus
-  cetakno("Keep going!")
-mbari
-```
+**Supported Types:**
 
-### Optional Type System
-
-Jawascript supports an optional static type system, similar to GDScript or TypeScript. This allows you to add type annotations to your variables, function parameters, and function return types. While not mandatory, using types can significantly improve code readability, and help catch errors early during development.
-
-**Key Benefits:**
--   **Early Error Detection:** Catch type-related bugs before runtime.
--   **Improved Readability:** Code becomes self-documenting, making it easier to understand.
+| DjawaScript Type | JavaScript Type |
+| :--- | :--- |
+| `Angka` | `number` |
+| `Teks` | `string` |
+| `Logika` | `boolean` |
+| `Kosong` | `null` |
+| `OraDidefinisikan` | `undefined` |
+| `Daftar` | `Array` |
+| `Obyek` | `Object` |
+| `Sembarang` | `any` |
+| `OraOno` | `void` |
 
 **Syntax:**
 
--   **Variable Declarations:**
 ```jawascript
-jarno age: Angka = 30;
-iki iku name: Teks = "Budi";
-jarno isActive: Logika = tenan;
-```
+// Variable declarations with types
+jarno age: Angka = 30
+iki iku name: Teks = "Budi"
+jarno isActive: Logika = tenan
 
--   **Function Parameters and Return Types:**
-```jawascript
+// Function parameters and return types
 gawe greet(name: Teks): Teks terus
-  balekno "Hello " tambah name;
+  balekno "Hello " tambah name
 mbari
 
 gawe add(a: Angka, b: Angka): Angka terus
-  balekno a tambah b;
+  balekno a tambah b
+mbari
+
+// Arrow function with types
+jarno getAge yoiku (birthYear: Angka): Angka lakoni 2025 kurang birthYear
+
+jarno printInfo yoiku (message: Teks, count: Angka): OraOno lakoni terus
+  cetakno(message tambah ": " tambah count)
 mbari
 ```
 
--   **Arrow Functions (Parameters and Return Types):**
- ```jawascript
-jarno getAge = (birthYear: Angka): Angka lakoni
-  balekno 2025 kurang birthYear;
+> **How it works:** When types are used, DjawaScript transpiles your code to valid TypeScript. You can then run `tsc` to perform static type checking and produce final JavaScript output.
 
-jarno printInfo = (message: Teks, count: Angka): OraOno lakoni terus
-  cetakno(message tambah ": " tambah count);
-mbari;
- ```
+---
 
-**Supported Basic Types:**
--   `Angka` (JavaScript `number`)
--   `Teks` (JavaScript `string`)
--   `Logika` (JavaScript `boolean`)
--   `Kosong` (JavaScript `null`)
--   `OraDidefinisikan` (JavaScript `undefined`)
--   `Daftar` (JavaScript `Array`)
--   `Obyek` (JavaScript `Object`)
--   `Sembarang` (JavaScript `any`)
--   `OraOno` (JavaScript `void`)
+## Control Flow
 
-**How it Works:**
-Jawascript transpiles code with type annotations into valid TypeScript syntax. You can then use a TypeScript compiler (`tsc`) to perform static type checking and generate the final JavaScript output.
+### Conditionals: `lek`, `lek misale`, `liyane`
 
-### Control Flow
-
-Manage the flow of your program with conditionals, loops, and switch statements.
-
-- **Conditionals**
-  - `lek (condition)`: Starts a conditional block that executes if the condition is true.
-  - `lek misale (condition)`: An additional conditional block (`else if`).
-  - `liyane`: A block that executes if all previous conditions are false (`else`).
-
-### Ternary Operator: `ta` & `lek gak`
-
-Jawascript provides a concise conditional expression, similar to JavaScript's ternary operator (`? :`), using the keywords `ta` and `lek gak`.
-
-- `condition ta value_if_true lek gak value_if_false`: Evaluates `condition`. If true, returns `value_if_true`; otherwise, returns `value_if_false`.
+| Keyword | JavaScript Equivalent | Description |
+| :--- | :--- | :--- |
+| `lek (condition)` | `if (condition)` | Executes block if condition is true |
+| `lek misale (condition)` | `else if (condition)` | Additional condition check |
+| `liyane` | `else` | Executes if all previous conditions are false |
 
 ```jawascript
-// JS: const status = age >= 18 ? 'Adult' : 'Minor';
-
-iki iku age yoiku 20;
-iki iku status yoiku age luwihGedhePodo 18 ta 'Adult' lek gak 'Minor';
-cetakno("Status:", status); // Output: Adult
-
-jarno anotherAge yoiku 15;
-cetakno("Status:", anotherAge luwihGedhePodo 18 ta 'Adult' lek gak 'Minor'); // Output: Minor
-```
-
-- **Loops**
-  - `kanggo (init; cond; iter)`: A `for` loop construct.
-  - `selagi (condition)`: A `while` loop construct.
-  - `lakoni ... selagi (condition)`: A `do...while` loop construct, ensuring the block executes at least once.
-
-### `for...in` Loop
-
-Jawascript supports iterating over the enumerable properties of an object using the `kanggo...ing` loop, similar to JavaScript's `for...in` loop.
-
-- `kanggo (iki iku key ing object) terus ... mbari`: Iterates over the keys (property names) of an object.
-
-```jawascript
-iki iku user yoiku { name: 'Sastro', age: 30, city: 'Jogja' };
-
-cetakno('User properties:');
-kanggo (iki iku key ing user) terus
-  cetakno(`${key}: ${user[key]}`);
-mbari
-// Output:
-// name: Sastro
-// age: 30
-// city: Jogja
-```
-
-### `for...of` Loop (`kanggo...soko...`)
-
-To iterate over the values of an iterable object (like an Array, String, Map, or Set), Jawascript provides the `kanggo...soko...` loop. This is different from `kanggo...ing` (`for...in`), which iterates over the keys or indices.
-
-- `kanggo (iki iku value soko iterable) terus ... mbari`: Iterates over the values of an iterable.
-
-```jawascript
-// Example with an Array
-iki iku fruits yoiku ['apple', 'orange', 'mango'];
-kanggo (iki iku fruit soko fruits) terus
-  cetakno(fruit);
-mbari
-// Output:
-// apple
-// orange
-// mango
-
-// Example with a String
-iki iku name yoiku "Slamet";
-kanggo (iki iku letter soko name) terus
-  cetakno(letter);
-mbari
-// Output:
-// S
-// l
-// a
-// m
-// e
-// t
-```
-
-- **Switch Statement**
-  - `pilih (variable)`: A `switch` statement construct.
-  - `kalo (value):`: A `case` block within a switch.
-  - `yowes:`: The `default` block within a switch.
-
-- **Loop/Switch Control**
-  - `mandek`: Exits a loop or switch statement (`break`).
-  - `lanjutno`: Skips to the next iteration of a loop (`continue`).
-
-```jawascript
-// Example of if/else
 jarno score yoiku 85
+
 lek (score luwihGedhe 90) terus
   cetakno("Excellent")
 mbari lek misale (score luwihGedhe 75) terus
   cetakno("Good")
 mbari liyane terus
-  cetakno("Sufficient")
+  cetakno("Keep practicing!")
 mbari
+```
 
-// Example of a for loop
-kanggo (jarno i yoiku 0; i luwihCilik 3; i++) terus
+### Ternary Operator: `ta` & `lek gak`
+
+A concise inline conditional, equivalent to JavaScript's `? :` ternary.
+
+**Syntax:** `condition ta value_if_true lek gak value_if_false`
+
+```jawascript
+// JS: const status = age >= 18 ? 'Adult' : 'Minor';
+
+iki iku age yoiku 20
+iki iku status yoiku age luwihGedhePodo 18 ta 'Adult' lek gak 'Minor'
+cetakno(status)  // Output: Adult
+```
+
+### Loops
+
+**`for` loop — `kanggo`**
+
+```jawascript
+kanggo (jarno i yoiku 0; i luwihCilik 5; i++) terus
   cetakno(i)
 mbari
+// Output: 0 1 2 3 4
+```
 
-// Example of a do...while loop
+**`while` loop — `selagi`**
+
+```jawascript
+jarno count yoiku 0
+selagi (count luwihCilik 3) terus
+  cetakno(count)
+  count++
+mbari
+```
+
+**`do...while` loop — `lakoni...selagi`**
+
+The block runs at least once, even if the condition is false from the start.
+
+```jawascript
 jarno count yoiku 0
 lakoni terus
   cetakno("Count: " tambah count)
@@ -288,11 +295,79 @@ lakoni terus
 mbari selagi (count luwihCilik 3)
 ```
 
-### Functions
+**`for...in` loop — `kanggo...ing`**
 
-- `gawe (name)(params)`: Defines a function.
-- `balekno (value)`: Returns a value from a function.
-- `asilno (value)`: Pauses and resumes a generator function, returning a value from the generator (`yield`).
+Iterates over the **keys** (property names) of an object.
+
+```jawascript
+iki iku user yoiku { name: 'Sastro', age: 30, city: 'Jogja' }
+
+kanggo (iki iku key ing user) terus
+  cetakno(key tambah ": " tambah user[key])
+mbari
+// Output:
+// name: Sastro
+// age: 30
+// city: Jogja
+```
+
+**`for...of` loop — `kanggo...soko`**
+
+Iterates over the **values** of an iterable (Array, String, Map, Set, etc.).
+
+```jawascript
+iki iku fruits yoiku ['apple', 'orange', 'mango']
+
+kanggo (iki iku fruit soko fruits) terus
+  cetakno(fruit)
+mbari
+// Output:
+// apple
+// orange
+// mango
+```
+
+**Loop control:**
+
+| Keyword | JavaScript Equivalent | Description |
+| :--- | :--- | :--- |
+| `mandek` | `break` | Exit the loop immediately |
+| `lanjutno` | `continue` | Skip to the next iteration |
+
+### Switch Statement: `pilih`
+
+| Keyword | JavaScript Equivalent | Description |
+| :--- | :--- | :--- |
+| `pilih (variable)` | `switch (variable)` | Start a switch statement |
+| `kalo (value):` | `case (value):` | A case block |
+| `yowes:` | `default:` | Default block if no case matches |
+| `mandek` | `break` | Exit the switch |
+
+```jawascript
+jarno day yoiku "Monday"
+
+pilih (day) terus
+  kalo "Monday":
+    cetakno("Start of the work week!")
+    mandek
+  kalo "Friday":
+    cetakno("Almost weekend!")
+    mandek
+  yowes:
+    cetakno("Regular day.")
+mbari
+```
+
+---
+
+## Functions
+
+### Regular Functions: `gawe`
+
+| Keyword | JavaScript Equivalent | Description |
+| :--- | :--- | :--- |
+| `gawe name(params)` | `function name(params)` | Declare a function |
+| `balekno value` | `return value` | Return a value |
 
 ```jawascript
 gawe calculateArea(length, width) terus
@@ -300,9 +375,40 @@ gawe calculateArea(length, width) terus
 mbari
 
 iki iku area yoiku calculateArea(10, 5)
-cetakno(area) // -> 50
+cetakno(area)  // Output: 50
+```
 
-// Example of a generator function using asilno
+### Arrow Functions: `lakoni`
+
+A shorter function syntax equivalent to JavaScript's `=>` arrow functions.
+
+- **Single-line:** The return is implicit — no need for `balekno`.
+- **Multi-line:** Wrap the body in `terus` and `mbari`, and use `balekno` explicitly.
+
+```jawascript
+// Single-line (implicit return)
+// JS: const multiply = (a, b) => a * b;
+iki iku multiply yoiku (a, b) lakoni a ping b
+cetakno(multiply(7, 8))  // Output: 56
+
+// Used as a callback
+iki iku numbers yoiku [1, 2, 3]
+iki iku doubled yoiku numbers.petakake(n lakoni n ping 2)
+cetakno(doubled)  // Output: [2, 4, 6]
+
+// Multi-line (explicit return)
+iki iku greet yoiku (name) lakoni terus
+  iki iku greeting yoiku "Welcome, " tambah name
+  balekno greeting
+mbari
+cetakno(greet("Sastro"))  // Output: Welcome, Sastro
+```
+
+### Generator Functions
+
+Use `tenangan` to declare a generator and `asilno` (`yield`) to pause and return a value.
+
+```jawascript
 gawe tenangan idGenerator() terus
   jarno id yoiku 0
   selagi (tenan) terus
@@ -310,324 +416,271 @@ gawe tenangan idGenerator() terus
   mbari
 mbari
 
-jarno generator yoiku idGenerator anyar()
-cetakno(generator.next().value) // Output: 0
-cetakno(generator.next().value) // Output: 1
+jarno gen yoiku idGenerator anyar()
+cetakno(gen.next().value)  // Output: 0
+cetakno(gen.next().value)  // Output: 1
 ```
 
-### Arrow Functions: `lakoni`
+### Async Functions: `tenangan` & `enteni`
 
-Jawascript supports a shorter syntax for functions, equivalent to JavaScript's arrow functions (`=>`), using the `lakoni` keyword. `lakoni` translates to "do" or "perform", capturing the essence of mapping parameters to an output.
-
-- **Implicit Return:** For single-line functions, the return is implicit.
-- **Block Body:** For multi-line functions, you can use the `terus` and `mbari` keywords.
+| Keyword | JavaScript Equivalent | Description |
+| :--- | :--- | :--- |
+| `tenangan` | `async` | Declares an asynchronous function |
+| `enteni` | `await` | Waits for a Promise to resolve |
 
 ```jawascript
-// JS: const multiply = (a, b) => a * b;
-iki iku multiply yoiku (a, b) lakoni a ping b;
-cetakno(multiply(7, 8)); // -> 56
-
-// Used as a callback
-iki iku numbers yoiku [1, 2, 3];
-iki iku numbersDoubled yoiku numbers.petakake(n lakoni n ping 2);
-cetakno(numbersDoubled); // -> [2, 4, 6]
-
-// With a block body
-iki iku greet yoiku (name) lakoni terus
-  iki iku greeting yoiku "Welcome, " tambah name;
-  balekno greeting;
-mbari;
-cetakno(greet("Sastro")); // -> Welcome, Sastro
+tenangan gawe processData() terus
+  cetakno("Fetching data...")
+  iki iku data yoiku enteni fetchData()
+  cetakno("Data received:", data)
+mbari
 ```
 
-### Error Handling
+---
 
-- `cobak`: Starts a block to test for potential errors (`try`).
-- `nyekel (error)`: A block that executes if an error occurs in the `cobak` block (`catch`).
-- `pungkasan`: A block that always executes after `cobak` and `nyekel`, regardless of the outcome (`finally`).
-- `uncalen (value)`: Throws a custom error (`throw`).
+## Error Handling
+
+| Keyword | JavaScript Equivalent | Description |
+| :--- | :--- | :--- |
+| `cobak` | `try` | Start a block that might throw an error |
+| `nyekel (error)` | `catch (error)` | Handle the error if one is thrown |
+| `pungkasan` | `finally` | Always runs, regardless of success or failure |
+| `uncalen value` | `throw value` | Throw a custom error |
 
 ```jawascript
 cobak terus
-  uncalen "Oh no, an error!"
+  uncalen "Something went wrong!"
 mbari nyekel (e) terus
   cetakno("Caught error: " tambah e)
 mbari pungkasan terus
-  cetakno("This is always executed")
+  cetakno("This always runs.")
 mbari
 ```
 
-### Asynchronous Operations
+---
 
-- `tenangan`: Declares an asynchronous function (`async`).
-- `enteni`: Pauses the execution of an async function to wait for a Promise to resolve (`await`).
+## Operators & Comparators
 
-```jawascript
-// Assuming a function that returns a Promise
-gawe fetchData() { ... }
+> **Important:** Always leave a space before and after operators.
+> ✅ `5 tambah 3` &nbsp;&nbsp; ❌ `5'tambah'3`
 
-tenangan gawe processData() terus
-  cetakno("Starting to fetch data...")
-  iki iku data yoiku enteni fetchData()
-  cetakno("Data fetched successfully:", data)
-mbari
-```
+### Arithmetic & Assignment Operators
 
-### Tuple (Immutable Pair Data)
-
-Jawascript features a unique `Tuple` data type, similar to an array but its contents cannot be changed (immutable) after creation. This is ideal for data that should remain constant, such as coordinates or pairs of values.
-
-To create a `Tuple`, you can use the `tuple(...)` function.
-
-```jawascript
-// Create a coordinate Tuple
-iki iku coordinates yoiku tuple(10, 20)
-cetakno(coordinates[0]) // Output: 10
-cetakno(coordinates[1]) // Output: 20
-
-// Attempt to modify Tuple content (this will not succeed due to immutability)
-cobak terus
-  coordinates[0] = 5 // This will not change the value
-mbari nyekel (e) terus
-  cetakno("Error when modifying tuple:", e.message) // If an error occurs, it will be caught here
-mbari
-cetakno(coordinates[0]) // Output: Still 10
-
-// Tuples can contain different data types
-iki iku userInfo yoiku tuple("Budi", 28, tenan)
-cetakno(userInfo[0]) // Output: "Budi"
-cetakno(userInfo[1]) // Output: 28
-```
-
-## Jawascript Unique Features
-
-To fulfill the vision of being simpler and more expressive than JavaScript, Jawascript introduces unique syntactic sugar for common patterns.
-
-### Null/Undefined Checks: `iku ono` & `iku ilang`
-
-Checking for `null` or `undefined` is a very common task. Jawascript simplifies this with two dedicated keywords: `ono` (exists) and `ilang` (is missing/gone).
-
-- `variable iku ono`: Checks if a variable is **NOT** `null` or `undefined`.
-- `variable iku ilang`: Checks if a variable **IS** `null` or `undefined`.
-
-This provides a more readable and less error-prone way to handle potentially empty values. Under the hood, `iku ilang` is transpiled to `== null`, which is a well-known JavaScript trick to check for both `null` and `undefined` at the same time.
-
-```jawascript
-jarno emptyVar yoiku kosong; // null
-jarno anotherVar;
-
-jarno filledVar yoiku 0;
-
-// Check for absence
-lek (emptyVar iku ilang) terus
-  cetakno('emptyVar is missing.'); // This will run
-mbari
-
-lek (anotherVar iku ilang) terus
-  cetakno('anotherVar is also missing.'); // This will also run
-mbari
-
-// Check for existence
-lek (filledVar iku ono) terus
-  cetakno('filledVar exists, its value is: ', filledVar); // This will run
-mbari
-
-lek (emptyVar iku ono) terus
-  // This block will not run
-mbari liyane terus
-  cetakno('emptyVar does not exist.');
-mbari
-```
-
-## Operators and Comparators
-
-Jawascript replaces common JavaScript operators with Javanese words to make the code more expressive.
-
-**Important:** When using most of these operators, you **must** leave a space before and after them. The main exception is `ora` (`!`), which is typically placed before a value or group.
-
-**Correct:** `jarno result yoiku 5 tambah 3`
-**Incorrect:** `jarno result yoiku 5'tambah'3`
-
-| Javanese Operator | JavaScript Equivalent | Description |
+| DjawaScript | JavaScript | Description |
 | :--- | :--- | :--- |
-| `yoiku` | `=` | Assignment |
 | `tambah` | `+` | Addition |
 | `kurang` | `-` | Subtraction |
 | `ping` | `*` | Multiplication |
 | `bagi` | `/` | Division |
 | `siso` | `%` | Modulo (remainder) |
 | `pangkat` | `**` | Exponentiation |
-| `tambahKaro` | `+=` | Addition assignment |
-| `kurangKaro` | `-=` | Subtraction assignment |
-| `pingKaro` | `*=` | Multiplication assignment |
-| `bagiKaro` | `/=` | Division assignment |
-| `sisoKaro` | `%=` | Modulo assignment |
-| `plek` | `===` | Strict equality (equal value and type) |
-| `podo` | `==` | Loose equality (equal value) |
+| `yoiku` | `=` | Assignment |
+| `tambahKaro` | `+=` | Add and assign |
+| `kurangKaro` | `-=` | Subtract and assign |
+| `pingKaro` | `*=` | Multiply and assign |
+| `bagiKaro` | `/=` | Divide and assign |
+| `sisoKaro` | `%=` | Modulo and assign |
+
+### Comparison & Logical Operators
+
+| DjawaScript | JavaScript | Description |
+| :--- | :--- | :--- |
+| `plek` | `===` | Strict equality (value AND type match) |
+| `podo` | `==` | Loose equality (value match only) |
 | `gakPlek` | `!==` | Strict inequality |
 | `gakPodo` | `!=` | Loose inequality |
 | `luwihGedhe` | `>` | Greater than |
 | `luwihCilik` | `<` | Less than |
-| `luwihGedhePodo`| `>=` | Greater than or equal to |
-| `luwihCilikPodo`| `<=` | Less than or equal to |
+| `luwihGedhePodo` | `>=` | Greater than or equal to |
+| `luwihCilikPodo` | `<=` | Less than or equal to |
 | `lan` | `&&` | Logical AND |
-| `utawa` | `||` | Logical OR |
+| `utawa` | `\|\|` | Logical OR |
 | `ora` | `!` | Logical NOT |
-| `ikuJinise` | `instanceof` | Checks if an object is an instance of a specific class |
-| `tipene` | `typeof` | Checks the data type of a value |
-| `hapusen` | `delete` | Deletes a property from an object |
-| `kosongno` | `void` | Evaluates an expression and returns `undefined` |
-| `ing` | `in` | Checks if a property exists in an object |
-
-### Optional Chaining: `.mungkin.`
-
-Jawascript provides a safe way to access properties of an object that might be `null` or `undefined` without causing an error. This is achieved using the `.mungkin.` syntax, similar to JavaScript's `?.` operator.
-
-- `.mungkin.`: Safely accesses a property. If any part of the chain is `null` or `undefined`, the expression short-circuits and returns `undefined`.
 
 ```jawascript
-iki iku user yoiku { name: 'Sastro', address: { street: 'Jl. Kenangan' } };
-iki iku emptyUser yoiku kosong;
+iki iku a yoiku 10
+iki iku b yoiku 4
 
-// Accessing an existing property
-iki iku streetName yoiku user.address.mungkin.street;
-cetakno('Street Name:', streetName); // Output: Jl. Kenangan
+jarno result yoiku a tambah b  // -> 14
+cetakno(2 pangkat 3)           // -> 8
 
-// Accessing a non-existent property
-iki iku postalCode yoiku user.address.mungkin.postalCode;
-cetakno('Postal Code (non-existent):', postalCode); // Output: undefined
-
-// Accessing property from a null object
-iki iku emptyStreetName yoiku emptyUser.mungkin.address.mungkin.street;
-cetakno('Street Name from null object:', emptyStreetName); // Output: undefined
-```
-
-### Nullish Coalescing Operator: `utowoYenKosong`
-
-This operator provides a way to set a default value for a variable that is `null` or `undefined`. Unlike the logical OR (`||`) operator, `utowoYenKosong` only falls back to the default value if the left-hand side is strictly `null` or `undefined`, not for other falsy values like `0` or `''`.
-
-- `value utowoYenKosong defaultValue`: Returns `value` if it's not `null` or `undefined`; otherwise, returns `defaultValue`.
-
-```jawascript
-iki iku zeroValue yoiku 0;
-iki iku nullValue yoiku kosong;
-iki iku undefinedValue yoiku oraDidefinisikan;
-iki iku emptyTextValue yoiku '';
-
-cetakno('Zero Value utowoYenKosong 10:', zeroValue utowoYenKosong 10); // Output: 0
-cetakno('Null Value utowoYenKosong 10:', nullValue utowoYenKosong 10); // Output: 10
-cetakno('Undefined Value utowoYenKosong 10:', undefinedValue utowoYenKosong 10); // Output: 10
-cetakno('Empty Text Value utowoYenKosong 10:', emptyTextValue utowoYenKosong 10); // Output: ''
-
-// Compare with logical OR (utawa)
-cetakno('Zero Value utawa 10:', zeroValue utawa 10); // Output: 10 (because 0 is falsy)
-```
-
-### Bitwise Operators
-
-Jawascript provides a set of keywords for performing bitwise operations, which manipulate values at the binary bit level. These are useful for low-level programming, flag management, and certain algorithms.
-
-| Javanese Operator | JavaScript Equivalent | Description |
-| :--- | :--- | :--- |
-| `lanbit` | `&` | Bitwise AND |
-| `utawabit` | `|` | Bitwise OR |
-| `xor` | `^` | Bitwise XOR (Exclusive OR) |
-| `walik` | `~` | Bitwise NOT (Inversion) |
-| `geserKiwo` | `<<` | Left Shift |
-| `geserTengen`| `>>` | Right Shift |
-| `geserTengenNol`| `>>>` | Zero-fill Right Shift |
-
-**Example:**
-```jawascript
-iki iku a yoiku 5; // Binary: 0101
-iki iku b yoiku 3; // Binary: 0011
-
-cetakno('a lanbit b:', a lanbit b); // Output: 1 (0001)
-cetakno('a utawabit b:', a utawabit b); // Output: 7 (0111)
-cetakno('a xor b:', a xor b); // Output: 6 (0110)
-cetakno('walik a:', walik a); // Output: -6 (Binary: 11111111111111111111111111111010)
-
-cetakno('a geserKiwo 1:', a geserKiwo 1); // Output: 10 (1010)
-cetakno('a geserTengen 1:', a geserTengen 1); // Output: 2 (0010)
-```
-
-**Example:**
-```jawascript
-iki iku numberOne yoiku 10
-jarno numberTwo yoiku 4
-
-// Arithmetic
-jarno addResult yoiku numberOne tambah numberTwo // -> 14
-cetakno(2 pangkat 3) // -> 8
-
-// Comparison & Logical
-lek (addResult luwihGedhe 10 lan ora (numberOne podo 0)) terus
-  cetakno("Result is greater than 10 AND numberOne is not 0")
+lek (result luwihGedhe 10 lan ora (a podo 0)) terus
+  cetakno("Result is greater than 10 and a is not 0")
 mbari
 
-// Assignment
 jarno myScore yoiku 100
-myScore kurangKaro 10 // myScore is now 90
-cetakno(myScore)
+myScore kurangKaro 10
+cetakno(myScore)  // -> 90
+```
 
-// Example for ikuJinise
+### Special Operators
+
+| DjawaScript | JavaScript | Description |
+| :--- | :--- | :--- |
+| `ikuJinise` | `instanceof` | Check if an object is an instance of a class |
+| `tipene` | `typeof` | Get the data type of a value |
+| `hapusen` | `delete` | Delete a property from an object |
+| `kosongno` | `void` | Evaluate an expression and return `undefined` |
+| `ing` | `in` | Check if a property exists in an object |
+
+```jawascript
+// ikuJinise (instanceof)
 kelas Car terus
   wujudno(brand) terus
     iki.brand yoiku brand
   mbari
 mbari
 jarno myCar yoiku Car anyar("Toyota")
-cetakno(myCar ikuJinise Car) // Output: tenan
+cetakno(myCar ikuJinise Car)  // Output: tenan
 
-// Example for tipene
-cetakno(tipene "hello") // Output: "string"
+// tipene (typeof)
+cetakno(tipene "hello")  // Output: string
 
-// Example for hapusen
+// hapusen (delete)
 jarno obj yoiku { a: 1, b: 2 }
 hapusen obj.a
-cetakno(obj.a) // Output: oraDidefinisikan
+cetakno(obj.a)  // Output: oraDidefinisikan
 
-// Example for ing
+// ing (in)
 jarno person yoiku { name: "Budi", age: 30 }
-cetakno("name" ing person) // Output: tenan
-cetakno("address" ing person) // Output: gak
+cetakno("name" ing person)     // Output: tenan
+cetakno("address" ing person)  // Output: gak
 ```
+
+### Optional Chaining: `.mungkin.`
+
+Safely access deeply nested properties without causing an error if any part of the chain is `null` or `undefined`. Equivalent to JavaScript's `?.` operator.
+
+```jawascript
+iki iku user yoiku { name: 'Sastro', address: { street: 'Jl. Kenangan' } }
+iki iku emptyUser yoiku kosong
+
+// Safe access — works fine
+iki iku street yoiku user.address.mungkin.street
+cetakno(street)  // Output: Jl. Kenangan
+
+// Safe access — property doesn't exist, returns undefined instead of crashing
+iki iku postal yoiku user.address.mungkin.postalCode
+cetakno(postal)  // Output: undefined
+
+// Safe access on a null object
+iki iku result yoiku emptyUser.mungkin.address.mungkin.street
+cetakno(result)  // Output: undefined
+```
+
+### Nullish Coalescing: `utowoYenKosong`
+
+Returns the right-hand value only when the left-hand value is **strictly** `null` or `undefined` — unlike `utawa` (`||`), it does NOT trigger for other falsy values like `0` or `''`.
+
+```jawascript
+iki iku zeroValue yoiku 0
+iki iku nullValue yoiku kosong
+
+cetakno(zeroValue utowoYenKosong 10)  // Output: 0  (0 is not null/undefined)
+cetakno(nullValue utowoYenKosong 10)  // Output: 10 (null triggers the fallback)
+
+// Compare with logical OR (utawa)
+cetakno(zeroValue utawa 10)  // Output: 10 (because 0 is falsy — different behavior!)
+```
+
+### Bitwise Operators
+
+| DjawaScript | JavaScript | Description |
+| :--- | :--- | :--- |
+| `lanbit` | `&` | Bitwise AND |
+| `utawabit` | `\|` | Bitwise OR |
+| `xor` | `^` | Bitwise XOR |
+| `walik` | `~` | Bitwise NOT |
+| `geserKiwo` | `<<` | Left shift |
+| `geserTengen` | `>>` | Right shift |
+| `geserTengenNol` | `>>>` | Zero-fill right shift |
+
+```jawascript
+iki iku a yoiku 5  // Binary: 0101
+iki iku b yoiku 3  // Binary: 0011
+
+cetakno(a lanbit b)       // Output: 1  (0001)
+cetakno(a utawabit b)     // Output: 7  (0111)
+cetakno(a xor b)          // Output: 6  (0110)
+cetakno(a geserKiwo 1)    // Output: 10 (1010)
+cetakno(a geserTengen 1)  // Output: 2  (0010)
+```
+
+---
+
+## Unique Features
+
+### Null/Undefined Checks: `iku ono` & `iku ilang`
+
+DjawaScript provides readable keywords to check whether a variable exists or is missing — no need to write `=== null || === undefined`.
+
+| Expression | Meaning |
+| :--- | :--- |
+| `variable iku ono` | Variable is **not** `null` or `undefined` |
+| `variable iku ilang` | Variable **is** `null` or `undefined` |
+
+```jawascript
+jarno emptyVar yoiku kosong
+jarno filledVar yoiku 42
+
+// Check for absence
+lek (emptyVar iku ilang) terus
+  cetakno("emptyVar is missing.")  // This runs
+mbari
+
+// Check for presence
+lek (filledVar iku ono) terus
+  cetakno("filledVar exists:", filledVar)  // This runs
+mbari
+```
+
+### Tuple (Immutable Data)
+
+A `Tuple` is like an array, but its contents **cannot be changed** after creation. Use it for data that should stay constant, like coordinates or fixed pairs.
+
+```jawascript
+// Create a coordinate Tuple
+iki iku coordinates yoiku tuple(10, 20)
+cetakno(coordinates[0])  // Output: 10
+cetakno(coordinates[1])  // Output: 20
+
+// Attempting to change a Tuple will fail silently (or throw in strict mode)
+cobak terus
+  coordinates[0] yoiku 5
+mbari nyekel (e) terus
+  cetakno("Cannot modify a Tuple:", e.message)
+mbari
+cetakno(coordinates[0])  // Output: Still 10
+
+// Tuples can hold mixed types
+iki iku userInfo yoiku tuple("Budi", 28, tenan)
+cetakno(userInfo[0])  // Output: Budi
+cetakno(userInfo[1])  // Output: 28
+```
+
+---
 
 ## Special Keywords
 
-Jawascript includes several special keywords that provide specific functionalities or refer to particular contexts.
-
-| Javanese Keyword | JavaScript Equivalent | Description |
+| DjawaScript | JavaScript | Description |
 | :--- | :--- | :--- |
-| `iki` | `this` | Refers to the current object instance. |
-| `soko` | `of` | Used in `kanggo...soko` (`for...of`) loops for iterating over values of iterable objects. |
-| `debug` | `debugger` | Invokes the JavaScript debugger function, pausing execution. |
-| `tetep` | `static` | Defines a static method or property in a class, belonging to the class itself rather than instances. |
-| `entuk` | `get` | Defines a getter method in a class, used to retrieve the value of a property. |
-| `pasang` | `set` | Defines a setter method in a class, used to set the value of a property. |
+| `iki` | `this` | Refers to the current object instance |
+| `soko` | `of` | Used in `kanggo...soko` (for...of) loops |
+| `debug` | `debugger` | Pauses execution and invokes the debugger |
+| `tetep` | `static` | Defines a static method or property on a class |
+| `entuk` | `get` | Defines a getter on a class |
+| `pasang` | `set` | Defines a setter on a class |
 
-**Example:**
 ```jawascript
-// Example for iki (this) - already covered in Class & Inheritance section
-
-// Example for soko (for...of)
-jarno numberList yoiku [1, 2, 3]
-kanggo (jarno number soko numberList) terus
-  cetakno(number) // Output: 1, 2, 3
-mbari
-
-// Example for debug
-// debug // Uncomment to activate debugger
-
-// Example for tetep (static)
+// tetep (static)
 kelas Utility terus
   tetep gawe greet() terus
     cetakno("Hello from Utility!")
   mbari
 mbari
-Utility.greet() // Output: "Hello from Utility!"
+Utility.greet()  // Output: Hello from Utility!
 
-// Example for entuk (get) and pasang (set)
+// entuk (get) and pasang (set)
 kelas Box terus
   wujudno(width, height) terus
     iki._width yoiku width
@@ -645,91 +698,25 @@ kelas Box terus
 mbari
 
 jarno myBox yoiku Box anyar(5, 10)
-cetakno(myBox.area) // Output: 50
+cetakno(myBox.area)    // Output: 50
 myBox.size yoiku 7
-cetakno(myBox.area) // Output: 49
+cetakno(myBox.area)    // Output: 49
 ```
 
-## Module System: `jupukno` & `metokno`
+---
 
-Jawascript supports a module system to help you organize your code into multiple files.
+## Object-Oriented Programming (OOP)
 
-- `metokno { ... }`: For exporting specific/named variables or functions.
-- `metokno biasane ...`: For exporting a single default value from a file.
-- `jupukno ... soko '...'`: For importing code from another file.
-- `biasane`: Used with `jupukno` and `metokno` to specify a default import/export.
-- `dadi`: For renaming an import (`as`).
+DjawaScript supports class-based OOP with inheritance.
 
-### Re-exporting as Namespace: `metokno kabeh dadi ...`
+| Keyword | JavaScript Equivalent | Description |
+| :--- | :--- | :--- |
+| `kelas Name` | `class Name` | Declare a class |
+| `wujudno(...)` | `constructor(...)` | Class constructor |
+| `turunan soko ParentClass` | `extends ParentClass` | Inherit from a parent class |
+| `induk(...)` | `super(...)` | Call the parent constructor |
+| `iki` | `this` | Refers to the current instance |
 
-This syntax allows you to re-export all exports from another module as a single namespace object.
-
-```jawascript
-// JS: export * as utils from './utils.js';
-
-// Jawascript:
-metokno kabeh dadi util soko './util_export.js';
-
-// Example of usage (assuming util_export.js exports `a` and `b`)
-// cetakno(util.a);
-```
-
-### Dynamic Imports: `jupukno(...)`
-
-Jawascript supports dynamic imports, allowing you to load modules on demand. This is useful for code splitting or conditionally loading modules.
-
-```jawascript
-// JS: import('./module.js').then(module => console.log(module));
-
-// Jawascript:
-jupukno('./dynamic_module.js')
-  .banjur(module lakoni cetakno('Message from dynamic module:', module.message))
-  .nyekel(error lakoni cetakno('Error importing module:', error));
-
-cetakno('This will be executed before the dynamic module finishes importing.');
-```
-
-**Important:** The import path must point to the transpiled `.js` file, not the source `.jawa` file.
-
-**Example:**
-
-**`util.jawa`**
-```jawascript
-// util.jawa
-gawe greet(name) terus
-  balekno "Welcome, " tambah name
-mbari
-
-iki iku VERSION yoiku "1.0"
-
-// Export named
-metokno { greet }
-
-// Export default
-metokno biasane VERSION
-```
-
-**`app.jawa`**
-```jawascript
-// app.jawa
-// Import default (VERSION) and named (greet), renaming greet to sayHello
-jupukno biasane appVersion, { greet dadi sayHello } soko './util.js'
-
-cetakno("Version:", appVersion) // -> Version: 1.0
-cetakno(sayHello("Doni")) // -> Welcome, Doni
-```
-
-## Class & Inheritance (OOP)
-
-Jawascript also supports basic Object-Oriented Programming.
-
-- `kelas ...`: For declaring a class.
-- `wujudno(...)`: The class constructor.
-- `turunan soko`: For inheriting from a parent class (`extends`).
-- `induk(...)`: For calling the parent class's constructor (`super`).
-- `iki`: Refers to the current object instance (similar to `this` in JavaScript).
-
-**Example:**
 ```jawascript
 // Parent Class
 kelas Animal terus
@@ -745,7 +732,7 @@ mbari
 // Child Class
 kelas Cat turunan soko Animal terus
   wujudno(name) terus
-    induk(name) // calls parent constructor
+    induk(name)
   mbari
 
   meow() terus
@@ -754,251 +741,247 @@ kelas Cat turunan soko Animal terus
 mbari
 
 jarno myCat yoiku Cat anyar("Tom")
-myCat.eat()  // Inherited method
-myCat.meow()   // Own method
+myCat.eat()   // Output: Tom is eating.
+myCat.meow()  // Output: Tom says Meow!
 ```
 
-## Metaprogramming: `Perantara` (Proxy) and `Pantulan` (Reflect)
+---
 
-Jawascript supports advanced metaprogramming through `Perantara` (Proxy) and `Pantulan` (Reflect) objects, allowing you to intercept and define custom behavior for fundamental language operations.
+## Module System
 
--   `Perantara`: An object that wraps another object (the target) and intercepts operations like property lookup, assignment, and function invocation.
--   `Pantulan`: A built-in object that provides static methods for the intercepted operations, allowing you to invoke the original default behavior from within your proxy handler.
+DjawaScript supports ES-style modules for organizing code across multiple files.
 
-**Keywords:**
-
-| Javanese Keyword | JavaScript Equivalent | Description |
+| Keyword | JavaScript Equivalent | Description |
 | :--- | :--- | :--- |
-| `Perantara` | `Proxy` | The Proxy constructor. |
-| `Pantulan` | `Reflect` | The Reflect object. |
-| `Pantulan.jupuk` | `Reflect.get` | Retrieves a property from an object. |
-| `Pantulan.pasang` | `Reflect.set` | Sets a property on an object. |
-| `Pantulan.bangun` | `Reflect.construct` | Constructs a new object. |
-| `...` | `...` | And all other `Reflect` methods. |
+| `metokno { name }` | `export { name }` | Export a named value |
+| `metokno biasane value` | `export default value` | Export a default value |
+| `jupukno ... soko '...'` | `import ... from '...'` | Import from a file |
+| `biasane` | `default` | Used for default import/export |
+| `dadi` | `as` | Rename an import |
 
-**Example:**
-Here's how to create a proxy that logs property accesses and validates new values before setting them.
+**`util.jawa`**
+```jawascript
+gawe greet(name) terus
+  balekno "Welcome, " tambah name
+mbari
+
+iki iku VERSION yoiku "1.0"
+
+metokno { greet }          // Named export
+metokno biasane VERSION    // Default export
+```
+
+**`app.jawa`**
+```jawascript
+jupukno biasane appVersion, { greet dadi sayHello } soko './util.js'
+
+cetakno("Version:", appVersion)   // Output: Version: 1.0
+cetakno(sayHello("Doni"))         // Output: Welcome, Doni
+```
+
+### Re-exporting as a Namespace
+
+Re-export all exports from another module under a single namespace object.
 
 ```jawascript
-// 1. The target object
-iki iku target yoiku {
-  message: 'Hello World',
-  value: 100
-};
+// JS: export * as utils from './utils.js';
+metokno kabeh dadi util soko './util_export.js'
+```
 
-// 2. The handler for the proxy
+### Dynamic Imports
+
+Load modules on demand at runtime.
+
+```jawascript
+// JS: import('./module.js').then(module => ...)
+jupukno('./dynamic_module.js')
+  .banjur(module lakoni cetakno('Loaded:', module.message))
+  .nyekel(error lakoni cetakno('Error:', error))
+```
+
+> **Note:** The import path must point to the **compiled `.js` file**, not the source `.jawa` file.
+
+---
+
+## Metaprogramming: `Perantara` & `Pantulan`
+
+Advanced metaprogramming is supported through `Perantara` (Proxy) and `Pantulan` (Reflect).
+
+| DjawaScript | JavaScript | Description |
+| :--- | :--- | :--- |
+| `Perantara` | `Proxy` | Wraps an object to intercept operations |
+| `Pantulan` | `Reflect` | Provides methods for intercepted operations |
+| `Pantulan.jupuk` | `Reflect.get` | Get a property from an object |
+| `Pantulan.pasang` | `Reflect.set` | Set a property on an object |
+| `Pantulan.bangun` | `Reflect.construct` | Construct a new object |
+
+```jawascript
+iki iku target yoiku { message: 'Hello World', value: 100 }
+
 iki iku handler yoiku {
-  // Trap for getting a property
+  // Intercept property reads
   jupuk: gawe(obj, prop) terus
-    cetakno(`Attempting to get property: "${prop}"`);
-    // Use Pantulan.jupuk for default behavior
-    balekno Pantulan.jupuk(obj, prop);
+    cetakno(`Getting: "${prop}"`)
+    balekno Pantulan.jupuk(obj, prop)
   mbari,
 
-  // Trap for setting a property
+  // Intercept property writes
   pasang: gawe(obj, prop, value) terus
-    cetakno(`Attempting to set "${prop}" to "${value}"`);
-    lek (prop plek 'value' lan tipene value ora plek 'Angka') terus
-      uncalen anyar Kesalahan('Value must be a number!');
+    cetakno(`Setting "${prop}" to "${value}"`)
+    lek (prop plek 'value' lan tipene value ora plek 'number') terus
+      uncalen anyar Kesalahan('Value must be a number!')
     mbari
-    // Use Pantulan.pasang for default behavior
-    balekno Pantulan.pasang(obj, prop, value);
+    balekno Pantulan.pasang(obj, prop, value)
   mbari
-};
+}
 
-// 3. Create the Proxy object
-iki iku p yoiku anyar Perantara(target, handler);
+iki iku p yoiku anyar Perantara(target, handler)
 
-// 4. Trigger the 'get' trap
-cetakno(p.message); // -> "Attempting to get property: "message""
-                   // -> "Hello World"
+cetakno(p.message)  // -> Getting: "message" -> Hello World
+p.value yoiku 200   // -> Setting "value" to "200"
 
-// 5. Trigger the 'set' trap (success)
-p.value yoiku 200; // -> "Attempting to set "value" to "200""
-
-// 6. Trigger the 'set' trap (failure)
 cobak terus
-  p.value yoiku 'not a number'; // -> "Attempting to set "value" to "not a number""
+  p.value yoiku 'text'
 mbari nyekel (e) terus
-  cetakno('Error: ' tambah e.message); // -> "Error: Value must be a number!"
+  cetakno('Error: ' tambah e.message)  // -> Error: Value must be a number!
 mbari
 ```
 
-## Built-in Functions
+---
 
-JawaScript provides access to several common built-in JavaScript objects and global functions.
+## Built-in Library
 
-### Global Values
+### Global Values & Constructors
 
-*   `kosong`: Represents a `null` value.
-*   `oraDidefinisikan`: Represents an `undefined` value.
-*   `gudukAngka`: Represents `NaN` (Not-a-Number).
-*   `tanpaBates`: Represents `Infinity`.
+**Global values:**
 
-### Global Constructors
-
-Jawascript provides Javanese equivalents for common JavaScript global constructors. These are used to create new instances of built-in types.
-
-**New Instance Creation Syntax:**
-You can now create new instances using the `ClassName anyar()` syntax, in addition to the traditional `anyar ClassName()` syntax.
-
-| Javanese Constructor | JavaScript Equivalent | Description |
+| DjawaScript | JavaScript | Description |
 | :--- | :--- | :--- |
-| `Daftar` | `Array` | Creates a new Array object. |
-| `Obyek` | `Object` | Creates a new Object object. |
-| `Teks` | `String` | Creates a new String object. |
-| `Angka` | `Number` | Creates a new Number object. |
-| `Logika` | `Boolean` | Creates a new Boolean object. |
-| `Simbol` | `Symbol` | Creates a new Symbol object. |
-| `Peta` | `Map` | Creates a new Map object. |
-| `Kumpulan` | `Set` | Creates a new Set object. |
-| `Janji` | `Promise` | Creates a new Promise object. |
-| `Kesalahan` | `Error` | Creates a new Error object. |
-| `PolaTeks` | `RegExp` | Creates a new RegExp object for regular expressions. |
+| `kosong` | `null` | Null value |
+| `oraDidefinisikan` | `undefined` | Undefined value |
+| `gudukAngka` | `NaN` | Not-a-Number |
+| `tanpaBates` | `Infinity` | Infinity |
+| `globalIki` | `globalThis` | The global scope object |
 
-**Static Methods for `Obyek` (Object) and `Daftar` (Array):**
-Jawascript also provides direct access to common static methods of `Object` and `Array` using their Javanese names.
+**Global constructors:**
 
-| Javanese Method | JavaScript Equivalent | Description |
+You can create new instances using either `ClassName anyar()` or `anyar ClassName()`.
+
+| DjawaScript | JavaScript | Description |
 | :--- | :--- | :--- |
-| `Obyek.iku(value1, value2)` | `Object.is(value1, value2)` | Compares two values for strict equality. |
-| `Obyek.wenehno(target, ...sources)` | `Object.assign(target, ...sources)` | Copies all enumerable own properties from one or more source objects to a target object. |
-| `Obyek.kunci(obj)` | `Object.keys(obj)` | Returns an array of a given object's own enumerable property names. |
-| `Obyek.nilai(obj)` | `Object.values(obj)` | Returns an array of a given object's own enumerable property values. |
-| `Obyek.entri(obj)` | `Object.entries(obj)` | Returns an array of a given object's own enumerable string-keyed property `[key, value]` pairs. |
-| `Daftar.ikiDaftar(value)` | `Array.isArray(value)` | Determines whether the passed value is an `Array`. |
+| `Daftar` | `Array` | Array |
+| `Obyek` | `Object` | Object |
+| `Teks` | `String` | String |
+| `Angka` | `Number` | Number |
+| `Logika` | `Boolean` | Boolean |
+| `Simbol` | `Symbol` | Symbol (unique identifier) |
+| `Peta` | `Map` | Map |
+| `Kumpulan` | `Set` | Set |
+| `Janji` | `Promise` | Promise |
+| `Kesalahan` | `Error` | Error |
+| `PolaTeks` | `RegExp` | Regular Expression |
 
-**Example:**
-```jawascript
-// New instance creation syntax
-jarno emptyList yoiku Daftar anyar()
-cetakno(emptyList) // Output: []
+**Static Object & Array methods:**
 
-jarno emptyObject yoiku Obyek anyar()
-cetakno(emptyObject) // Output: {}
-
-// Old instance creation syntax still works
-jarno newText yoiku Teks anyar("Hello")
-cetakno(newText) // Output: [String: 'Hello']
-
-// Static methods example
-iki iku obj1 yoiku { a: 1 };
-iki iku obj2 yoiku { b: 2 };
-iki iku obj3 yoiku Obyek.wenehno({}, obj1, obj2);
-cetakno("Object.assign: " + DataJSON.stringkan(obj3)); // Output: {"a":1,"b":2}
-cetakno("Object.is(1, 1): " tambah Obyek.iku(1, 1)); // Output: tenan
-cetakno("Object.keys: " + Obyek.kunci(obj3)); // Output: a,b
-cetakno("Array.isArray([]): " + Daftar.ikiDaftar(Daftar anyar())); // Output: tenan
-```
-
-**Example for `Simbol`:**
-`Simbol` creates a unique value that can be used as a property key in an object, preventing name collisions.
+| DjawaScript | JavaScript | Description |
+| :--- | :--- | :--- |
+| `Obyek.iku(v1, v2)` | `Object.is(v1, v2)` | Strict equality comparison |
+| `Obyek.wenehno(target, ...src)` | `Object.assign(target, ...src)` | Copy properties from source to target |
+| `Obyek.kunci(obj)` | `Object.keys(obj)` | Get array of property names |
+| `Obyek.nilai(obj)` | `Object.values(obj)` | Get array of property values |
+| `Obyek.entri(obj)` | `Object.entries(obj)` | Get array of `[key, value]` pairs |
+| `Daftar.ikiDaftar(value)` | `Array.isArray(value)` | Check if value is an Array |
 
 ```jawascript
-// Example for Simbol
-iki iku uniqueId yoiku Simbol('id')
-iki iku user yoiku {
-  name: 'Slamet'
-}
+jarno list yoiku Daftar anyar()
+cetakno(list)  // Output: []
 
-user[uniqueId] yoiku '987-xyz'
+iki iku obj1 yoiku { a: 1 }
+iki iku obj2 yoiku { b: 2 }
+iki iku merged yoiku Obyek.wenehno({}, obj1, obj2)
+cetakno(DataJSON.stringkan(merged))  // Output: {"a":1,"b":2}
+cetakno(Obyek.kunci(merged))         // Output: ['a', 'b']
 
-// The symbol key is not visible in normal iterations
-cetakno(Obyek.kunci(user)) // -> ['name']
-cetakno(user.name)      // -> 'Slamet'
-cetakno(user[uniqueId])     // -> '987-xyz'
+// Symbol — creates a unique key that won't collide with other properties
+iki iku uid yoiku Simbol('id')
+iki iku user yoiku { name: 'Slamet' }
+user[uid] yoiku '987-xyz'
+cetakno(Obyek.kunci(user))  // Output: ['name'] (Symbol keys are hidden)
+cetakno(user[uid])          // Output: 987-xyz
 ```
 
-### `Mtk` Object (for `Math`)
+### `Mtk` — Math Object
 
-Jawascript provides the `Mtk` object as an equivalent to JavaScript's built-in `Math` object, offering various mathematical functions and constants.
+**Constants:**
 
-**Constants**
+| Constant | Value | Description |
+| :--- | :--- | :--- |
+| `Mtk.PI` | ≈ 3.14159 | Pi |
+| `Mtk.E` | ≈ 2.718 | Euler's number |
+| `Mtk.LN2` | ≈ 0.693 | Natural log of 2 |
+| `Mtk.LN10` | ≈ 2.303 | Natural log of 10 |
+| `Mtk.SQRT2` | ≈ 1.414 | Square root of 2 |
 
-| Constant | Description |
-| :--- | :--- |
-| `Mtk.PI` | Ratio of a circle's circumference to its diameter (≈ 3.14159). |
-| `Mtk.E` | Euler's number, base of natural logarithms (≈ 2.718). |
-| `Mtk.LN2` | Natural logarithm of 2 (≈ 0.693). |
-| `Mtk.LN10` | Natural logarithm of 10 (≈ 2.303). |
-| `Mtk.LOG2E` | Base 2 logarithm of E (≈ 1.443). |
-| `Mtk.LOG10E` | Base 10 logarithm of E (≈ 0.434). |
-| `Mtk.SQRT1_2` | Square root of 1/2 (≈ 0.707). |
-| `Mtk.SQRT2` | Square root of 2 (≈ 1.414). |
+**Functions:**
 
-**Functions**
+| Function | JavaScript Equivalent | Description |
+| :--- | :--- | :--- |
+| `Mtk.acak()` | `Math.random()` | Random number between 0 and 1 |
+| `Mtk.bunder(x)` | `Math.round(x)` | Round to nearest integer |
+| `Mtk.ngisor(x)` | `Math.floor(x)` | Round down |
+| `Mtk.nduwur(x)` | `Math.ceil(x)` | Round up |
+| `Mtk.mutlak(x)` | `Math.abs(x)` | Absolute value |
+| `Mtk.pangkat(base, exp)` | `Math.pow(base, exp)` | Exponentiation |
+| `Mtk.oyot(x)` | `Math.sqrt(x)` | Square root |
+| `Mtk.palingDhuwur(...args)` | `Math.max(...args)` | Largest value |
+| `Mtk.palingNgisor(...args)` | `Math.min(...args)` | Smallest value |
+| `Mtk.sin(x)` | `Math.sin(x)` | Sine |
+| `Mtk.cos(x)` | `Math.cos(x)` | Cosine |
+| `Mtk.tan(x)` | `Math.tan(x)` | Tangent |
+| `Mtk.log(x)` | `Math.log(x)` | Natural logarithm |
+| `Mtk.log2(x)` | `Math.log2(x)` | Base-2 logarithm |
+| `Mtk.log10(x)` | `Math.log10(x)` | Base-10 logarithm |
+| `Mtk.exp(x)` | `Math.exp(x)` | Eˣ |
+| `Mtk.cbrt(x)` | `Math.cbrt(x)` | Cube root |
+| `Mtk.trunc(x)` | `Math.trunc(x)` | Remove fractional part |
+| `Mtk.sign(x)` | `Math.sign(x)` | Sign of a number (-1, 0, or 1) |
+| `Mtk.hypot(...args)` | `Math.hypot(...args)` | Square root of sum of squares |
 
-| Function | Description |
-| :--- | :--- |
-| `Mtk.acak()` | Returns a pseudo-random number between 0 and 1. |
-| `Mtk.bunder(x)` | Rounds a number to the nearest integer. |
-| `Mtk.ngisor(x)` | Returns the largest integer less than or equal to a number (`floor`). |
-| `Mtk.nduwur(x)` | Returns the smallest integer greater than or equal to a number (`ceil`). |
-| `Mtk.mutlak(x)` | Returns the absolute value of a number. |
-| `Mtk.pangkat(base, exp)` | Returns the base to the exponent power. |
-| `Mtk.oyot(x)` | Returns the square root of a number. |
-| `Mtk.palingDhuwur(a, b, ...)` | Returns the largest of zero or more numbers (`max`). |
-| `Mtk.palingNgisor(a, b, ...)` | Returns the smallest of zero or more numbers (`min`). |
-| `Mtk.sin(x)` | Returns the sine of a number. |
-| `Mtk.cos(x)` | Returns the cosine of a number. |
-| `Mtk.tan(x)` | Returns the tangent of a number. |
-| `Mtk.asin(x)` | Returns the arcsine of a number. |
-| `Mtk.acos(x)` | Returns the arccosine of a number. |
-| `Mtk.atan(x)` | Returns the arctangent of a number. |
-| `Mtk.atan2(y, x)` | Returns the arctangent of the quotient of its arguments. |
-| `Mtk.log(x)` | Returns the natural logarithm (base E) of a number. |
-| `Mtk.log2(x)` | Returns the base 2 logarithm of a number. |
-| `Mtk.log10(x)` | Returns the base 10 logarithm of a number. |
-| `Mtk.exp(x)` | Returns E<sup>x</sup>. |
-| `Mtk.cbrt(x)` | Returns the cube root of a number. |
-| `Mtk.clz32(x)` | Returns the number of leading zero bits in a 32-bit integer. |
-| `Mtk.cosh(x)` | Returns the hyperbolic cosine of a number. |
-| `Mtk.expm1(x)` | Returns e<sup>x</sup> - 1. |
-| `Mtk.fround(x)` | Returns the nearest single precision float representation. |
-| `Mtk.hypot(...args)` | Returns the square root of the sum of squares of arguments. |
-| `Mtk.imul(x, y)` | Returns the result of a C-like 32-bit multiplication. |
-| `Mtk.log1p(x)` | Returns the natural logarithm of 1 + x. |
-| `Mtk.sign(x)` | Returns the sign of a number. |
-| `Mtk.sinh(x)` | Returns the hyperbolic sine of a number. |
-| `Mtk.tanh(x)` | Returns the hyperbolic tangent of a number. |
-| `Mtk.trunc(x)` | Returns the integer part of a number. |
+### `Tanggalan` — Date Object
 
-### `Tanggalan` Object (for `Date`)
+| Method | JavaScript Equivalent | Description |
+| :--- | :--- | :--- |
+| `Tanggalan.saiki()` | `Date.now()` | Milliseconds since Jan 1, 1970 UTC |
+| `Tanggalan anyar()` | `new Date()` | Current date and time |
 
-*   `Tanggalan.saiki()`: Returns the number of milliseconds elapsed since January 1, 1970 UTC (`Date.now()`).
-*   `Tanggalan anyar()`: Creates a new Date object representing the current date and time.
+### `DataJSON` — JSON Object
 
-### `DataJSON` Object (for `JSON`)
-
-*   `DataJSON.urai(str)`: Parses a JSON string (`JSON.parse`).
-*   `DataJSON.stringkan(obj)`: Converts a JavaScript value to a JSON string (`JSON.stringify`).
+| Method | JavaScript Equivalent | Description |
+| :--- | :--- | :--- |
+| `DataJSON.urai(str)` | `JSON.parse(str)` | Parse a JSON string into an object |
+| `DataJSON.stringkan(obj)` | `JSON.stringify(obj)` | Convert an object to a JSON string |
 
 ### Global Functions
 
-*   `ikiGudukAngka(value)`: Determines whether a value is `NaN` (`isNaN`).
-*   `jadiknoInt(str, radix)`: Parses a string and returns an integer (`parseInt`).
-*   `jadiknoFloat(str)`: Parses a string and returns a floating-point number (`parseFloat`).
-*   `ikiTerbatas(value)`: Determines whether a value is a finite number (`isFinite`).
-*   `uraiURI(encodedURI)`: Decodes a Uniform Resource Identifier (URI) component (`decodeURI`).
-*   `enkodeURI(uri)`: Encodes a Uniform Resource Identifier (URI) (`encodeURI`).
-*   `uraiBagianURI(encodedURIComponent)`: Decodes a Uniform Resource Identifier (URI) component (`decodeURIComponent`).
-*   `enkodeBagianURI(uriComponent)`: Encodes a Uniform Resource Identifier (URI) component (`encodeURIComponent`).
-*   `globalIki`: Refers to the global `globalThis` object, providing a standard way to access the global scope.
-*   `setWaktuInterval(callback, delay)`: Repeatedly calls a function or executes a code snippet, with a fixed time delay between each call (`setInterval`).
-*   `hapusWaktuInterval(intervalID)`: Clears a timer set with `setWaktuInterval()` (`clearInterval`).
-*   `setWaktuTunda(callback, delay)`: Executes a function, or evaluates an expression, after a specified delay (`setTimeout`).
-*   `hapusWaktuTunda(timeoutID)`: Clears a timer set with `setWaktuTunda()` (`clearTimeout`).
+| DjawaScript | JavaScript | Description |
+| :--- | :--- | :--- |
+| `ikiGudukAngka(value)` | `isNaN(value)` | Check if a value is NaN |
+| `jadiknoInt(str, radix)` | `parseInt(str, radix)` | Parse string to integer |
+| `jadiknoFloat(str)` | `parseFloat(str)` | Parse string to float |
+| `ikiTerbatas(value)` | `isFinite(value)` | Check if a value is a finite number |
+| `uraiURI(uri)` | `decodeURI(uri)` | Decode a URI |
+| `enkodeURI(uri)` | `encodeURI(uri)` | Encode a URI |
+| `uraiBagianURI(str)` | `decodeURIComponent(str)` | Decode a URI component |
+| `enkodeBagianURI(str)` | `encodeURIComponent(str)` | Encode a URI component |
+| `setWaktuTunda(fn, ms)` | `setTimeout(fn, ms)` | Run function after a delay |
+| `hapusWaktuTunda(id)` | `clearTimeout(id)` | Cancel a timeout |
+| `setWaktuInterval(fn, ms)` | `setInterval(fn, ms)` | Run function repeatedly |
+| `hapusWaktuInterval(id)` | `clearInterval(id)` | Cancel an interval |
 
-**Example:**
 ```jawascript
-cetakno(ikiGudukAngka("abc")) // Output: tenan
-cetakno(jadiknoInt("101", 2)) // Output: 5
-cetakno(ikiTerbatas(10 / 0)) // Output: gak
-
-jarno uri yoiku "https://example.com/path with spaces"
-jarno encoded yoiku enkodeURI(uri)
-cetakno(encoded) // Output: https://example.com/path%20with%20spaces
-cetakno(uraiURI(encoded)) // Output: https://example.com/path with spaces
+cetakno(ikiGudukAngka("abc"))  // Output: tenan
+cetakno(jadiknoInt("101", 2))  // Output: 5 (binary to decimal)
+cetakno(ikiTerbatas(10 bagi 0)) // Output: gak
 
 setWaktuTunda(gawe () terus
   cetakno("This appears after 1 second")
@@ -1017,130 +1000,98 @@ mbari, 1000)
 
 ### Promise Methods: `.banjur` & `.nyekel`
 
-Jawascript provides Javanese equivalents for the standard Promise methods, allowing for clear and consistent asynchronous code handling.
-
-| Jawascript Method | JavaScript Equivalent | Description |
+| DjawaScript | JavaScript | Description |
 | :--- | :--- | :--- |
-| `.banjur(onFulfilled, onRejected?)` | `.then(onFulfilled, onRejected?)` | Handles the successful fulfillment of a Promise. |
-| `.nyekel(onRejected)` | `.catch(onRejected)` | Handles the rejection of a Promise. |
+| `.banjur(onFulfilled, onRejected?)` | `.then(...)` | Handle a fulfilled Promise |
+| `.nyekel(onRejected)` | `.catch(...)` | Handle a rejected Promise |
 
-**Example:**
 ```jawascript
-// JS: myPromise.then(result => console.log(result)).catch(error => console.error(error));
+iki iku myPromise yoiku Janji anyar((resolve, reject) dadi terus
+  setWaktuTunda(() dadi resolve('Done!'), 100)
+mbari)
 
-// Jawascript:
-iki iku examplePromise yoiku Janji anyar((resolve, reject) dadi terus
-  // Simulate an async operation
-  setWaktuTunda(() dadi resolve('Operation successful!'), 100);
-mbari);
-
-examplePromise
+myPromise
   .banjur(result lakoni cetakno('Success:', result))
-  .nyekel(error lakoni cetakno('Error:', error));
-
-// Example with a failing promise
-iki iku failingPromise yoiku Janji anyar((resolve, reject) lakoni terus
-  setWaktuTunda(() lakoni reject('Operation failed!'), 50);
-mbari);
-
-failingPromise
-  .banjur(result lakoni cetakno('Success (should not happen):', result))
-  .nyekel(error lakoni cetakno('Error:', error));
+  .nyekel(error lakoni cetakno('Error:', error))
 ```
 
-### Array & String Methods
+### Array Methods
 
-Jawascript provides a host of common methods for Arrays and Strings. Many method names can be used for both (like `.dawane` to get the length of an Array or a String).
-
-#### Array-Specific Methods
-
-These methods are for `Daftar` (Array) types.
-
-| Jawascript Method | JavaScript Equivalent | Example Usage |
+| DjawaScript | JavaScript | Description |
 | :--- | :--- | :--- |
-| `.dorong(item)` | `.push(item)` | `myList.dorong(4)` |
-| `.jupukPungkasan()`| `.pop()` | `lastItem = myList.jupukPungkasan()` |
-| `.geser()` | `.shift()` | `firstItem = myList.geser()` |
-| `.tambahNgarep(item)`| `.unshift(item)`| `myList.tambahNgarep(0)` |
-| `.sambung(idx, del, item?)` | `.splice(idx, del, item?)` | `myList.sambung(1, 0, 'newItem')` |
-| `.sambungake(separator)`| `.join(separator)`| `myList.sambungake('-')` |
-| `.walik()` | `.reverse()` | `myList.walik()` |
-| `.urutake(fn?)` | `.sort(fn?)` | `[3,1,2].urutake((a, b) => a - b)` |
-| `.golek(fn)` | `.find(fn)` | `myList.golek(x => x > 1)` |
-| `.golekIndeks(fn)` | `.findIndex(fn)` | `myList.golekIndeks(x => x > 10)` |
-| `.golekIndeksPungkasan(item)`| `.lastIndexOf(item)`| `['a','b','a'].golekIndeksPungkasan('a')` |
-| `.saring(fn)` | `.filter(fn)` | `myList.saring(x => x > 2)` |
-| `.petakake(fn)` | `.map(fn)` | `myList.petakake(x => x * 2)` |
-| `.kanggoSaben(fn)` | `.forEach(fn)` | `myList.kanggoSaben(x => cetakno(x))` |
-| `.suda(fn, initial?)` | `.reduce(fn, initial?)` | `myList.suda((total, current) => total + current)` |
-| `.sudaTengen(fn, initial?)` | `.reduceRight(fn, initial?)`| `myList.sudaTengen((total, current) => total + current)` |
-| `.ana(fn)` | `.some(fn)` | `myList.ana(x => x > 5)` |
-| `.kabeh(fn)` | `.every(fn)` | `myList.kabeh(x => x > 0)` |
+| `.dorong(item)` | `.push(item)` | Add item to end |
+| `.jupukPungkasan()` | `.pop()` | Remove and return last item |
+| `.geser()` | `.shift()` | Remove and return first item |
+| `.tambahNgarep(item)` | `.unshift(item)` | Add item to front |
+| `.sambung(idx, del, item?)` | `.splice(...)` | Insert or remove items |
+| `.sambungake(separator)` | `.join(separator)` | Join elements into a string |
+| `.walik()` | `.reverse()` | Reverse the array |
+| `.urutake(fn?)` | `.sort(fn?)` | Sort the array |
+| `.golek(fn)` | `.find(fn)` | Find first matching element |
+| `.golekIndeks(fn)` | `.findIndex(fn)` | Find index of first match |
+| `.golekIndeksPungkasan(item)` | `.lastIndexOf(item)` | Find last index of item |
+| `.saring(fn)` | `.filter(fn)` | Filter elements by condition |
+| `.petakake(fn)` | `.map(fn)` | Transform each element |
+| `.kanggoSaben(fn)` | `.forEach(fn)` | Run function for each element |
+| `.suda(fn, initial?)` | `.reduce(fn, initial?)` | Reduce to a single value |
+| `.sudaTengen(fn, initial?)` | `.reduceRight(fn, initial?)` | Reduce from right to left |
+| `.ana(fn)` | `.some(fn)` | Check if any element matches |
+| `.kabeh(fn)` | `.every(fn)` | Check if all elements match |
 
-#### String-Specific Methods
+### String Methods
 
-These methods are for `Teks` (String) types.
-
-| Jawascript Method | JavaScript Equivalent | Example Usage |
+| DjawaScript | JavaScript | Description |
 | :--- | :--- | :--- |
-| `.gedekno()` | `.toUpperCase()` | `myText.gedekno()` |
-| `.cilikno()` | `.toLowerCase()` | `myText.cilikno()` |
-| `.rapikno()` | `.trim()` | `' some space '.rapikno()` |
-| `.gantien(a, b)` | `.replace(a, b)` | `myText.gantien('old', 'new')` |
-| `.gantienKabeh(a, b)`| `.replaceAll(a, b)`| `myText.gantienKabeh('a', 'o')` |
-| `.pecahen(separator)`| `.split(separator)`| `'a-b-c'.pecahen('-')` |
-| `.dimulaiKaro(s)` | `.startsWith(s)` | `myText.dimulaiKaro('Jawa')` |
-| `.diakhiriKaro(s)` | `.endsWith(s)` | `myText.diakhiriKaro('!')` |
-| `.tambahiNgarep(len, txt)` | `.padStart(len, txt)` | `myText.tambahiNgarep(10, '0')` |
-| `.tambahiMburi(len, txt)` | `.padEnd(len, txt)` | `myText.tambahiMburi(10, '.')` |
-| `.potonganTeks(start, end?)`| `.substring(start, end?)`| `myText.potonganTeks(0, 4)` |
-| `.karakterKe(index)`| `.charAt(index)` | `myText.karakterKe(0)` |
-| `.cocokno(regex)` | `.match(regex)` | `myText.cocokno(/jawa/i)` |
-| `.goleki(word)` | `.search(word)` | `myText.goleki('cool')` |
+| `.gedekno()` | `.toUpperCase()` | Convert to uppercase |
+| `.cilikno()` | `.toLowerCase()` | Convert to lowercase |
+| `.rapikno()` | `.trim()` | Remove leading/trailing whitespace |
+| `.gantien(a, b)` | `.replace(a, b)` | Replace first match |
+| `.gantienKabeh(a, b)` | `.replaceAll(a, b)` | Replace all matches |
+| `.pecahen(separator)` | `.split(separator)` | Split into an array |
+| `.dimulaiKaro(s)` | `.startsWith(s)` | Check if starts with string |
+| `.diakhiriKaro(s)` | `.endsWith(s)` | Check if ends with string |
+| `.tambahiNgarep(len, txt)` | `.padStart(len, txt)` | Pad the start |
+| `.tambahiMburi(len, txt)` | `.padEnd(len, txt)` | Pad the end |
+| `.potonganTeks(start, end?)` | `.substring(start, end?)` | Extract a substring |
+| `.karakterKe(index)` | `.charAt(index)` | Get character at index |
+| `.cocokno(regex)` | `.match(regex)` | Match against a regex |
+| `.goleki(word)` | `.search(word)` | Search for a match |
 
-#### Shared Methods (for both Array & String)
+### Shared Array & String Methods
 
 These methods work on both `Daftar` (Array) and `Teks` (String).
 
-| Jawascript Method | JavaScript Equivalent | Example Usage |
+| DjawaScript | JavaScript | Description |
 | :--- | :--- | :--- |
-| `.dawane` | `.length` | `[1,2].dawane` or `'abc'.dawane` |
-| `.ngemot(item)` | `.includes(item)` | `myList.ngemot(2)` or `myText.ngemot('a')` |
-| `.iris(start, end?)` | `.slice(start, end?)` | `myList.iris(1)` or `myText.iris(0, 5)` |
-| `.gabung(item)` | `.concat(item)` | `list1.gabung(list2)` or `text1.gabung(text2)` |
-| `.indeksSaka(item)`| `.indexOf(item)` | `myList.indeksSaka(3)` or `myText.indeksSaka('b')` |
+| `.dawane` | `.length` | Length of array or string |
+| `.ngemot(item)` | `.includes(item)` | Check if item is contained |
+| `.iris(start, end?)` | `.slice(start, end?)` | Extract a portion |
+| `.gabung(item)` | `.concat(item)` | Concatenate arrays or strings |
+| `.indeksSaka(item)` | `.indexOf(item)` | Find first index of item |
 
-## CLI Usage
+---
 
-Jawascript provides a Command Line Interface (CLI) tool named `djawa` to help you manage and run your `.jawa` files.
+## CLI Reference
 
 ### Installation
 
-1.  Make sure you have [Node.js](https://nodejs.org/) installed.
-2.  Install JawaScript globally via npm:
-    ```bash
-    npm install -g @jawirhytam/jawirscript
-    ```
-    Or, to install the latest version directly from GitHub:
-    ```bash
-    npm install -g https://github.com/gegesteorngoding/djawa-script
-    ```
+Make sure [Node.js](https://nodejs.org/) is installed, then run:
+
+```bash
+npm install -g @jawirhytam/jawirscript
+```
+
+Or install directly from GitHub:
+```bash
+npm install -g https://github.com/gegesteorngoding/djawa-script
+```
 
 ### Commands
 
-Here are the available `djawa` commands:
-
-*   **`djawa run <file.jawa>`**
-    Transpiles and executes a `.jawa` file directly.
-
-*   **`djawa build <file.jawa>`**
-    Transpiles a `.jawa` file into a `.js` file.
-
-*   **`djawa make <filename>`**
-    Creates a new `.jawa` file from a template.
-
-*   `djawa version` or `djawa -v`
-    Displays the current version of JawaScript.
-
-*   `djawa help` or `djawa -h`
-    Shows the help message.
+| Command | Description |
+| :--- | :--- |
+| `djawa run <file.jawa>` | Transpile and run a `.jawa` file |
+| `djawa build <file.jawa>` | Transpile a `.jawa` file to `.js` |
+| `djawa make <filename>` | Create a new `.jawa` file from template |
+| `djawa version` / `djawa -v` | Show the current DjawaScript version |
+| `djawa help` / `djawa -h` | Show help information |
