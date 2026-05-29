@@ -2,9 +2,9 @@
 
 ---
 
-# DjawaScript
+# JPL — Javanese Programming Language
 
-**DjawaScript** adalah bahasa pemrograman berbasis transpiler yang terinspirasi dari bahasa Jawa, dengan JavaScript sebagai bahasa induknya. Tulis kode menggunakan kata-kata bahasa Jawa — DjawaScript akan mengompilasinya menjadi JavaScript yang valid.
+**JPL (Javanese Programming Language)** adalah bahasa pemrograman mandiri berbasis interpreter yang terinspirasi dari bahasa Jawa. Tulis kode menggunakan kata-kata bahasa Jawa — JPL menjalankannya langsung melalui mesin interpreter miliknya sendiri.
 
 > File sumber menggunakan ekstensi `.jawa`. Alat CLI-nya bernama `djawa`.
 
@@ -68,7 +68,7 @@ npm install -g @jawirhytam/jawirscript
 
 Atau install versi terbaru langsung dari GitHub:
 ```bash
-npm install -g https://github.com/gegesteorngoding/djawa-script
+npm install -g https://github.com/elepepdev/djawa-script
 ```
 
 **2. Buat file baru:**
@@ -93,7 +93,7 @@ djawa run halo.jawa
 
 ### Blok Kode: `terus` & `mbari`
 
-DjawaScript adalah bahasa **berbasis blok**. Setiap blok kode — baik untuk fungsi, perulangan, maupun kondisional — harus dibuka dengan `terus` dan ditutup dengan `mbari`. Anggap saja mereka seperti `{` dan `}` di JavaScript.
+JPL adalah bahasa **berbasis blok**. Setiap blok kode — baik untuk fungsi, perulangan, maupun kondisional — harus dibuka dengan `terus` dan ditutup dengan `mbari`. Anggap saja mereka seperti `{` dan `}` di JPL.
 
 ```jawascript
 lek (tenan) terus
@@ -130,7 +130,7 @@ umur yoiku umur tambah 1  // umur sekarang 26
 
 ### Tipe Data
 
-| DjawaScript | JavaScript | Keterangan |
+| JPL | JavaScript | Keterangan |
 | :--- | :--- | :--- |
 | `tenan` | `true` | Boolean benar |
 | `gak` | `false` | Boolean salah |
@@ -146,7 +146,7 @@ jarno ora_ono yoiku kosong
 
 ### Konsol & Input Pengguna
 
-Objek `cetakno` adalah padanan dari `console` di JavaScript. Gunakan `takon` untuk meminta input dari pengguna.
+Kata kunci `cetakno` adalah padanan dari `console` di JavaScript. Gunakan `takon` untuk meminta input dari pengguna.
 
 | Method | Ekuivalen JavaScript | Keterangan |
 | :--- | :--- | :--- |
@@ -181,11 +181,11 @@ cetakno.akhirWaktu("timerku")
 
 ## Sistem Tipe (Opsional)
 
-DjawaScript mendukung **sistem tipe statis opsional** yang mirip dengan TypeScript. Menambahkan anotasi tipe tidak diwajibkan, tetapi sangat membantu untuk menangkap bug lebih awal dan membuat kode lebih mudah dipahami.
+JPL mendukung **sistem tipe statis opsional** yang mirip dengan TypeScript. Menambahkan anotasi tipe tidak diwajibkan, tetapi sangat membantu untuk menangkap bug lebih awal dan membuat kode lebih mudah dipahami.
 
 **Tipe yang Didukung:**
 
-| Tipe DjawaScript | Tipe JavaScript |
+| Tipe JPL | Tipe JavaScript |
 | :--- | :--- |
 | `Angka` | `number` |
 | `Teks` | `string` |
@@ -222,7 +222,7 @@ jarno cetakInfo yoiku (pesan: Teks, jumlah: Angka): OraOno lakoni terus
 mbari
 ```
 
-> **Cara kerjanya:** Ketika tipe digunakan, DjawaScript mentranspilasi kode Anda menjadi TypeScript yang valid. Anda kemudian bisa menjalankan `tsc` untuk melakukan pengecekan tipe statis dan menghasilkan output JavaScript akhir.
+> **Catatan:** Anotasi tipe diurai dan disimpan oleh interpreter. Penegakan tipe statis penuh direncanakan untuk rilis mendatang.
 
 ---
 
@@ -466,7 +466,7 @@ mbari
 
 ### Operator Aritmatika & Penugasan
 
-| DjawaScript | JavaScript | Keterangan |
+| JPL | JavaScript | Keterangan |
 | :--- | :--- | :--- |
 | `tambah` | `+` | Penjumlahan |
 | `kurang` | `-` | Pengurangan |
@@ -483,7 +483,7 @@ mbari
 
 ### Operator Perbandingan & Logika
 
-| DjawaScript | JavaScript | Keterangan |
+| JPL | JavaScript | Keterangan |
 | :--- | :--- | :--- |
 | `plek` | `===` | Persamaan ketat (nilai DAN tipe harus sama) |
 | `podo` | `==` | Persamaan longgar (nilai saja) |
@@ -515,7 +515,7 @@ cetakno(skorku)  // -> 90
 
 ### Operator Khusus
 
-| DjawaScript | JavaScript | Keterangan |
+| JPL | JavaScript | Keterangan |
 | :--- | :--- | :--- |
 | `ikuJinise` | `instanceof` | Cek apakah objek adalah instance dari sebuah kelas |
 | `tipene` | `typeof` | Dapatkan tipe data sebuah nilai |
@@ -585,7 +585,7 @@ cetakno(nilaiNol utawa 10)  // Output: 10 (karena 0 adalah falsy — perilaku be
 
 ### Operator Bitwise
 
-| DjawaScript | JavaScript | Keterangan |
+| JPL | JavaScript | Keterangan |
 | :--- | :--- | :--- |
 | `lanbit` | `&` | Bitwise AND |
 | `utawabit` | `\|` | Bitwise OR |
@@ -612,7 +612,7 @@ cetakno(a geserTengen 1)  // Output: 2  (0010)
 
 ### Pengecekan Null/Undefined: `iku ono` & `iku ilang`
 
-DjawaScript menyediakan kata kunci yang mudah dibaca untuk mengecek apakah sebuah variabel ada atau tidak — tanpa perlu menulis `=== null || === undefined`.
+JPL menyediakan kata kunci yang mudah dibaca untuk mengecek apakah sebuah variabel ada atau tidak — tanpa perlu menulis `=== null || === undefined`.
 
 | Ekspresi | Artinya |
 | :--- | :--- |
@@ -662,7 +662,7 @@ cetakno(infoPengguna[1])  // Output: 28
 
 ## Kata Kunci Khusus
 
-| DjawaScript | JavaScript | Keterangan |
+| JPL | JavaScript | Keterangan |
 | :--- | :--- | :--- |
 | `iki` | `this` | Merujuk pada instance objek saat ini |
 | `soko` | `of` | Digunakan dalam perulangan `kanggo...soko` (for...of) |
@@ -707,7 +707,7 @@ cetakno(kotakku.area)    // Output: 49
 
 ## Pemrograman Berorientasi Objek (OOP)
 
-DjawaScript mendukung OOP berbasis kelas dengan pewarisan.
+JPL mendukung OOP berbasis kelas dengan pewarisan.
 
 | Kata Kunci | Ekuivalen JavaScript | Keterangan |
 | :--- | :--- | :--- |
@@ -749,7 +749,7 @@ kucingku.meong()   // Output: Tom muni Meong!
 
 ## Sistem Modul
 
-DjawaScript mendukung sistem modul gaya ES untuk mengorganisasi kode ke beberapa file.
+JPL mendukung sistem modul gaya ES untuk mengorganisasi kode ke beberapa file.
 
 | Kata Kunci | Ekuivalen JavaScript | Keterangan |
 | :--- | :--- | :--- |
@@ -807,7 +807,7 @@ jupukno('./modul_dinamis.js')
 
 Metaprogramming tingkat lanjut didukung melalui `Perantara` (Proxy) dan `Pantulan` (Reflect).
 
-| DjawaScript | JavaScript | Keterangan |
+| JPL | JavaScript | Keterangan |
 | :--- | :--- | :--- |
 | `Perantara` | `Proxy` | Membungkus objek untuk mencegat operasi |
 | `Pantulan` | `Reflect` | Menyediakan method untuk operasi yang dicegat |
@@ -855,7 +855,7 @@ mbari
 
 **Nilai global:**
 
-| DjawaScript | JavaScript | Keterangan |
+| JPL | JavaScript | Keterangan |
 | :--- | :--- | :--- |
 | `kosong` | `null` | Nilai null |
 | `oraDidefinisikan` | `undefined` | Nilai undefined |
@@ -867,7 +867,7 @@ mbari
 
 Instance baru bisa dibuat dengan sintaks `NamaKelas anyar()` atau `anyar NamaKelas()`.
 
-| DjawaScript | JavaScript | Keterangan |
+| JPL | JavaScript | Keterangan |
 | :--- | :--- | :--- |
 | `Daftar` | `Array` | Array |
 | `Obyek` | `Object` | Object |
@@ -883,7 +883,7 @@ Instance baru bisa dibuat dengan sintaks `NamaKelas anyar()` atau `anyar NamaKel
 
 **Method statis untuk Obyek & Daftar:**
 
-| DjawaScript | JavaScript | Keterangan |
+| JPL | JavaScript | Keterangan |
 | :--- | :--- | :--- |
 | `Obyek.iku(v1, v2)` | `Object.is(v1, v2)` | Perbandingan ketat |
 | `Obyek.wenehno(target, ...src)` | `Object.assign(target, ...src)` | Salin properti ke target |
@@ -963,7 +963,7 @@ cetakno(pengguna[uid])          // Output: 987-xyz
 
 ### Fungsi Global
 
-| DjawaScript | JavaScript | Keterangan |
+| JPL | JavaScript | Keterangan |
 | :--- | :--- | :--- |
 | `ikiGudukAngka(nilai)` | `isNaN(nilai)` | Cek apakah nilai adalah NaN |
 | `jadiknoInt(str, radix)` | `parseInt(str, radix)` | Urai string ke integer |
@@ -1000,7 +1000,7 @@ mbari, 1000)
 
 ### Method Promise: `.banjur` & `.nyekel`
 
-| DjawaScript | JavaScript | Keterangan |
+| JPL | JavaScript | Keterangan |
 | :--- | :--- | :--- |
 | `.banjur(onFulfilled, onRejected?)` | `.then(...)` | Tangani Promise yang berhasil |
 | `.nyekel(onRejected)` | `.catch(...)` | Tangani Promise yang gagal |
@@ -1017,7 +1017,7 @@ janjiku
 
 ### Method Array
 
-| DjawaScript | JavaScript | Keterangan |
+| JPL | JavaScript | Keterangan |
 | :--- | :--- | :--- |
 | `.dorong(item)` | `.push(item)` | Tambah item ke akhir |
 | `.jupukPungkasan()` | `.pop()` | Hapus dan kembalikan item terakhir |
@@ -1040,7 +1040,7 @@ janjiku
 
 ### Method String
 
-| DjawaScript | JavaScript | Keterangan |
+| JPL | JavaScript | Keterangan |
 | :--- | :--- | :--- |
 | `.gedekno()` | `.toUpperCase()` | Ubah ke huruf kapital |
 | `.cilikno()` | `.toLowerCase()` | Ubah ke huruf kecil |
@@ -1061,7 +1061,7 @@ janjiku
 
 Method-method ini berfungsi pada keduanya, `Daftar` (Array) dan `Teks` (String).
 
-| DjawaScript | JavaScript | Keterangan |
+| JPL | JavaScript | Keterangan |
 | :--- | :--- | :--- |
 | `.dawane` | `.length` | Panjang array atau string |
 | `.ngemot(item)` | `.includes(item)` | Cek apakah item terkandung di dalamnya |
@@ -1083,15 +1083,14 @@ npm install -g @jawirhytam/jawirscript
 
 Atau install langsung dari GitHub:
 ```bash
-npm install -g https://github.com/gegesteorngoding/djawa-script
+npm install -g https://github.com/elepepdev/djawa-script
 ```
 
 ### Perintah
 
 | Perintah | Keterangan |
 | :--- | :--- |
-| `djawa run <file.jawa>` | Transpilasi dan jalankan file `.jawa` |
-| `djawa build <file.jawa>` | Transpilasi file `.jawa` menjadi `.js` |
+| `djawa run <file.jawa>` | Jalankan file `.jawa` secara langsung |
 | `djawa make <namafile>` | Buat file `.jawa` baru dari template |
-| `djawa version` / `djawa -v` | Tampilkan versi DjawaScript saat ini |
+| `djawa version` / `djawa -v` | Tampilkan versi JPL saat ini |
 | `djawa help` / `djawa -h` | Tampilkan informasi bantuan |

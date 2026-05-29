@@ -3,4 +3,10 @@
 jarno a yoiku 1
 jarno b yoiku 2
 
-cetakno(a tambah b)
+cetakno(a + b)
+
+lek (a luwihGedhe b) terus
+  cetakno("Ha ah lah")
+mbari liyane terus
+  cetakno("Nggak le")
+mbari 

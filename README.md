@@ -2,9 +2,9 @@
 
 ---
 
-# DjawaScript
+# JPL — Javanese Programming Language
 
-**DjawaScript** is a transpiler-based programming language inspired by Javanese, with JavaScript as its parent language. Write code using Javanese words — DjawaScript compiles it into valid JavaScript.
+**JPL (Javanese Programming Language)** is an independent, interpreted programming language inspired by the Javanese language. Write code using Javanese words — JPL runs it directly through its own interpreter engine.
 
 > Source files use the `.jawa` extension. The CLI tool is named `djawa`.
 
@@ -68,7 +68,7 @@ npm install -g @jawirhytam/jawirscript
 
 Or install the latest version from GitHub:
 ```bash
-npm install -g https://github.com/gegesteorngoding/djawa-script
+npm install -g https://github.com/elepepdev/djawa-script
 ```
 
 **2. Create a new file:**
@@ -93,7 +93,7 @@ djawa run hello.jawa
 
 ### Code Blocks: `terus` & `mbari`
 
-DjawaScript is a **block-based** language. Every code block — whether for a function, loop, or conditional — must open with `terus` and close with `mbari`. Think of them as the `{` and `}` of DjawaScript.
+JPL is a **block-based** language. Every code block — whether for a function, loop, or conditional — must open with `terus` and close with `mbari`. Think of them as the `{` and `}` of JPL.
 
 ```jawascript
 lek (tenan) terus
@@ -130,7 +130,7 @@ age yoiku age tambah 1  // age is now 26
 
 ### Data Types
 
-| DjawaScript | JavaScript | Description |
+| JPL | JavaScript | Description |
 | :--- | :--- | :--- |
 | `tenan` | `true` | Boolean true |
 | `gak` | `false` | Boolean false |
@@ -146,7 +146,7 @@ jarno nothing yoiku kosong
 
 ### Console & User Input
 
-The `cetakno` object is DjawaScript's equivalent of JavaScript's `console`. Use `takon` to prompt for user input.
+The `cetakno` keyword is JPL's equivalent of JavaScript's `console`. Use `takon` to prompt for user input.
 
 | Method | JavaScript Equivalent | Description |
 | :--- | :--- | :--- |
@@ -181,11 +181,11 @@ cetakno.akhirWaktu("myTimer")
 
 ## Type System (Optional)
 
-DjawaScript supports an **optional static type system** similar to TypeScript. Adding type annotations is not required, but it helps catch bugs early and makes code easier to understand.
+JPL supports an **optional static type system** similar to TypeScript. Adding type annotations is not required, but it helps catch bugs early and makes code easier to understand.
 
 **Supported Types:**
 
-| DjawaScript Type | JavaScript Type |
+| JPL Type | JavaScript Type |
 | :--- | :--- |
 | `Angka` | `number` |
 | `Teks` | `string` |
@@ -222,7 +222,7 @@ jarno printInfo yoiku (message: Teks, count: Angka): OraOno lakoni terus
 mbari
 ```
 
-> **How it works:** When types are used, DjawaScript transpiles your code to valid TypeScript. You can then run `tsc` to perform static type checking and produce final JavaScript output.
+> **Note:** Type annotations are parsed and stored by the interpreter. Full static type enforcement is planned for a future release.
 
 ---
 
@@ -466,7 +466,7 @@ mbari
 
 ### Arithmetic & Assignment Operators
 
-| DjawaScript | JavaScript | Description |
+| JPL | JavaScript | Description |
 | :--- | :--- | :--- |
 | `tambah` | `+` | Addition |
 | `kurang` | `-` | Subtraction |
@@ -483,7 +483,7 @@ mbari
 
 ### Comparison & Logical Operators
 
-| DjawaScript | JavaScript | Description |
+| JPL | JavaScript | Description |
 | :--- | :--- | :--- |
 | `plek` | `===` | Strict equality (value AND type match) |
 | `podo` | `==` | Loose equality (value match only) |
@@ -515,7 +515,7 @@ cetakno(myScore)  // -> 90
 
 ### Special Operators
 
-| DjawaScript | JavaScript | Description |
+| JPL | JavaScript | Description |
 | :--- | :--- | :--- |
 | `ikuJinise` | `instanceof` | Check if an object is an instance of a class |
 | `tipene` | `typeof` | Get the data type of a value |
@@ -585,7 +585,7 @@ cetakno(zeroValue utawa 10)  // Output: 10 (because 0 is falsy — different beh
 
 ### Bitwise Operators
 
-| DjawaScript | JavaScript | Description |
+| JPL | JavaScript | Description |
 | :--- | :--- | :--- |
 | `lanbit` | `&` | Bitwise AND |
 | `utawabit` | `\|` | Bitwise OR |
@@ -612,7 +612,7 @@ cetakno(a geserTengen 1)  // Output: 2  (0010)
 
 ### Null/Undefined Checks: `iku ono` & `iku ilang`
 
-DjawaScript provides readable keywords to check whether a variable exists or is missing — no need to write `=== null || === undefined`.
+JPL provides readable keywords to check whether a variable exists or is missing — no need to write `=== null || === undefined`.
 
 | Expression | Meaning |
 | :--- | :--- |
@@ -662,7 +662,7 @@ cetakno(userInfo[1])  // Output: 28
 
 ## Special Keywords
 
-| DjawaScript | JavaScript | Description |
+| JPL | JavaScript | Description |
 | :--- | :--- | :--- |
 | `iki` | `this` | Refers to the current object instance |
 | `soko` | `of` | Used in `kanggo...soko` (for...of) loops |
@@ -707,7 +707,7 @@ cetakno(myBox.area)    // Output: 49
 
 ## Object-Oriented Programming (OOP)
 
-DjawaScript supports class-based OOP with inheritance.
+JPL supports class-based OOP with inheritance.
 
 | Keyword | JavaScript Equivalent | Description |
 | :--- | :--- | :--- |
@@ -749,7 +749,7 @@ myCat.meow()  // Output: Tom says Meow!
 
 ## Module System
 
-DjawaScript supports ES-style modules for organizing code across multiple files.
+JPL supports ES-style modules for organizing code across multiple files.
 
 | Keyword | JavaScript Equivalent | Description |
 | :--- | :--- | :--- |
@@ -807,7 +807,7 @@ jupukno('./dynamic_module.js')
 
 Advanced metaprogramming is supported through `Perantara` (Proxy) and `Pantulan` (Reflect).
 
-| DjawaScript | JavaScript | Description |
+| JPL | JavaScript | Description |
 | :--- | :--- | :--- |
 | `Perantara` | `Proxy` | Wraps an object to intercept operations |
 | `Pantulan` | `Reflect` | Provides methods for intercepted operations |
@@ -855,7 +855,7 @@ mbari
 
 **Global values:**
 
-| DjawaScript | JavaScript | Description |
+| JPL | JavaScript | Description |
 | :--- | :--- | :--- |
 | `kosong` | `null` | Null value |
 | `oraDidefinisikan` | `undefined` | Undefined value |
@@ -867,7 +867,7 @@ mbari
 
 You can create new instances using either `ClassName anyar()` or `anyar ClassName()`.
 
-| DjawaScript | JavaScript | Description |
+| JPL | JavaScript | Description |
 | :--- | :--- | :--- |
 | `Daftar` | `Array` | Array |
 | `Obyek` | `Object` | Object |
@@ -883,7 +883,7 @@ You can create new instances using either `ClassName anyar()` or `anyar ClassNam
 
 **Static Object & Array methods:**
 
-| DjawaScript | JavaScript | Description |
+| JPL | JavaScript | Description |
 | :--- | :--- | :--- |
 | `Obyek.iku(v1, v2)` | `Object.is(v1, v2)` | Strict equality comparison |
 | `Obyek.wenehno(target, ...src)` | `Object.assign(target, ...src)` | Copy properties from source to target |
@@ -963,7 +963,7 @@ cetakno(user[uid])          // Output: 987-xyz
 
 ### Global Functions
 
-| DjawaScript | JavaScript | Description |
+| JPL | JavaScript | Description |
 | :--- | :--- | :--- |
 | `ikiGudukAngka(value)` | `isNaN(value)` | Check if a value is NaN |
 | `jadiknoInt(str, radix)` | `parseInt(str, radix)` | Parse string to integer |
@@ -1000,7 +1000,7 @@ mbari, 1000)
 
 ### Promise Methods: `.banjur` & `.nyekel`
 
-| DjawaScript | JavaScript | Description |
+| JPL | JavaScript | Description |
 | :--- | :--- | :--- |
 | `.banjur(onFulfilled, onRejected?)` | `.then(...)` | Handle a fulfilled Promise |
 | `.nyekel(onRejected)` | `.catch(...)` | Handle a rejected Promise |
@@ -1017,7 +1017,7 @@ myPromise
 
 ### Array Methods
 
-| DjawaScript | JavaScript | Description |
+| JPL | JavaScript | Description |
 | :--- | :--- | :--- |
 | `.dorong(item)` | `.push(item)` | Add item to end |
 | `.jupukPungkasan()` | `.pop()` | Remove and return last item |
@@ -1040,7 +1040,7 @@ myPromise
 
 ### String Methods
 
-| DjawaScript | JavaScript | Description |
+| JPL | JavaScript | Description |
 | :--- | :--- | :--- |
 | `.gedekno()` | `.toUpperCase()` | Convert to uppercase |
 | `.cilikno()` | `.toLowerCase()` | Convert to lowercase |
@@ -1061,7 +1061,7 @@ myPromise
 
 These methods work on both `Daftar` (Array) and `Teks` (String).
 
-| DjawaScript | JavaScript | Description |
+| JPL | JavaScript | Description |
 | :--- | :--- | :--- |
 | `.dawane` | `.length` | Length of array or string |
 | `.ngemot(item)` | `.includes(item)` | Check if item is contained |
@@ -1083,15 +1083,14 @@ npm install -g @jawirhytam/jawirscript
 
 Or install directly from GitHub:
 ```bash
-npm install -g https://github.com/gegesteorngoding/djawa-script
+npm install -g https://github.com/elepepdev/djawa-script
 ```
 
 ### Commands
 
 | Command | Description |
 | :--- | :--- |
-| `djawa run <file.jawa>` | Transpile and run a `.jawa` file |
-| `djawa build <file.jawa>` | Transpile a `.jawa` file to `.js` |
+| `djawa run <file.jawa>` | Run a `.jawa` file directly |
 | `djawa make <filename>` | Create a new `.jawa` file from template |
-| `djawa version` / `djawa -v` | Show the current DjawaScript version |
+| `djawa version` / `djawa -v` | Show the current JPL version |
 | `djawa help` / `djawa -h` | Show help information |
