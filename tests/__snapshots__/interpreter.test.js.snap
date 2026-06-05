@@ -1,0 +1,250 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 01-variables.jawa 1`] = `""`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 02-conditionals.jawa 1`] = `"Dewasa"`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 03-loops.jawa 1`] = `
+"For loop: 0
+For loop: 1
+For loop: 2
+While loop: 0
+While loop: 1"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 04-functions.jawa 1`] = `""`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 05-switch-case.jawa 1`] = `"Baik"`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 06-try-catch-finally.jawa 1`] = `
+"Mencoba operasi...
+Hasil: 5
+Operasi selesai."
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 07-classes.jawa 1`] = `""`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 08-async-await.jawa 1`] = `
+"Mulai ambil data...
+Data diterima: Data dari server"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 09-modules.jawa 1`] = `""`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 10-logical-operators-and-continue.jawa 1`] = `
+"A true dan B false
+A true atau B true
+Loop ke: 0
+Loop ke: 1
+Loop ke: 3
+Loop ke: 4"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 11-prompt.jawa 1`] = `"Halo, Mock Input!"`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 12-null-undefined.jawa 1`] = `
+"Nilai Kosong: kosong
+Nilai Ora Didefinisikan: oraDidefinisikan
+nilaiKosong adalah kosong
+nilaiOraDidefinisikan adalah oraDidefinisikan"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 13-math-functions.jawa 1`] = `
+"Random: 0.10843740596877116
+Round 3.7: 4"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 14-date-functions.jawa 1`] = `
+"Current timestamp: Thu Jun 04 2026 21:03:16 GMT+0700 (Western Indonesia Time)
+New Date object: <native Tanggalan>
+Specific Date object: <native Tanggalan>"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 15-json-functions.jawa 1`] = `""`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 16-global-functions.jawa 1`] = `""`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 17-operators.jawa 1`] = `
+"15
+5
+50
+2
+1
+a luwih gedhe
+b luwih cilik
+podo bener
+plek bener
+gak podo bener
+gak plek bener
+a luwih gedhe podo c
+b luwih cilik podo c
+8
+15
+8
+30
+5
+1"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 18-tuples.jawa 1`] = `""`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 19-do-while.jawa 1`] = `
+"Mulai do...while loop:
+Hitungan: 0
+Selesai do...while loop.
+Mulai do...while loop (kondisi salah):
+Nilai x: 5
+Selesai do...while loop (kondisi salah)."
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 20-generators.jawa 1`] = `"Generator 1:"`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 21-global-constructors.jawa 1`] = `
+"Daftar Kosong: function Array() { [native code] }
+Daftar Angka: function Array() { [native code] }
+Obyek Kosong: function Object() { [native code] }
+Teks Halo: function String() { [native code] }
+Panjang Teks Halo: 1
+Angka: function Number() { [native code] }
+Logika: function Boolean() { [native code] }"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 22-global-functions-extended.jawa 1`] = `""`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 23-debug-keyword.jawa 1`] = `"Starting debug test..."`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 24-getter-setter.jawa 1`] = `
+"Area: oraDidefinisikan
+New Area: oraDidefinisikan"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 25-static-members.jawa 1`] = `""`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 26-array-string-methods.jawa 1`] = `
+"--- Tes Array Methods ---
+Daftar asli: [5, 1, 4, 2, 8]
+Dawane: 5
+Ngemot angka 4? true
+Indeks saka angka 4: 2
+Sakwise didorong 10: [5, 1, 4, 2, 8, 10]
+Sing dijupuk pungkasan: 10
+Daftar saiki: [5, 1, 4, 2, 8]
+Daftar urut: [1, 2, 4, 5, 8]
+Daftar diwalik: [8, 2, 4, 1, 5]
+Disambungake dadi teks: 5 - 1 - 4 - 2 - 8
+Disaring (luwih gedhe teko 4): [5, 8]
+Dipetakake (ping 2): [10, 2, 8, 4, 16]
+Ana sing luwih gedhe teko 5? true
+Kabeh luwih cilik teko 10? true
+
+--- Tes String Methods ---
+Teks asli:    Jawascript iku Keren!   
+Dawane: 27
+Teks dirapikno: Jawascript iku Keren!
+Dawane sakwise rapi: 21
+Digedekno: JAWASCRIPT IKU KEREN!
+Dicilikno: jawascript iku keren!
+Dimulai karo "Jawa"? true
+Diakhiri karo "Keren!"? true
+Ngemot "iku"? true
+Sakwise diganti: Jawascript iku Mantep!
+Irisan (0, 10): Jawascript
+Dipeceh dadi daftar: [Jawascript, iku, Mantep!]
+Tembung keloro: iku"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 27-arrow-functions.jawa 1`] = `
+"--- Tes Arrow Function ---
+Kuadrat dari 5: 25
+Array dipetakake x2: [2, 4, 6, 8]
+Sugeng rawuh, Budi"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 28-ono-ilang.jawa 1`] = `
+"--- Tes Fitur Khas \`ono\` & \`ilang\` ---
+
+-- Tes \`iku ilang\` --
+variabelKosong beneran ilang
+variabelOraDidefinisikan beneran ilang
+variabelAngkaNol dianggep ONO
+
+-- Tes \`iku ono\` --
+variabelOno beneran ono
+variabelTeksKosong beneran ono
+variabelFalse beneran ono
+variabelKosong dianggep ILANG"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 29-template-literals.jawa 1`] = `
+"--- Tes Template Literals ---
+Halo, jenengku Sastro lan umurku 32 taun.
+Hasil seko 7 ping 5 yoiku 35
+
+  Contoh kode Jawascript:
+  lek (x iku ono) terus
+    cetakno("x ono");
+  mbari
+"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 30-destructuring.jawa 1`] = `
+"--- Tes Destructuring ---
+Jeneng: Sastro
+Umur: 30
+Nilai a: 10
+Nilai b: 20
+Kutho: Jogja
+Status: Aktif
+Jeneng lengkap: Sastro, Umur saiki: 30"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 31-rest-spread.jawa 1`] = `"--- Tes Rest & Spread Syntax ---"`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 32-ternary-operator.jawa 1`] = `
+"--- Tes Ternary Operator ---
+Status umur 20: Dewasa
+Status umur 15: Anak-anak
+Halo, Sastro
+Halo, Tamu"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 33-for-in-loop.jawa 1`] = `
+"--- Tes \`for...in\` Loop ---
+Properti pengguna:"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 34-bitwise-operators.jawa 1`] = `"--- Tes Bitwise Operators ---"`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 35-optional-chaining.jawa 1`] = `"--- Tes Optional Chaining ---"`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 36-nullish-coalescing.jawa 1`] = `
+"--- Tes Nullish Coalescing Operator ---
+Nilai Nol utowoYenKosong 10: 0
+Nilai Kosong utowoYenKosong 10: 10
+Nilai OraDidefinisikan utowoYenKosong 10: 10
+Nilai Teks Kosong utowoYenKosong 10: 
+Nilai Nol utawa 10: 0"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 37-export-wildcard.jawa 1`] = `"--- Tes Export Wildcard ---"`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 38-dynamic-import.jawa 1`] = `"--- Tes Dynamic Import ---"`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 39-zero-fill-right-shift.jawa 1`] = `"--- Tes Zero-fill Right Shift Operator (geserTengenNol) ---"`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 40-promise-methods.jawa 1`] = `"--- Tes Promise Methods (.banjur, .nyekel) ---"`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 41-generator-enhancements.jawa 1`] = `"--- Tes Generator Enhancements ---"`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 42-bigint-literals.jawa 1`] = `"--- Tes BigInt Literals ---"`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 43-types.jawa 1`] = `""`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 44-for-of-loop.jawa 1`] = `
+"--- Tes Loop Kanggo...Soko (for...of) ---
+Iterasi liwat Daftar:"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 45-symbol.jawa 1`] = `"--- Tes Tipe Data Simbol ---"`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 46-proxy-reflect.jawa 1`] = `"--- Tes Proxy (Perantara) & Reflect (Pantulan) ---"`;

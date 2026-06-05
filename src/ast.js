@@ -39,6 +39,15 @@ export class Unary extends Expr {
   accept(visitor) { return visitor.visitUnaryExpr(this); }
 }
 
+export class Postfix extends Expr {
+  constructor(left, operator) {
+    super();
+    this.left = left;
+    this.operator = operator;
+  }
+  accept(visitor) { return visitor.visitPostfixExpr(this); }
+}
+
 export class Variable extends Expr {
   constructor(name) {
     super();
@@ -132,6 +141,31 @@ export class Tuple extends Expr {
   accept(visitor) { return visitor.visitTupleExpr(this); }
 }
 
+export class ArrayLiteral extends Expr {
+  constructor(elements) {
+    super();
+    this.elements = elements;
+  }
+  accept(visitor) { return visitor.visitArrayLiteralExpr(this); }
+}
+
+export class ObjectLiteral extends Expr {
+  constructor(properties) {
+    super();
+    this.properties = properties; // Map of key (string) to value (Expr)
+  }
+  accept(visitor) { return visitor.visitObjectLiteralExpr(this); }
+}
+
+export class TemplateLiteral extends Expr {
+  constructor(strings, expressions) {
+    super();
+    this.strings = strings;
+    this.expressions = expressions;
+  }
+  accept(visitor) { return visitor.visitTemplateLiteralExpr(this); }
+}
+
 export class Stmt {
   accept(visitor) {}
 }
@@ -145,9 +179,9 @@ export class Expression extends Stmt {
 }
 
 export class Cetakno extends Stmt {
-  constructor(expression) {
+  constructor(expressions) {
     super();
-    this.expression = expression;
+    this.expressions = expressions;
   }
   accept(visitor) { return visitor.visitCetaknoStmt(this); }
 }
@@ -266,6 +300,14 @@ export class Lanjutno extends Stmt {
     this.keyword = keyword;
   }
   accept(visitor) { return visitor.visitLanjutnoStmt(this); }
+}
+
+export class Command extends Stmt {
+  constructor(name) {
+    super();
+    this.name = name; // string, e.g., 'clear' or 'credits'
+  }
+  accept(visitor) { return visitor.visitCommandStmt(this); }
 }
 
 export class Pilih extends Stmt {

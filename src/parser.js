@@ -1,5 +1,6 @@
-import { TokenType } from './tokens.js';
+import { TokenType, Keywords } from './tokens.js';
 import * as AST from './ast.js';
+import { Lexer } from './lexer.js';
 
 export class Parser {
   constructor(tokens) {
@@ -18,18 +19,26 @@ export class Parser {
 
   declaration() {
     try {
-      if (this.match(TokenType.KELAS)) return this.classDeclaration();
-      if (this.match(TokenType.TENANGAN)) {
-        if (this.check(TokenType.GAWE)) {
-          this.advance();
-          return this.functionDeclaration("gawe", true);
+      let result = null;
+      if (this.match(TokenType.KELAS)) result = this.classDeclaration();
+      else if (this.match(TokenType.GAWE)) {
+        let isAsync = false;
+        if (this.match(TokenType.TENANGAN)) isAsync = true;
+        result = this.functionDeclaration("gawe", isAsync);
+      }
+      else if (this.match(TokenType.TENANGAN)) {
+        if (this.match(TokenType.GAWE)) {
+          result = this.functionDeclaration("gawe", true);
+        } else {
+          result = this.statement();
         }
       }
-      if (this.match(TokenType.GAWE)) return this.functionDeclaration("gawe");
-      if (this.match(TokenType.IKI_IKU)) return this.varDeclaration(true);
-      if (this.match(TokenType.JARNO)) return this.varDeclaration(false);
+      else if (this.match(TokenType.IKI_IKU)) result = this.varDeclaration(true);
+      else if (this.match(TokenType.JARNO)) result = this.varDeclaration(false);
+      else result = this.statement();
 
-      return this.statement();
+      this.match(TokenType.SEMICOLON); // Optional semicolon
+      return result;
     } catch (error) {
       console.error(error.message);
       this.synchronize();
@@ -62,7 +71,7 @@ export class Parser {
 
   functionDeclaration(kind, isAsync = false) {
     let name = null;
-    if (kind !== "wujudno") {
+    if (kind !== "wujudno" && kind !== "arrow") {
       if (this.match(TokenType.IDENTIFIER) || 
           this.match(TokenType.TAMBAH, TokenType.KURANG, TokenType.PING, TokenType.BAGI, TokenType.SISO)) {
         name = this.previous();
@@ -74,18 +83,91 @@ export class Parser {
     const parameters = [];
     if (!this.check(TokenType.RIGHT_PAREN)) {
       do {
-        parameters.push(this.consume(TokenType.IDENTIFIER, "Kudune jeneng parameter."));
+        if (this.match(TokenType.TERUS)) { // Object destructuring in param
+            const properties = [];
+            if (!this.check(TokenType.MBARI)) {
+                do {
+                    const name = this.consume(TokenType.IDENTIFIER, "Kudune jeneng properti.");
+                    let alias = name;
+                    if (this.match(TokenType.DADI)) {
+                        alias = this.consume(TokenType.IDENTIFIER, "Kudune jeneng alias.");
+                    }
+                    properties.push({ name, alias });
+                } while (this.match(TokenType.COMMA));
+            }
+            this.consume(TokenType.MBARI, "Kudune 'mbari' sakwise destructuring.");
+            parameters.push({ lexeme: "{destructuring}", properties, line: this.previous().line });
+        } else if (this.match(TokenType.LEFT_BRACKET)) { // Array destructuring in param
+            const elements = [];
+            if (!this.check(TokenType.RIGHT_BRACKET)) {
+                do {
+                    elements.push(this.consume(TokenType.IDENTIFIER, "Kudune jeneng elemen."));
+                } while (this.match(TokenType.COMMA));
+            }
+            this.consume(TokenType.RIGHT_BRACKET, "Kudune ']' sakwise destructuring.");
+            parameters.push({ lexeme: "[destructuring]", elements, line: this.previous().line });
+        } else {
+            parameters.push(this.consume(TokenType.IDENTIFIER, "Kudune jeneng parameter."));
+            if (this.match(TokenType.COLON)) {
+                this.consume(TokenType.IDENTIFIER, "Kudune tipe data.");
+            }
+        }
       } while (this.match(TokenType.COMMA));
     }
     this.consume(TokenType.RIGHT_PAREN, "Kudune ')' sakwise parameter.");
+    
+    if (this.match(TokenType.COLON)) {
+        this.consume(TokenType.IDENTIFIER, "Kudune tipe data balikan.");
+    }
+
     this.consume(TokenType.TERUS, `Kudune 'terus' sakdurunge body ${kind}.`);
     const body = this.block();
-    const finalName = name || { lexeme: "wujudno", line: this.previous().line };
+    const finalName = name || { lexeme: kind === "wujudno" ? "wujudno" : "arrow", line: this.previous().line };
     return new AST.Gawe(finalName, parameters, new AST.Block(body), isAsync);
   }
 
   varDeclaration(isConst) {
+    if (this.match(TokenType.TERUS)) { // Object destructuring
+        const properties = [];
+        if (!this.check(TokenType.MBARI)) {
+            do {
+                const name = this.consume(TokenType.IDENTIFIER, "Kudune jeneng properti.");
+                let alias = name;
+                if (this.match(TokenType.DADI)) {
+                    alias = this.consume(TokenType.IDENTIFIER, "Kudune jeneng alias.");
+                }
+                let defaultValue = null;
+                if (this.match(TokenType.YOIKU)) {
+                    defaultValue = this.expression();
+                }
+                properties.push({ name, alias, defaultValue });
+            } while (this.match(TokenType.COMMA));
+        }
+        this.consume(TokenType.MBARI, "Kudune 'mbari' sakwise destructuring.");
+        this.consume(TokenType.YOIKU, "Kudune 'yoiku' sakwise destructuring.");
+        const initializer = this.expression();
+        return new AST.Var({ lexeme: "{destructuring}", properties, line: this.previous().line }, initializer, isConst);
+    }
+    
+    if (this.match(TokenType.LEFT_BRACKET)) { // Array destructuring
+        const elements = [];
+        if (!this.check(TokenType.RIGHT_BRACKET)) {
+            do {
+                elements.push(this.consume(TokenType.IDENTIFIER, "Kudune jeneng elemen."));
+            } while (this.match(TokenType.COMMA));
+        }
+        this.consume(TokenType.RIGHT_BRACKET, "Kudune ']' sakwise destructuring.");
+        this.consume(TokenType.YOIKU, "Kudune 'yoiku' sakwise destructuring.");
+        const initializer = this.expression();
+        return new AST.Var({ lexeme: "[destructuring]", elements, line: this.previous().line }, initializer, isConst);
+    }
+
     const name = this.consume(TokenType.IDENTIFIER, "Kudune jeneng variabel.");
+    
+    if (this.match(TokenType.COLON)) {
+        this.consume(TokenType.IDENTIFIER, "Kudune tipe data.");
+    }
+
     let initializer = null;
     if (this.match(TokenType.YOIKU)) {
       initializer = this.expression();
@@ -94,6 +176,8 @@ export class Parser {
   }
 
   statement() {
+    if (this.match(TokenType.CLEAR)) return new AST.Command('clear');
+    if (this.match(TokenType.CREDITS)) return new AST.Command('credits');
     if (this.match(TokenType.LEK)) return this.lekStatement();
     if (this.match(TokenType.CETAKNO)) return this.cetaknoStatement();
     if (this.match(TokenType.BALEKNO)) return this.baleknoStatement();
@@ -132,9 +216,14 @@ export class Parser {
 
   cetaknoStatement() {
     this.consume(TokenType.LEFT_PAREN, "Kudune '(' sakwise 'cetakno'.");
-    const value = this.expression();
+    const expressions = [];
+    if (!this.check(TokenType.RIGHT_PAREN)) {
+      do {
+        expressions.push(this.expression());
+      } while (this.match(TokenType.COMMA));
+    }
     this.consume(TokenType.RIGHT_PAREN, "Kudune ')' sakwise nilai.");
-    return new AST.Cetakno(value);
+    return new AST.Cetakno(expressions);
   }
 
   baleknoStatement() {
@@ -204,6 +293,7 @@ export class Parser {
   }
 
   cobakStatement() {
+    this.consume(TokenType.TERUS, "Kudune 'terus' sakwise 'cobak'.");
     const tryBlock = new AST.Block(this.block());
     let catchVar = null;
     let catchBranch = null;
@@ -260,7 +350,7 @@ export class Parser {
   }
 
   ternary() {
-    let expr = this.or();
+    let expr = this.nullish();
     if (this.match(TokenType.TA)) {
       const thenExpr = this.expression();
       this.consume(TokenType.LEK_GAK, "Kudune 'lek gak' sakwise ekspresi true.");
@@ -268,6 +358,16 @@ export class Parser {
       expr = new AST.Ternary(expr, thenExpr, elseExpr);
     }
     return expr;
+  }
+
+  nullish() {
+      let expr = this.or();
+      while (this.match(TokenType.UTOWO_YEN_KOSONG)) {
+          const operator = this.previous();
+          const right = this.or();
+          expr = new AST.Logical(expr, operator, right);
+      }
+      return expr;
   }
 
   or() {
@@ -292,20 +392,38 @@ export class Parser {
 
   equality() {
     let expr = this.comparison();
-    while (this.match(TokenType.GAK_PLEK, TokenType.GAK_PODO, TokenType.PLEK, TokenType.PODO)) {
+    while (this.match(TokenType.GAK_PLEK, TokenType.GAK_PODO, TokenType.PLEK, TokenType.PODO, TokenType.GUDUK)) {
       const operator = this.previous();
-      const right = this.comparison();
-      expr = new AST.Binary(expr, operator, right);
+      if (operator.type === TokenType.GUDUK) {
+          const right = this.comparison();
+          expr = new AST.Binary(expr, { type: TokenType.GAK_PODO, lexeme: "!=", line: operator.line }, right);
+      } else {
+        const right = this.comparison();
+        expr = new AST.Binary(expr, operator, right);
+      }
     }
     return expr;
   }
 
   comparison() {
     let expr = this.term();
-    while (this.match(TokenType.LUWIH_GEDHE, TokenType.LUWIH_GEDHE_PODO, TokenType.LUWIH_CILIK, TokenType.LUWIH_CILIK_PODO)) {
+    while (this.match(TokenType.LUWIH_GEDHE, TokenType.LUWIH_GEDHE_PODO, TokenType.LUWIH_CILIK, TokenType.LUWIH_CILIK_PODO,
+                     TokenType.IKU_ONO, TokenType.IKU_ILANG, TokenType.IKU)) {
       const operator = this.previous();
-      const right = this.term();
-      expr = new AST.Binary(expr, operator, right);
+      if (operator.type === TokenType.IKU_ONO || operator.type === TokenType.IKU_ILANG) {
+        expr = new AST.Postfix(expr, operator);
+      } else if (operator.type === TokenType.IKU) {
+          if (this.match(TokenType.ONO)) {
+              expr = new AST.Postfix(expr, { type: TokenType.IKU_ONO, lexeme: "iku ono", line: operator.line });
+          } else if (this.match(TokenType.ILANG)) {
+              expr = new AST.Postfix(expr, { type: TokenType.IKU_ILANG, lexeme: "iku ilang", line: operator.line });
+          } else {
+              throw this.error(this.peek(), "Kudune 'ono' utowo 'ilang' sakwise 'iku'.");
+          }
+      } else {
+        const right = this.term();
+        expr = new AST.Binary(expr, operator, right);
+      }
     }
     return expr;
   }
@@ -331,7 +449,7 @@ export class Parser {
   }
 
   unary() {
-    if (this.match(TokenType.ORA, TokenType.TAMBAH, TokenType.KURANG)) {
+    if (this.match(TokenType.ORA, TokenType.TAMBAH, TokenType.KURANG, TokenType.ENTENI, TokenType.ASILNO)) {
       const operator = this.previous();
       const right = this.unary();
       return new AST.Unary(operator, right);
@@ -345,16 +463,23 @@ export class Parser {
       if (this.match(TokenType.LEFT_PAREN)) {
         expr = this.finishCall(expr);
       } else if (this.match(TokenType.DOT)) {
-        const name = this.consume(TokenType.IDENTIFIER, "Kudune jeneng properti sakwise '.'.");
-        expr = new AST.Get(expr, name);
-      } else if (this.match(TokenType.ANYAR)) {
-        this.consume(TokenType.LEFT_PAREN, "Kudune '(' sakwise 'anyar'.");
-        const args = [];
-        if (!this.check(TokenType.RIGHT_PAREN)) {
-          do { args.push(this.expression()); } while (this.match(TokenType.COMMA));
+        if (this.check(TokenType.IDENTIFIER) || this.isKeyword(this.peek())) {
+          const name = this.advance();
+          expr = new AST.Get(expr, name);
+        } else {
+          throw this.error(this.peek(), "Kudune jeneng properti sakwise '.'.");
         }
-        const paren = this.consume(TokenType.RIGHT_PAREN, "Kudune ')' sakwise argumen.");
-        expr = new AST.Call(expr, paren, args);
+      } else if (this.match(TokenType.LEFT_BRACKET)) {
+        const index = this.expression();
+        this.consume(TokenType.RIGHT_BRACKET, "Kudune ']' sakwise index.");
+        // We can reuse Get AST or create a new Index AST. 
+        // For simplicity, let's use a dummy identifier for bracket access or just use Get.
+        // Actually, let's use a special Get node or handle it in Interpreter.
+        // I'll create an Index node in AST.
+        expr = new AST.Get(expr, { lexeme: "[]", line: this.previous().line, index });
+      } else if (this.match(TokenType.ANYAR)) {
+        // ... handled in primary
+        break;
       } else {
         break;
       }
@@ -380,6 +505,63 @@ export class Parser {
     if (this.match(TokenType.ORADIDEFINISIKAN)) return new AST.Literal(undefined);
     if (this.match(TokenType.NUMBER, TokenType.STRING)) return new AST.Literal(this.previous().literal);
     if (this.match(TokenType.IKI)) return new AST.This(this.previous());
+    
+    if (this.match(TokenType.TEMPLATE)) {
+      const { strings, expressions } = this.previous().literal;
+      const parsedExpressions = expressions.map(code => {
+        const lexer = new Lexer(code);
+        const tokens = lexer.scanTokens();
+        const parser = new Parser(tokens);
+        return parser.expression();
+      });
+      return new AST.TemplateLiteral(strings, parsedExpressions);
+    }
+
+    if (this.match(TokenType.TAKON)) {
+      this.consume(TokenType.LEFT_PAREN, "Kudune '(' sakwise 'takon'.");
+      const prompt = this.expression();
+      this.consume(TokenType.RIGHT_PAREN, "Kudune ')' sakwise prompt.");
+      return new AST.Call(new AST.Variable({ lexeme: "takon", line: this.previous().line }), this.previous(), [prompt]);
+    }
+
+    if (this.match(TokenType.TUPLE)) {
+      this.consume(TokenType.LEFT_PAREN, "Kudune '(' sakwise 'tuple'.");
+      const elements = [];
+      if (!this.check(TokenType.RIGHT_PAREN)) {
+        do { elements.push(this.expression()); } while (this.match(TokenType.COMMA));
+      }
+      this.consume(TokenType.RIGHT_PAREN, "Kudune ')' sakwise elemen tuple.");
+      return new AST.Tuple(this.previous(), elements);
+    }
+
+    if (this.match(TokenType.LEFT_BRACKET)) {
+      const elements = [];
+      if (!this.check(TokenType.RIGHT_BRACKET)) {
+        do { elements.push(this.expression()); } while (this.match(TokenType.COMMA));
+      }
+      this.consume(TokenType.RIGHT_BRACKET, "Kudune ']' sakwise elemen array.");
+      return new AST.ArrayLiteral(elements);
+    }
+
+    if (this.match(TokenType.TERUS)) { // Using 'terus' as '{' for objects
+      const properties = new Map();
+      if (!this.check(TokenType.MBARI)) {
+        do {
+          let key;
+          if (this.match(TokenType.IDENTIFIER, TokenType.STRING)) {
+              key = this.previous().literal || this.previous().lexeme;
+          } else {
+              key = this.consume(TokenType.IDENTIFIER, "Kudune jeneng properti.").lexeme;
+          }
+          this.consume(TokenType.COLON, "Kudune ':' sakwise jeneng properti.");
+          const value = this.expression();
+          properties.set(key, value);
+        } while (this.match(TokenType.COMMA));
+      }
+      this.consume(TokenType.MBARI, "Kudune 'mbari' sakwise properti obyek.");
+      return new AST.ObjectLiteral(properties);
+    }
+
     if (this.match(TokenType.ANYAR)) {
       const type = this.consume(TokenType.IDENTIFIER, "Kudune jeneng kelas sakwise 'anyar'.");
       this.consume(TokenType.LEFT_PAREN, "Kudune '(' sakwise jeneng kelas.");
@@ -390,12 +572,53 @@ export class Parser {
       const paren = this.consume(TokenType.RIGHT_PAREN, "Kudune ')' sakwise argumen.");
       return new AST.Call(new AST.Variable(type), paren, args);
     }
-    
-    // Identifier check
-    if (this.check(TokenType.IDENTIFIER) || 
-        this.check(TokenType.TAMBAH) || this.check(TokenType.KURANG) || 
-        this.check(TokenType.PING) || this.check(TokenType.BAGI) || this.check(TokenType.SISO)) {
-      this.advance();
+
+    // Arrow function check (single param)
+    if (this.check(TokenType.IDENTIFIER)) {
+        const next = this.tokens[this.current + 1];
+        if (next && next.type === TokenType.LAKONI) {
+            const param = this.advance();
+            this.advance(); // consume LAKONI
+            if (this.match(TokenType.TERUS)) {
+                return new AST.Gawe({ lexeme: "arrow", line: param.line }, [param], new AST.Block(this.block()));
+            } else {
+                return new AST.Gawe({ lexeme: "arrow", line: param.line }, [param], new AST.Expression(this.expression()));
+            }
+        }
+    }
+
+    // Arrow function check (multiple params)
+    if (this.check(TokenType.LEFT_PAREN)) {
+        let i = this.current + 1;
+        let isArrow = false;
+        let parenCount = 1;
+        while (i < this.tokens.length && parenCount > 0) {
+            if (this.tokens[i].type === TokenType.LEFT_PAREN) parenCount++;
+            if (this.tokens[i].type === TokenType.RIGHT_PAREN) parenCount--;
+            i++;
+        }
+        if (i < this.tokens.length && this.tokens[i].type === TokenType.LAKONI) isArrow = true;
+        
+        if (isArrow) {
+            this.advance(); // consume (
+            const parameters = [];
+            if (!this.check(TokenType.RIGHT_PAREN)) {
+                do {
+                    parameters.push(this.consume(TokenType.IDENTIFIER, "Kudune jeneng parameter."));
+                } while (this.match(TokenType.COMMA));
+            }
+            this.consume(TokenType.RIGHT_PAREN, "Kudune ')' sakwise parameter.");
+            this.consume(TokenType.LAKONI, "Kudune 'lakoni' sakwise parameter.");
+            if (this.match(TokenType.TERUS)) {
+                return new AST.Gawe({ lexeme: "arrow", line: this.previous().line }, parameters, new AST.Block(this.block()));
+            } else {
+                return new AST.Gawe({ lexeme: "arrow", line: this.previous().line }, parameters, new AST.Expression(this.expression()));
+            }
+        }
+    }
+
+    if (this.match(TokenType.IDENTIFIER) || 
+        this.match(TokenType.TAMBAH, TokenType.KURANG, TokenType.PING, TokenType.BAGI, TokenType.SISO)) {
       return new AST.Variable(this.previous());
     }
 
@@ -405,6 +628,11 @@ export class Parser {
       return new AST.Grouping(expr);
     }
     throw this.error(this.peek(), "Kudune ekspresi.");
+  }
+
+  isKeyword(token) {
+    if (token.type === TokenType.EOF) return false;
+    return !!Keywords[token.lexeme.toLowerCase()] || !!Keywords[token.lexeme];
   }
 
   match(...types) {

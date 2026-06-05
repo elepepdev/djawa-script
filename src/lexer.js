@@ -32,26 +32,59 @@ export class Lexer {
     switch (c) {
       case '(': this.addToken(TokenType.LEFT_PAREN); break;
       case ')': this.addToken(TokenType.RIGHT_PAREN); break;
+      case '{': this.addToken(TokenType.TERUS); break;
+      case '}': this.addToken(TokenType.MBARI); break;
       case '[': this.addToken(TokenType.LEFT_BRACKET); break;
       case ']': this.addToken(TokenType.RIGHT_BRACKET); break;
       case ',': this.addToken(TokenType.COMMA); break;
       case ';': this.addToken(TokenType.SEMICOLON); break;
       case ':': this.addToken(TokenType.COLON); break;
       case '.': this.addToken(TokenType.DOT); break;
-      case '-': this.addToken(this.match('=') ? TokenType.KURANG_KARO : TokenType.MINUS); break;
+      case '-': this.addToken(this.match('=') ? TokenType.KURANG_KARO : TokenType.KURANG); break;
       case '+': this.addToken(this.match('=') ? TokenType.TAMBAH_KARO : TokenType.TAMBAH); break;
       case '*': this.addToken(this.match('=') ? TokenType.PING_KARO : TokenType.PING); break;
       case '/':
         if (this.match('/')) {
           while (this.peek() !== '\n' && !this.isAtEnd()) this.advance();
+        } else if (this.match('*')) {
+          this.addToken(TokenType.SLASH_COMMAND);
         } else {
-          this.addToken(this.match('=') ? TokenType.BAGI_KARO : TokenType.BAGI);
+          // Check for slash commands like /clear or /credits
+          const cmdStart = this.current;
+          while (this.isAlpha(this.peek())) this.advance();
+          const cmd = this.source.substring(this.start + 1, this.current);
+          if (cmd === 'clear') {
+            this.addToken(TokenType.CLEAR);
+          } else if (cmd === 'credits') {
+            this.addToken(TokenType.CREDITS);
+          } else {
+            this.addToken(this.match('=') ? TokenType.BAGI_KARO : TokenType.BAGI);
+          }
         }
         break;
-      case '=': this.addToken(this.match('=') ? TokenType.PODO : TokenType.YOIKU); break;
+      case '=':
+        if (this.match('=')) {
+          this.addToken(this.match('=') ? TokenType.PLEK : TokenType.PODO);
+        } else {
+          this.addToken(TokenType.YOIKU);
+        }
+        break;
       case '<': this.addToken(this.match('=') ? TokenType.LUWIH_CILIK_PODO : TokenType.LUWIH_CILIK); break;
       case '>': this.addToken(this.match('=') ? TokenType.LUWIH_GEDHE_PODO : TokenType.LUWIH_GEDHE); break;
-      case '!': this.addToken(this.match('=') ? TokenType.GAK_PODO : TokenType.ORA); break;
+      case '!':
+        if (this.match('=')) {
+          this.addToken(this.match('=') ? TokenType.GAK_PLEK : TokenType.GAK_PODO);
+        } else {
+          this.addToken(TokenType.ORA);
+        }
+        break;
+      case '?':
+        if (this.match('?')) {
+          this.addToken(TokenType.UTOWO_YEN_KOSONG);
+        } else {
+          this.addToken(TokenType.TA);
+        }
+        break;
       case ' ':
       case '\r':
       case '\t':
@@ -59,7 +92,11 @@ export class Lexer {
       case '\n':
         this.line++;
         break;
-      case '"': this.string(); break;
+      case '"':
+      case "'":
+        this.string(c); break;
+      case '`':
+        this.template(); break;
       default:
         if (this.isDigit(c)) {
           this.number();
@@ -77,17 +114,27 @@ export class Lexer {
     let text = this.source.substring(this.start, this.current);
     
     // Check for multi-word keywords
-    const currentLexeme = text;
-    if (this.peek() === ' ') {
-        const saved = this.current;
-        this.advance(); // consume space
-        let nextWord = "";
-        while (this.isAlpha(this.peek())) nextWord += this.advance();
-        const combined = `${currentLexeme} ${nextWord}`;
-        if (Keywords[combined]) {
-            text = combined;
+    const savedCurrent = this.current;
+    const savedTokensLength = this.tokens.length;
+    
+    let tempCurrent = this.current;
+    let combinedText = text;
+    
+    // Greedily try to match longer multi-word keywords
+    while (this.source.charAt(tempCurrent) === ' ') {
+        tempCurrent++;
+        let nextWordStart = tempCurrent;
+        while (this.isAlphaNumeric(this.source.charAt(tempCurrent))) tempCurrent++;
+        let nextWord = this.source.substring(nextWordStart, tempCurrent);
+        if (!nextWord) break;
+        
+        combinedText += " " + nextWord;
+        if (Keywords[combinedText]) {
+            text = combinedText;
+            this.current = tempCurrent;
         } else {
-            this.current = saved; // put back the space and whatever followed
+            // Keep looking if it might be part of a longer one? 
+            // For JPL, 2 words is usually max, but let's be safe.
         }
     }
 
@@ -105,14 +152,62 @@ export class Lexer {
     this.addToken(TokenType.NUMBER, parseFloat(this.source.substring(this.start, this.current)));
   }
 
-  string() {
-    while (this.peek() !== '"' && !this.isAtEnd()) {
+  template() {
+    const strings = [];
+    const expressions = []; // These will be strings of code to be parsed later
+    let currentString = "";
+
+    while (this.peek() !== '`' && !this.isAtEnd()) {
+      if (this.peek() === '$' && this.peekNext() === '{') {
+        strings.push(currentString);
+        currentString = "";
+        this.advance(); // $
+        this.advance(); // {
+        
+        let exprCode = "";
+        let braceCount = 1;
+        while (braceCount > 0 && !this.isAtEnd()) {
+          if (this.peek() === '{') braceCount++;
+          if (this.peek() === '}') braceCount--;
+          if (braceCount > 0) exprCode += this.advance();
+        }
+        if (this.isAtEnd()) throw new Error("Unterminated template interpolation.");
+        this.advance(); // }
+        expressions.push(exprCode);
+      } else {
+        if (this.peek() === '\n') this.line++;
+        currentString += this.advance();
+      }
+    }
+
+    if (this.isAtEnd()) throw new Error("Unterminated template literal.");
+    strings.push(currentString);
+    this.advance(); // `
+    
+    this.addToken(TokenType.TEMPLATE, { strings, expressions });
+  }
+
+  string(quote) {
+    let value = "";
+    while (this.peek() !== quote && !this.isAtEnd()) {
       if (this.peek() === '\n') this.line++;
-      this.advance();
+      if (this.peek() === '\\') {
+          this.advance();
+          const escaped = this.advance();
+          switch(escaped) {
+              case 'n': value += '\n'; break;
+              case 't': value += '\t'; break;
+              case '\\': value += '\\'; break;
+              case '"': value += '"'; break;
+              case "'": value += "'"; break;
+              default: value += escaped; break;
+          }
+      } else {
+        value += this.advance();
+      }
     }
     if (this.isAtEnd()) throw new Error("Unterminated string.");
     this.advance();
-    const value = this.source.substring(this.start + 1, this.current - 1);
     this.addToken(TokenType.STRING, value);
   }
 

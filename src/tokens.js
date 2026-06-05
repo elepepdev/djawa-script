@@ -1,5 +1,6 @@
 export const TokenType = {
-  // Keywords
+  GUDUK: 'GUDUK',
+
   IKI_IKU: 'IKI_IKU',       // const
   JARNO: 'JARNO',           // let
   GAWE: 'GAWE',             // function
@@ -41,6 +42,9 @@ export const TokenType = {
   PASANG: 'PASANG',         // set
   IKU_ONO: 'IKU_ONO',       // is not null/undefined
   IKU_ILANG: 'IKU_ILANG',   // is null/undefined
+  IKU: 'IKU',               // iku
+  ONO: 'ONO',               // ono
+  ILANG: 'ILANG',           // ilang
   TUPLE: 'TUPLE',           // tuple()
   JUPUKNO: 'JUPUKNO',       // import
   METOKNO: 'METOKNO',       // export
@@ -106,9 +110,16 @@ export const TokenType = {
   COLON: 'COLON',             // :
   SEMICOLON: 'SEMICOLON',     // ;
   MUNGKIN: 'MUNGKIN',         // .mungkin.
-  
+  TEMPLATE: 'TEMPLATE',       // `template`
+
+  // Duplicate token definitions removed
+  // New slash command tokens
+  CLEAR: 'CLEAR',
+  CREDITS: 'CREDITS',
+
   EOF: 'EOF'
 };
+
 
 export const Keywords = {
   'iki iku': TokenType.IKI_IKU,
@@ -133,6 +144,7 @@ export const Keywords = {
   'pilih': TokenType.PILIH,
   'kalo': TokenType.KALO,
   'yowes': TokenType.YOWES,
+  'guduk': TokenType.GUDUK,
   'cobak': TokenType.COBAK,
   'nyekel': TokenType.NYEKEL,
   'pungkasan': TokenType.PUNGKASAN,
@@ -158,7 +170,8 @@ export const Keywords = {
   'kabeh': TokenType.KABEH,
   'ta': TokenType.TA,
 
-  // Javanese Operators as Keywords to prevent them being IDENTIFIERs
+  'CLEAR': 'CLEAR',
+  'CREDITS': 'CREDITS',
   'tambah': TokenType.TAMBAH,
   'kurang': TokenType.KURANG,
   'ping': TokenType.PING,
@@ -190,6 +203,9 @@ export const Keywords = {
   'geserTengen': TokenType.GESER_TENGEN,
   'geserTengenNol': TokenType.GESER_TENGEN_NOL,
   'utowoYenKosong': TokenType.UTOWO_YEN_KOSONG,
+  'iku': TokenType.IKU,
+  'ono': TokenType.ONO,
+  'ilang': TokenType.ILANG,
   'lek misale': TokenType.LEK_MISALE,
   'lek gak': TokenType.LEK_GAK,
   
@@ -209,4 +225,34 @@ export const Keywords = {
   'utowo': TokenType.LIYANE,
   'saksuwene': TokenType.SELAGI,
   'mbaleni': TokenType.KANGGO,
+  'new': TokenType.ANYAR,
+  'if': TokenType.LEK,
+  'else': TokenType.LIYANE,
+  'while': TokenType.SELAGI,
+  'for': TokenType.KANGGO,
+  'return': TokenType.BALEKNO,
+  'function': TokenType.GAWE,
+  'const': TokenType.IKI_IKU,
+  'let': TokenType.JARNO,
+  'var': TokenType.JARNO,
+  'async': TokenType.TENANGAN,
+  'await': TokenType.ENTENI,
+  'yield': TokenType.ASILNO,
+  'try': TokenType.COBAK,
+  'catch': TokenType.NYEKEL,
+  'finally': TokenType.PUNGKASAN,
+  'throw': TokenType.UNCALEN,
+  'class': TokenType.KELAS,
+  'extends': TokenType.TURUNAN_SOKO,
+  'constructor': TokenType.WUJUDNO,
+  'super': TokenType.INDUK,
+  'this': TokenType.IKI,
+  'static': TokenType.TETEP,
+  'switch': TokenType.PILIH,
+  'case': TokenType.KALO,
+  'default': TokenType.YOWES,
+  'true': TokenType.TENAN,
+  'false': TokenType.GAK,
+  'null': TokenType.KOSONG,
+  'undefined': TokenType.ORADIDEFINISIKAN,
 };

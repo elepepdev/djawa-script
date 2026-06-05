@@ -43,12 +43,16 @@ async function runRepl() {
   });
 
   const interpreter = new Interpreter();
-  console.log("DjawaScript REPL (Independent Engine)");
+  let buffer = "";
+  let blockDepth = 0;
+
+  console.log("DjawaScript REPL v2.0.1");
   console.log("Ketik 'metu' utowo pencet Ctrl+C kanggo metu.");
 
+  rl.setPrompt('djawa> ');
   rl.prompt();
 
-  rl.on('line', (line) => {
+  rl.on('line', async (line) => {
     const trimmed = line.trim();
     if (trimmed === 'metu') {
       rl.close();
@@ -60,17 +64,36 @@ async function runRepl() {
       return;
     }
 
+    // Hitung blok
+    const terusCount = (line.match(/terus/g) || []).length;
+    const mbariCount = (line.match(/mbari/g) || []).length;
+    blockDepth += (terusCount - mbariCount);
+
+    buffer += line + '\n';
+
+    if (blockDepth > 0) {
+      rl.setPrompt('....> ');
+      rl.prompt();
+      return;
+    }
+
+    // Jika blok selesai, eksekusi
     try {
-      const lexer = new Lexer(line);
+      const lexer = new Lexer(buffer);
       const tokens = lexer.scanTokens();
       const parser = new Parser(tokens);
       const statements = parser.parse();
-      
-      interpreter.interpret(statements);
+
+      await interpreter.interpret(statements);
     } catch (error) {
       console.error('Error:', error.message);
+      buffer = "";
+      blockDepth = 0;
     }
 
+    buffer = ""; // Reset
+    blockDepth = 0; // Reset
+    rl.setPrompt('djawa> ');
     rl.prompt();
   }).on('close', () => {
     console.log('\nMatur nuwun!');
@@ -91,9 +114,9 @@ async function runFile(fileName) {
     const tokens = lexer.scanTokens();
     const parser = new Parser(tokens);
     const statements = parser.parse();
-    
+
     const interpreter = new Interpreter();
-    interpreter.interpret(statements);
+    await interpreter.interpret(statements);
   } catch (error) {
     console.error('Error nalika nglakokake kode:');
     console.error(error.message);

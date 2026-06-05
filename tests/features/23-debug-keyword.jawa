@@ -1,0 +1,5 @@
+// Test for 'debug' keyword
+cetakno("Starting debug test...");
+jarno x = 10;
+debug; // Should invoke debugger
+cetakno("Debug test complete.");

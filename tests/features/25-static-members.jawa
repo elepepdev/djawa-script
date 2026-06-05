@@ -1,0 +1,9 @@
+// Test for static members
+
+kelas Utility {
+  tetep gawe greet() {
+    cetakno("Hello from static method!");
+  }
+}
+
+Utility.greet();
