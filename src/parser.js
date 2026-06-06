@@ -295,16 +295,16 @@ export class Parser {
   }
 
   lekStatement() {
-    this.consume(TokenType.LEFT_PAREN, "Kudune '(' sakwise 'lek'.");
+    this.match(TokenType.LEFT_PAREN);
     const condition = this.expression();
-    this.consume(TokenType.RIGHT_PAREN, "Kudune ')' sakwise kondisi.");
+    if (this.check(TokenType.RIGHT_PAREN)) this.advance();
     this.consume(TokenType.TERUS, "Kudune 'terus' sakwise kondisi.");
     const thenBranch = new AST.Block(this.block());
     const elseIfBranches = [];
     while (this.match(TokenType.LEK_MISALE)) {
-      this.consume(TokenType.LEFT_PAREN, "Kudune '(' sakwise 'lek misale'.");
+      this.match(TokenType.LEFT_PAREN);
       const elifCond = this.expression();
-      this.consume(TokenType.RIGHT_PAREN, "Kudune ')' sakwise kondisi.");
+      if (this.check(TokenType.RIGHT_PAREN)) this.advance();
       this.consume(TokenType.TERUS, "Kudune 'terus' sakwise kondisi.");
       elseIfBranches.push({ condition: elifCond, branch: new AST.Block(this.block()) });
     }
@@ -317,14 +317,19 @@ export class Parser {
   }
 
   cetaknoStatement() {
-    this.consume(TokenType.LEFT_PAREN, "Kudune '(' sakwise 'cetakno'.");
     const expressions = [];
-    if (!this.check(TokenType.RIGHT_PAREN)) {
+    if (this.match(TokenType.LEFT_PAREN)) {
+      if (!this.check(TokenType.RIGHT_PAREN)) {
+        do {
+          expressions.push(this.expression());
+        } while (this.match(TokenType.COMMA));
+      }
+      this.consume(TokenType.RIGHT_PAREN, "Kudune ')' sakwise nilai.");
+    } else {
       do {
         expressions.push(this.expression());
       } while (this.match(TokenType.COMMA));
     }
-    this.consume(TokenType.RIGHT_PAREN, "Kudune ')' sakwise nilai.");
     return new AST.Cetakno(expressions);
   }
 
@@ -338,9 +343,9 @@ export class Parser {
   }
 
   selagiStatement() {
-    this.consume(TokenType.LEFT_PAREN, "Kudune '(' sakwise 'selagi'.");
+    this.match(TokenType.LEFT_PAREN);
     const condition = this.expression();
-    this.consume(TokenType.RIGHT_PAREN, "Kudune ')' sakwise kondisi.");
+    if (this.check(TokenType.RIGHT_PAREN)) this.advance();
     this.consume(TokenType.TERUS, "Kudune 'terus' sakdurunge body loop.");
     const body = new AST.Block(this.block());
     return new AST.Selagi(condition, body);
@@ -394,9 +399,9 @@ export class Parser {
   }
 
   pilihStatement() {
-    this.consume(TokenType.LEFT_PAREN, "Kudune '(' sakwise 'pilih'.");
+    this.match(TokenType.LEFT_PAREN);
     const expr = this.expression();
-    this.consume(TokenType.RIGHT_PAREN, "Kudune ')' sakwise ekspresi.");
+    if (this.check(TokenType.RIGHT_PAREN)) this.advance();
     this.consume(TokenType.TERUS, "Kudune 'terus' sakwise 'pilih'.");
     const cases = [];
     while (this.match(TokenType.KALO)) {
@@ -425,9 +430,9 @@ export class Parser {
     let catchVar = null;
     let catchBranch = null;
     if (this.match(TokenType.NYEKEL)) {
-      this.consume(TokenType.LEFT_PAREN, "Kudune '(' sakwise 'nyekel'.");
+      this.match(TokenType.LEFT_PAREN);
       catchVar = this.consume(TokenType.IDENTIFIER, "Kudune jeneng variabel error.");
-      this.consume(TokenType.RIGHT_PAREN, "Kudune ')' sakwise jeneng variabel.");
+      if (this.check(TokenType.RIGHT_PAREN)) this.advance();
       this.consume(TokenType.TERUS, "Kudune 'terus' sakwise 'nyekel'.");
       catchBranch = new AST.Block(this.block());
     }

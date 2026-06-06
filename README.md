@@ -778,6 +778,61 @@ Use these in test scripts or as runtime guards. `pastenPodo` is short for "paste
 
 ---
 
+## Tanda Kurung Opsional (v2.2.0)
+
+Demi filosofi **"berbicara kepada komputer secara langsung"**, tanda kurung `()` di sekitar argumen konstruk-konstruk berikut menjadi **opsional** pada level statement.
+
+### Konstruk yang Mendukung
+
+| Konstruksi | Bentuk dengan kurung | Bentuk tanpa kurung |
+| :--- | :--- | :--- |
+| `lek` (if) | `lek (x > 0) terus ...` | `lek x > 0 terus ...` |
+| `lek misale` (else if) | `lek misale (x > 0) terus ...` | `lek misale x > 0 terus ...` |
+| `selagi` (while) | `selagi (x < 10) terus ...` | `selagi x < 10 terus ...` |
+| `pilih` (switch) | `pilih (x) terus ... mbari` | `pilih x terus ... mbari` |
+| `cetakno` (print) | `cetakno a, b, c` | `cetakno a, b, c` |
+| `cetakno` (1 arg) | `cetakno (x)` | `cetakno x` |
+| `nyekel` (catch) | `nyekel (e) terus ...` | `nyekel e terus ...` |
+
+### Contoh
+
+```jawascript
+// lek tanpa kurung
+lek umur >= 17 terus
+  cetakno("Dewasa")
+mbari
+
+// cetakno multi-argumen tanpa kurung
+cetakno "halo", "dunia", "!"
+
+// nyekel tanpa kurung
+cobak terus
+  uncalen "ada kesalahan"
+mbari nyekel e terus
+  cetakno "error: " + e
+mbari
+
+// Bentuk campuran tetap valid dalam file yang sama
+jarno skor = 85
+lek (skor >= 90) terus
+  cetakno("A")
+mbari lek misale skor >= 80 terus
+  cetakno("B")
+mbari
+```
+
+### Yang Tetap Wajib Kurung
+
+Untuk menjaga parser tetap sederhana dan tidak ambigu, tanda kurung tetap **wajib** pada:
+
+- Deklarasi fungsi: `gawe nama (a, b) terus ... mbari` (multi-param, destructuring)
+- Arrow function: `(x, y) lakoni ...`
+- C-style `for`: `kanggo (i = 0; i < 10; i = i + 1) terus ...`
+- Function call ekspresi: `f (a, b)`, `tuple (a, b)`, `takon (msg)`, `new Foo (a, b)`
+- Grouping ekspresi: `(a + b)`
+
+---
+
 ## Special Keywords
 
 | JPL | JavaScript | Description |

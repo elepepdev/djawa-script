@@ -1,0 +1,81 @@
+// Test: Tanda Kurung Opsional (Paren-Optional Syntax)
+// Demonstrates that () are now optional in statement-level constructs
+// for the philosophy of "berbicara kepada komputer secara langsung".
+
+cetakno("--- lek tanpa kurung ---")
+jarno umur = 20
+lek umur > 17 terus
+  cetakno("Dewasa")
+mbari
+
+cetakno("--- lek misale tanpa kurung ---")
+lek umur > 12 terus
+  cetakno("Remaja")
+mbari lek misale umur > 5 terus
+  cetakno("Anak")
+mbari liyane terus
+  cetakno("Balita")
+mbari
+
+cetakno("--- lek dengan operator kompleks ---")
+jarno x = 5
+lek x * 2 > 8 terus
+  cetakno("x * 2 luwih saka 8")
+mbari
+
+cetakno("--- selagi tanpa kurung ---")
+jarno i = 0
+selagi i < 3 terus
+  cetakno("i = " + i)
+  i = i + 1
+mbari
+
+cetakno("--- pilih tanpa kurung ---")
+jarno hari = 3
+pilih hari terus
+  kalo 1: cetakno("Senin")
+  kalo 2: cetakno("Selasa")
+  kalo 3: cetakno("Rabu")
+  yowes:
+    cetakno("Liyane")
+mbari
+
+cetakno("--- cetakno tanpa kurung: 1 argumen ---")
+cetakno "halo"
+
+cetakno("--- cetakno tanpa kurung: 2 argumen ---")
+cetakno "halo", "dunia"
+
+cetakno("--- cetakno tanpa kurung: 3 argumen ---")
+cetakno "siji", "loro", "telu"
+
+cetakno("--- cetakno tanpa kurung: ekspresi ---")
+jarno a = 10
+jarno b = 20
+cetakno a + b
+
+cetakno("--- nyekel tanpa kurung ---")
+cobak terus
+  uncalen "ups"
+mbari nyekel e terus
+  cetakno "nyekel error: " + e
+mbari
+
+cetakno("--- BENTUK CAMPURAN: paren + tanpa paren ---")
+// Beberapa dengan kurung, beberapa tanpa, dalam file yang sama
+jarno skor = 85
+lek (skor >= 90) terus
+  cetakno("A")
+mbari lek misale skor >= 80 terus
+  cetakno("B")
+mbari liyane terus
+  cetakno("C")
+mbari
+
+cetakno("--- lek plek tanpa kurung ---")
+jarno a = 5
+lek a plek 5 terus
+  cetakno "a podo karo 5"
+mbari
+
+cetakno("--- Rampung ---")

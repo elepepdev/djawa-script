@@ -1,0 +1,73 @@
+// demo.jawa — Demo singkat semua fitur v2.1+ v2.2
+
+cetakno("=== DEMO FITUR DJAWASCRIPT ===")
+
+cetakno("1. Numeric separator:")
+cetakno 1_000_000
+
+cetakno("2. Raw string:")
+cetakno r"C:\windows\system32"
+
+cetakno("3. Range iterator:")
+kanggo i soko 1..4 terus
+  cetakno "  - " + i
+mbari
+
+cetakno("4. Iterator helpers:")
+iki iku nums yoiku [1, 2, 3, 4, 5]
+cetakno "  sum = " + nums.kurangi((a, b) lakoni a tambah b, 0)
+cetakno "  first > 3 = " + nums.temokake(x lakoni x > 3)
+
+cetakno("5. RegExp literal:")
+iki iku email yoiku /^[^\s@]+@[^\s@]+$/
+cetakno "  match: " + email.tes("user@jawir.id")
+
+cetakno("6. Enum:")
+cacah Werna yoiku
+  abang, ijo, kuning
+mbari
+cetakno "  abang = " + Werna.abang
+cetakno "  jenenge(2) = " + Werna.jenenge(2)
+
+cetakno("7. Pattern matching:")
+gawe sapaan(oralan) terus
+  cocok oralan terus
+    kalo "sedulur" terus
+      balekno "Sedulurku"
+    mbari
+    kalo "ndhara" terus
+      balekno "Ndhara"
+    mbari
+    kalo _ terus
+      balekno "Ora kenal"
+    mbari
+  mbari
+mbari
+cetakno "  " + sapaan("sedulur")
+cetakno "  " + sapaan("ndhara")
+cetakno "  " + sapaan("liyane")
+
+cetakno("8. Pasten (assertion):")
+pasten 1 + 1 plek 2
+cetakno "  lulus!"
+
+cetakno("9. for...of:")
+kanggo woh soko ["apel", "jeruk", "mangga"] terus
+  cetakno "  - " + woh
+mbari
+
+cetakno("10. Tanda kurung opsional (v2.2):")
+// Sekarang paren tidak wajib lagi!
+jarno skor = 85
+lek skor >= 90 terus
+  cetakno "  A"
+mbari lek misale skor >= 80 terus
+  cetakno "  B"
+mbari liyane terus
+  cetakno "  C"
+mbari
+
+// cetakno multi-arg juga bisa tanpa kurung
+cetakno "  halo", "dunia", "tanpa", "kurung"
+
+cetakno("=== Selesai ===")

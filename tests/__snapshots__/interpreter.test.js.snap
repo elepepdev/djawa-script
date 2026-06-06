@@ -366,4 +366,34 @@ sapa = Sugeng rawuh, Jawa
 tambahake(3, 4) = 7"
 `;
 
+exports[`JawaScript Interpreter Feature Tests should correctly execute 58-paren-optional.jawa 1`] = `
+"--- lek tanpa kurung ---
+Dewasa
+--- lek misale tanpa kurung ---
+Remaja
+--- lek dengan operator kompleks ---
+x * 2 luwih saka 8
+--- selagi tanpa kurung ---
+i = 0
+i = 1
+i = 2
+--- pilih tanpa kurung ---
+Rabu
+--- cetakno tanpa kurung: 1 argumen ---
+halo
+--- cetakno tanpa kurung: 2 argumen ---
+halo dunia
+--- cetakno tanpa kurung: 3 argumen ---
+siji loro telu
+--- cetakno tanpa kurung: ekspresi ---
+30
+--- nyekel tanpa kurung ---
+nyekel error: ups
+--- BENTUK CAMPURAN: paren + tanpa paren ---
+B
+--- lek plek tanpa kurung ---
+a podo karo 5
+--- Rampung ---"
+`;
+
 exports[`JawaScript Interpreter Feature Tests should correctly execute test-module.jawa 1`] = `""`;

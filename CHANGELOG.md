@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## [v2.2.0] — Tanda Kurung Opsional
+
+### Added
+- **Paren-optional syntax** (statement level): `lek`, `lek misale`, `selagi`, `pilih`, `cetakno`, `nyekel` dapat ditulis tanpa tanda kurung di sekitar argumennya, demi filosofi "berbicara kepada komputer secara langsung".
+  - `lek (x > 0) terus` → `lek x > 0 terus`
+  - `cetakno a, b, c` (multi-argumen tanpa kurung)
+  - `nyekel e terus` (langsung identifier)
+- Hybrid parser: kurung lama tetap 100% didukung — tidak ada breaking change.
+
+### Out of Scope (tetap wajib kurung)
+- Deklarasi fungsi `gawe name (params) terus` (multi-param, destructuring)
+- Arrow function `(x, y) lakoni ...`
+- C-style `kanggo (init; cond; incr)`
+- Function call ekspresi `f (a, b)`, `tuple (a, b)`, `takon (msg)`, `new Foo (a, b)`, grouping `(expr)`
+
 ## [v2.1.0] — Tahap 1 Complete
 
 ### Added
