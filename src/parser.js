@@ -21,6 +21,9 @@ export class Parser {
     try {
       let result = null;
       if (this.match(TokenType.KELAS)) result = this.classDeclaration();
+      else if (this.match(TokenType.CACAH)) result = this.enumDeclaration();
+      else if (this.match(TokenType.METOKNO)) result = this.metoknoStatement();
+      else if (this.match(TokenType.JUPUKNO)) result = this.jupuknoStatement();
       else if (this.match(TokenType.GAWE)) {
         let isAsync = false;
         if (this.match(TokenType.TENANGAN)) isAsync = true;
@@ -67,6 +70,103 @@ export class Parser {
     }
     this.consume(TokenType.MBARI, "Kudune 'mbari' sakwise body kelas.");
     return new AST.Kelas(name, superclass, methods);
+  }
+
+  metoknoStatement() {
+    // 'terus' is optional
+    this.match(TokenType.TERUS);
+    if (this.match(TokenType.KABEH)) {
+      return new AST.MetoknoStmt('all', []);
+    }
+    if (this.match(TokenType.BIASANE)) {
+      // metokno biasane <expr>
+      const value = this.expression();
+      return new AST.MetoknoStmt('default', [value]);
+    }
+    // Named exports — work with or without `terus { ... }`
+    const items = [];
+    if (!this.check(TokenType.MBARI) && !this.isAtEnd()) {
+      do {
+        const name = this.consumeNameLike("Kudune jeneng sing arep di-metokno.");
+        items.push({ name });
+      } while (this.match(TokenType.COMMA));
+    }
+    this.match(TokenType.MBARI);
+    return new AST.MetoknoStmt('named', items);
+  }
+
+  jupuknoStatement() {
+    // 'terus' is optional
+    this.match(TokenType.TERUS);
+    if (this.match(TokenType.KABEH)) {
+      // jupukno * dadi Name soko 'path'
+      this.consume(TokenType.DADI, "Kudune 'dadi' sakwise '*' ing 'jupukno'.");
+      const alias = this.consumeNameLike("Kudune jeneng alias.");
+      this.consume(TokenType.SOKO, "Kudune 'soko' sakwise alias.");
+      const sourceTok = this.consume(TokenType.STRING, "Kudune path string.");
+      return new AST.JupuknoStmt('all', [{ alias }], sourceTok.literal);
+    }
+    if (this.match(TokenType.BIASANE)) {
+      // jupukno biasane Name soko 'path'
+      const name = this.consumeNameLike("Kudune jeneng default import.");
+      this.consume(TokenType.SOKO, "Kudune 'soko' sakwise jeneng.");
+      const sourceTok = this.consume(TokenType.STRING, "Kudune path string.");
+      return new AST.JupuknoStmt('default', [{ name }], sourceTok.literal);
+    }
+    // Named imports — work with or without `terus { ... }`
+    const items = [];
+    if (!this.check(TokenType.MBARI) && !this.isAtEnd()) {
+      do {
+        const name = this.consumeNameLike("Kudune jeneng sing arep di-jupukno.");
+        let alias = name;
+        if (this.match(TokenType.DADI)) {
+          alias = this.consumeNameLike("Kudune jeneng alias.");
+        }
+        items.push({ name, alias });
+      } while (this.match(TokenType.COMMA));
+    }
+    this.match(TokenType.MBARI);
+    this.consume(TokenType.SOKO, "Kudune 'soko' sakwise daftar import.");
+    const sourceTok = this.consume(TokenType.STRING, "Kudune path string.");
+    return new AST.JupuknoStmt('named', items, sourceTok.literal);
+  }
+
+  consumeNameLike(message) {
+    if (this.check(TokenType.IDENTIFIER)) return this.advance();
+    // Allow keywords that look like identifiers (single-word, no special chars)
+    const t = this.peek();
+    if (t.type === TokenType.EOF) throw this.error(t, message);
+    if (/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(t.lexeme)) return this.advance();
+    throw this.error(t, message);
+  }
+
+  enumDeclaration() {
+    const name = this.consume(TokenType.IDENTIFIER, "Kudune jeneng enum.");
+    this.consume(TokenType.YOIKU, "Kudune 'yoiku' sakwise jeneng enum.");
+    // 'terus' is optional — body starts directly with variants
+    this.match(TokenType.TERUS);
+    const variants = [];
+    let autoValue = 0;
+    while (!this.check(TokenType.MBARI) && !this.isAtEnd()) {
+      const vname = this.consume(TokenType.IDENTIFIER, "Kudune jeneng varian enum.");
+      let value = autoValue;
+      let explicit = false;
+      if (this.match(TokenType.YOIKU)) {
+        // Parse a single literal (number, string, true, false) for explicit value
+        if (this.match(TokenType.NUMBER, TokenType.STRING)) {
+          value = this.previous().literal;
+        } else if (this.match(TokenType.TENAN)) value = true;
+        else if (this.match(TokenType.GAK)) value = false;
+        else if (this.match(TokenType.KOSONG)) value = null;
+        else throw this.error(this.peek(), "Nilai enum kudu literal (angka, string, tenan, gak, kosong).");
+        explicit = true;
+      }
+      variants.push({ name: vname, value, explicit });
+      autoValue = explicit ? (typeof value === 'number' ? value + 1 : autoValue) : autoValue + 1;
+      if (!this.match(TokenType.COMMA)) break;
+    }
+    this.consume(TokenType.MBARI, "Kudune 'mbari' sakwise body enum.");
+    return new AST.EnumStmt(name, variants);
   }
 
   functionDeclaration(kind, isAsync = false) {
@@ -183,7 +283,9 @@ export class Parser {
     if (this.match(TokenType.BALEKNO)) return this.baleknoStatement();
     if (this.match(TokenType.SELAGI)) return this.selagiStatement();
     if (this.match(TokenType.KANGGO)) return this.kanggoStatement();
+    if (this.match(TokenType.RENTANG)) return this.rentangStatement();
     if (this.match(TokenType.PILIH)) return this.pilihStatement();
+    if (this.match(TokenType.COCOK)) return this.cocokStatement();
     if (this.match(TokenType.COBAK)) return this.cobakStatement();
     if (this.match(TokenType.UNCALEN)) return this.uncalenStatement();
     if (this.match(TokenType.MANDEK)) return new AST.Mandek(this.previous());
@@ -245,6 +347,20 @@ export class Parser {
   }
 
   kanggoStatement() {
+    // for...of style: kanggo [var] x soko expr { } or rentang { }
+    if (!this.check(TokenType.LEFT_PAREN)) {
+      let isConst = false;
+      let varKeyword = null;
+      if (this.match(TokenType.JARNO)) { isConst = false; varKeyword = this.previous(); }
+      else if (this.match(TokenType.IKI_IKU)) { isConst = true; varKeyword = this.previous(); }
+      const name = this.consume(TokenType.IDENTIFIER, "Kudune jeneng variabel iterasi.");
+      this.consume(TokenType.SOKO, "Kudune 'soko' sakwise jeneng variabel.");
+      const iterable = this.expression();
+      this.consume(TokenType.TERUS, "Kudune 'terus' sakdurunge body loop.");
+      const body = new AST.Block(this.block());
+      return new AST.ForOf(name, iterable, body, isConst);
+    }
+
     this.consume(TokenType.LEFT_PAREN, "Kudune '(' sakwise 'kanggo'.");
     let initializer;
     if (this.match(TokenType.SEMICOLON)) initializer = null;
@@ -264,6 +380,17 @@ export class Parser {
     this.consume(TokenType.TERUS, "Kudune 'terus' sakdurunge body loop.");
     const body = new AST.Block(this.block());
     return new AST.Kanggo(initializer, condition, increment, body);
+  }
+
+  rentangStatement() {
+    const start = this.expression();
+    let end = null;
+    if (this.match(TokenType.DOT_DOT)) {
+      end = this.expression();
+    }
+    this.consume(TokenType.TERUS, "Kudune 'terus' sakwise 'rentang'.");
+    const body = new AST.Block(this.block());
+    return new AST.RentangStmt(start, end, body);
   }
 
   pilihStatement() {
@@ -310,6 +437,104 @@ export class Parser {
       finallyBranch = new AST.Block(this.block());
     }
     return new AST.Cobak(tryBlock, catchVar, catchBranch, finallyBranch);
+  }
+
+  cocokStatement() {
+    const expr = this.expression();
+    // 'terus' is optional
+    this.match(TokenType.TERUS);
+    const arms = [];
+    let defaultBranch = null;
+    while (!this.check(TokenType.MBARI) && !this.isAtEnd()) {
+      if (this.match(TokenType.YOWES)) {
+        // yowes: body (terus ... mbari) or single statement
+        let stmts;
+        if (this.match(TokenType.TERUS)) {
+          stmts = this.block();
+        } else {
+          stmts = [this.declaration()];
+        }
+        defaultBranch = new AST.Block(stmts);
+        continue;
+      }
+      if (!this.match(TokenType.KALO)) {
+        throw this.error(this.peek(), "Kudune 'kalo' utowo 'yowes' ing 'cocok'.");
+      }
+      // Parse one or more patterns separated by `,` or `utawa` (or-pattern)
+      const patterns = [this.parsePattern()];
+      while (this.match(TokenType.COMMA) || this.match(TokenType.UTAWA)) {
+        patterns.push(this.parsePattern());
+      }
+      let guard = null;
+      if (this.match(TokenType.LAN)) {
+        guard = this.expression();
+      }
+      // Body: either `terus ... mbari` (block) or single statement
+      let stmts;
+      if (this.match(TokenType.TERUS)) {
+        stmts = this.block();
+      } else {
+        stmts = [this.declaration()];
+      }
+      arms.push({ patterns, guard, body: new AST.Block(stmts) });
+    }
+    this.consume(TokenType.MBARI, "Kudune 'mbari' sakwise 'cocok'.");
+    return new AST.MatchStmt(expr, arms, defaultBranch);
+  }
+
+  parsePattern() {
+    // Wildcard _
+    if (this.match(TokenType.IDENTIFIER)) {
+      const tok = this.previous();
+      if (tok.lexeme === "_") return new AST.WildcardPattern();
+      return new AST.BindingPattern(tok);
+    }
+    if (this.match(TokenType.TENAN)) return new AST.LiteralPattern(true);
+    if (this.match(TokenType.GAK)) return new AST.LiteralPattern(false);
+    if (this.match(TokenType.KOSONG)) return new AST.LiteralPattern(null);
+    if (this.match(TokenType.ORADIDEFINISIKAN)) return new AST.LiteralPattern(undefined);
+    if (this.match(TokenType.NUMBER, TokenType.STRING)) return new AST.LiteralPattern(this.previous().literal);
+    if (this.match(TokenType.LEFT_BRACKET)) {
+      const elements = [];
+      let rest = null;
+      if (!this.check(TokenType.RIGHT_BRACKET)) {
+        do {
+          if (this.check(TokenType.DOT_DOT)) {
+            this.advance();
+            if (this.check(TokenType.RIGHT_BRACKET)) { rest = new AST.WildcardPattern(); break; }
+            if (this.check(TokenType.IDENTIFIER)) { rest = new AST.BindingPattern(this.advance()); break; }
+            throw this.error(this.peek(), "Kudune '_' utowo jeneng variabel sakwise '..'.");
+          }
+          elements.push(this.parsePattern());
+        } while (this.match(TokenType.COMMA));
+      }
+      this.consume(TokenType.RIGHT_BRACKET, "Kudune ']' sakwise array pattern.");
+      return new AST.ArrayPattern(elements, rest);
+    }
+    if (this.match(TokenType.TERUS)) {
+      const properties = [];
+      let rest = null;
+      if (!this.check(TokenType.MBARI)) {
+        do {
+          if (this.check(TokenType.DOT_DOT)) {
+            this.advance();
+            rest = new AST.WildcardPattern();
+            break;
+          }
+          const key = this.consume(TokenType.IDENTIFIER, "Kudune jeneng properti.");
+          let pat;
+          if (this.match(TokenType.COLON)) {
+            pat = this.parsePattern();
+          } else {
+            pat = new AST.BindingPattern(key);
+          }
+          properties.push({ key, pat });
+        } while (this.match(TokenType.COMMA));
+      }
+      this.consume(TokenType.MBARI, "Kudune 'mbari' sakwise object pattern.");
+      return new AST.ObjectPattern(properties, rest);
+    }
+    throw this.error(this.peek(), "Pattern ora valid.");
   }
 
   uncalenStatement() {
@@ -429,11 +654,21 @@ export class Parser {
   }
 
   term() {
-    let expr = this.factor();
+    let expr = this.range();
     while (this.match(TokenType.KURANG, TokenType.TAMBAH)) {
       const operator = this.previous();
-      const right = this.factor();
+      const right = this.range();
       expr = new AST.Binary(expr, operator, right);
+    }
+    return expr;
+  }
+
+  range() {
+    let expr = this.factor();
+    if (this.match(TokenType.DOT_DOT)) {
+      const inclusive = !this.match(TokenType.DOT_DOT);
+      const end = this.factor();
+      expr = new AST.RangeExpr(expr, end, inclusive);
     }
     return expr;
   }
@@ -503,7 +738,11 @@ export class Parser {
     if (this.match(TokenType.TENAN)) return new AST.Literal(true);
     if (this.match(TokenType.KOSONG)) return new AST.Literal(null);
     if (this.match(TokenType.ORADIDEFINISIKAN)) return new AST.Literal(undefined);
-    if (this.match(TokenType.NUMBER, TokenType.STRING)) return new AST.Literal(this.previous().literal);
+    if (this.match(TokenType.NUMBER, TokenType.STRING, TokenType.RAW_STRING)) return new AST.Literal(this.previous().literal);
+    if (this.match(TokenType.REGEX)) {
+        const { pattern, flags } = this.previous().literal;
+        return new AST.Literal(new RegExp(pattern, flags));
+    }
     if (this.match(TokenType.IKI)) return new AST.This(this.previous());
     
     if (this.match(TokenType.TEMPLATE)) {

@@ -116,6 +116,7 @@ async function runFile(fileName) {
     const statements = parser.parse();
 
     const interpreter = new Interpreter();
+    interpreter.currentDir = path.dirname(absolutePath);
     await interpreter.interpret(statements);
   } catch (error) {
     console.error('Error nalika nglakokake kode:');

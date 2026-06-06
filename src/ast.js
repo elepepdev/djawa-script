@@ -157,6 +157,16 @@ export class ObjectLiteral extends Expr {
   accept(visitor) { return visitor.visitObjectLiteralExpr(this); }
 }
 
+export class RangeExpr extends Expr {
+  constructor(start, end, inclusive) {
+    super();
+    this.start = start;
+    this.end = end;
+    this.inclusive = inclusive; // true for 1..10, false for 1...10
+  }
+  accept(visitor) { return visitor.visitRangeExpr(this); }
+}
+
 export class TemplateLiteral extends Expr {
   constructor(strings, expressions) {
     super();
@@ -233,6 +243,27 @@ export class Kanggo extends Stmt {
     this.body = body;
   }
   accept(visitor) { return visitor.visitKanggoStmt(this); }
+}
+
+export class ForOf extends Stmt {
+  constructor(name, iterable, body, isConst = false) {
+    super();
+    this.name = name;
+    this.iterable = iterable;
+    this.body = body;
+    this.isConst = isConst;
+  }
+  accept(visitor) { return visitor.visitForOfStmt(this); }
+}
+
+export class RentangStmt extends Stmt {
+  constructor(start, end, body) {
+    super();
+    this.start = start;
+    this.end = end; // null = just iterate from start (use as iterable)
+    this.body = body;
+  }
+  accept(visitor) { return visitor.visitRentangStmt(this); }
 }
 
 export class Gawe extends Stmt {
@@ -318,4 +349,48 @@ export class Pilih extends Stmt {
     this.defaultBranch = defaultBranch;
   }
   accept(visitor) { return visitor.visitPilihStmt(this); }
+}
+
+export class EnumStmt extends Stmt {
+  constructor(name, variants) {
+    super();
+    this.name = name;
+    this.variants = variants; // Array of {name, value, explicit}
+  }
+  accept(visitor) { return visitor.visitEnumStmt(this); }
+}
+
+export class MatchStmt extends Stmt {
+  constructor(expression, arms, defaultBranch) {
+    super();
+    this.expression = expression;
+    this.arms = arms; // Array of {patterns, guard, body}
+    this.defaultBranch = defaultBranch;
+  }
+  accept(visitor) { return visitor.visitMatchStmt(this); }
+}
+
+export class LiteralPattern { constructor(value) { this.value = value; } }
+export class BindingPattern { constructor(name) { this.name = name; } }
+export class WildcardPattern {}
+export class ArrayPattern { constructor(elements, rest) { this.elements = elements; this.rest = rest; } }
+export class ObjectPattern { constructor(properties, rest) { this.properties = properties; this.rest = rest; } }
+
+export class MetoknoStmt extends Stmt {
+  constructor(kind, items) {
+    super();
+    this.kind = kind; // 'named' | 'default' | 'all'
+    this.items = items; // For 'named': [{name}]; for 'default': [expr]; for 'all': []
+  }
+  accept(visitor) { return visitor.visitMetoknoStmt(this); }
+}
+
+export class JupuknoStmt extends Stmt {
+  constructor(kind, items, source) {
+    super();
+    this.kind = kind; // 'named' | 'default' | 'all'
+    this.items = items; // For 'named': [{name, alias}]; for 'default': [name]; for 'all': [alias]
+    this.source = source; // string path
+  }
+  accept(visitor) { return visitor.visitJupuknoStmt(this); }
 }

@@ -1,0 +1,21 @@
+// Test: for...of (kanggo x soko arr) - the way JS-style for-of works
+cetakno("--- Kanggo x soko arr ---");
+
+iki iku angka yoiku [10, 20, 30];
+kanggo x soko angka terus
+  cetakno(x)
+mbari
+
+iki iku jeneng yoiku "Budi";
+cetakno("--- iterasi string ---");
+kanggo huruf soko jeneng terus
+  cetakno(huruf)
+mbari
+
+cetakno("--- iterasi obyek ---");
+iki iku data yoiku { a: 1, b: 2, c: 3 };
+kanggo nilai soko data terus
+  cetakno(nilai)
+mbari
+
+cetakno("--- Rampung ---");

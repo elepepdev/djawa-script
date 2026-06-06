@@ -1,0 +1,34 @@
+// Test: Pattern matching (cocok)
+cetakno("--- Pattern Matching (cocok) ---");
+
+gawe klasifikasi(n) terus
+  cocok n
+    kalo 0 terus balekno "nol" mbari
+    kalo 1, 2, 3 terus balekno "siji-siji" mbari
+    kalo x lan x < 0 terus balekno "negatif: " + x mbari
+    kalo x lan x > 100 terus balekno "gedhe banget: " + x mbari
+    kalo x terus balekno "liyane: " + x mbari
+  mbari
+mbari
+
+gawe urai(arr) terus
+  cocok arr
+    kalo [] terus balekno "kosong" mbari
+    kalo [a, b, c] terus balekno "tiga: " + a + "," + b + "," + c mbari
+    kalo [a, ..sisa] terus balekno "kaping siji: " + a + ", sisa: " + sisa.dawane mbari
+  mbari
+mbari
+
+cetakno(klasifikasi(0));
+cetakno(klasifikasi(2));
+cetakno(klasifikasi(-5));
+cetakno(klasifikasi(200));
+cetakno(klasifikasi(50));
+
+cetakno("--- wildcard binding ---");
+cetakno("match array:");
+cetakno(urai([1, 2, 3]));
+cetakno(urai([1, 2, 3, 4, 5]));
+cetakno(urai([]));
+
+cetakno("--- Rampung ---");

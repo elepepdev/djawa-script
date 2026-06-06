@@ -16,6 +16,7 @@ export class Lexer {
     this.start = 0;
     this.current = 0;
     this.line = 1;
+    this.regexAllowed = true; // true at start of expression
   }
 
   scanTokens() {
@@ -39,7 +40,7 @@ export class Lexer {
       case ',': this.addToken(TokenType.COMMA); break;
       case ';': this.addToken(TokenType.SEMICOLON); break;
       case ':': this.addToken(TokenType.COLON); break;
-      case '.': this.addToken(TokenType.DOT); break;
+      case '.': this.addToken(this.match('.') ? TokenType.DOT_DOT : TokenType.DOT); break;
       case '-': this.addToken(this.match('=') ? TokenType.KURANG_KARO : TokenType.KURANG); break;
       case '+': this.addToken(this.match('=') ? TokenType.TAMBAH_KARO : TokenType.TAMBAH); break;
       case '*': this.addToken(this.match('=') ? TokenType.PING_KARO : TokenType.PING); break;
@@ -48,6 +49,8 @@ export class Lexer {
           while (this.peek() !== '\n' && !this.isAtEnd()) this.advance();
         } else if (this.match('*')) {
           this.addToken(TokenType.SLASH_COMMAND);
+        } else if (this.regexAllowed) {
+          this.regex();
         } else {
           // Check for slash commands like /clear or /credits
           const cmdStart = this.current;
@@ -112,14 +115,20 @@ export class Lexer {
   identifier() {
     while (this.isAlphaNumeric(this.peek())) this.advance();
     let text = this.source.substring(this.start, this.current);
-    
+
+    // Check for raw string literal: r"..." or r'...' (only single 'r' followed by quote)
+    if (text === 'r' && (this.peek() === '"' || this.peek() === "'")) {
+      this.rawString(this.peek());
+      return;
+    }
+
     // Check for multi-word keywords
     const savedCurrent = this.current;
     const savedTokensLength = this.tokens.length;
-    
+
     let tempCurrent = this.current;
     let combinedText = text;
-    
+
     // Greedily try to match longer multi-word keywords
     while (this.source.charAt(tempCurrent) === ' ') {
         tempCurrent++;
@@ -127,13 +136,13 @@ export class Lexer {
         while (this.isAlphaNumeric(this.source.charAt(tempCurrent))) tempCurrent++;
         let nextWord = this.source.substring(nextWordStart, tempCurrent);
         if (!nextWord) break;
-        
+
         combinedText += " " + nextWord;
         if (Keywords[combinedText]) {
             text = combinedText;
             this.current = tempCurrent;
         } else {
-            // Keep looking if it might be part of a longer one? 
+            // Keep looking if it might be part of a longer one?
             // For JPL, 2 words is usually max, but let's be safe.
         }
     }
@@ -143,13 +152,52 @@ export class Lexer {
     this.addToken(type);
   }
 
+  rawString(quote) {
+    this.advance();
+    let value = "";
+    while (this.peek() !== quote && !this.isAtEnd()) {
+      if (this.peek() === '\n') this.line++;
+      value += this.advance();
+    }
+    if (this.isAtEnd()) throw new Error("Unterminated raw string.");
+    this.advance();
+    this.addToken(TokenType.RAW_STRING, value);
+  }
+
+  regex() {
+    let pattern = "";
+    let inClass = false;
+    while (!this.isAtEnd()) {
+      const c = this.peek();
+      if (c === '\n') { this.line++; }
+      if (c === '\\') {
+        pattern += this.advance();
+        if (!this.isAtEnd()) pattern += this.advance();
+        continue;
+      }
+      if (c === '[') inClass = true;
+      else if (c === ']') inClass = false;
+      else if (c === '/' && !inClass) { this.advance(); break; }
+      pattern += this.advance();
+    }
+    if (this.isAtEnd()) throw new Error("Unterminated regex literal.");
+    let flags = "";
+    while (this.isAlpha(this.peek())) flags += this.advance();
+    try {
+      this.addToken(TokenType.REGEX, { pattern, flags });
+    } catch (e) {
+      throw new Error(`Invalid regex: ${e.message}`);
+    }
+  }
+
   number() {
-    while (this.isDigit(this.peek())) this.advance();
+    while (this.isDigit(this.peek()) || this.peek() === '_') this.advance();
     if (this.peek() === '.' && this.isDigit(this.peekNext())) {
       this.advance();
-      while (this.isDigit(this.peek())) this.advance();
+      while (this.isDigit(this.peek()) || this.peek() === '_') this.advance();
     }
-    this.addToken(TokenType.NUMBER, parseFloat(this.source.substring(this.start, this.current)));
+    const raw = this.source.substring(this.start, this.current).replace(/_/g, '');
+    this.addToken(TokenType.NUMBER, parseFloat(raw));
   }
 
   template() {
@@ -251,5 +299,16 @@ export class Lexer {
   addToken(type, literal = null) {
     const text = this.source.substring(this.start, this.current);
     this.tokens.push(new Token(type, text, literal, this.line));
+    // Update regex-allowed state
+    // After an identifier, number, string, or closing bracket — regex NOT allowed
+    // After operator, opening bracket, semicolon, etc. — regex IS allowed
+    const closeTokens = [
+      TokenType.IDENTIFIER, TokenType.NUMBER, TokenType.STRING, TokenType.RAW_STRING,
+      TokenType.TEMPLATE, TokenType.REGEX,
+      TokenType.RIGHT_PAREN, TokenType.RIGHT_BRACKET, TokenType.MBARI,
+      TokenType.TENAN, TokenType.GAK, TokenType.KOSONG, TokenType.ORADIDEFINISIKAN,
+      TokenType.IKI,
+    ];
+    this.regexAllowed = !closeTokens.includes(type);
   }
 }

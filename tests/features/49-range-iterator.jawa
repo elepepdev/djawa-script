@@ -1,0 +1,19 @@
+// Test: Range iterator (1..10) + rentang keyword
+cetakno("--- Range Iterator ---");
+
+cetakno("rentang 1..5:");
+kanggo i soko rentang 1..5 terus
+  cetakno(i)
+mbari
+
+cetakno("rentang 0..10 (ekspresi):");
+kanggo i soko 0..10 terus
+  cetakno(i)
+mbari
+
+cetakno("iterasi langsung range:");
+kanggo x soko 1..3 terus
+  cetakno("x=" + x)
+mbari
+
+cetakno("--- Rampung ---");

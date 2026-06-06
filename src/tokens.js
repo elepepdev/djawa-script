@@ -1,6 +1,7 @@
 export const TokenType = {
   GUDUK: 'GUDUK',
 
+  CACAH: 'CACAH',           // enum
   IKI_IKU: 'IKI_IKU',       // const
   JARNO: 'JARNO',           // let
   GAWE: 'GAWE',             // function
@@ -11,6 +12,7 @@ export const TokenType = {
   LIYANE: 'LIYANE',         // else
   SELAGI: 'SELAGI',         // while
   KANGGO: 'KANGGO',         // for
+  RENTANG: 'RENTANG',       // range / for...of
   TERUS: 'TERUS',           // { (block start)
   MBARI: 'MBARI',           // } (block end)
   TENAN: 'TENAN',           // true
@@ -24,6 +26,7 @@ export const TokenType = {
   PILIH: 'PILIH',           // switch
   KALO: 'KALO',             // case
   YOWES: 'YOWES',           // default
+  COCOK: 'COCOK',           // match
   COBAK: 'COBAK',           // try
   NYEKEL: 'NYEKEL',         // catch
   PUNGKASAN: 'PUNGKASAN',   // finally
@@ -60,6 +63,8 @@ export const TokenType = {
   IDENTIFIER: 'IDENTIFIER',
   NUMBER: 'NUMBER',
   STRING: 'STRING',
+  RAW_STRING: 'RAW_STRING',
+  REGEX: 'REGEX',
 
   // Operators
   YOIKU: 'YOIKU',           // =
@@ -107,6 +112,7 @@ export const TokenType = {
   RIGHT_BRACKET: 'RIGHT_BRACKET', // ]
   COMMA: 'COMMA',             // ,
   DOT: 'DOT',                 // .
+  DOT_DOT: 'DOT_DOT',         // ..
   COLON: 'COLON',             // :
   SEMICOLON: 'SEMICOLON',     // ;
   MUNGKIN: 'MUNGKIN',         // .mungkin.
@@ -122,6 +128,7 @@ export const TokenType = {
 
 
 export const Keywords = {
+  'cacah': TokenType.CACAH,
   'iki iku': TokenType.IKI_IKU,
   'jarno': TokenType.JARNO,
   'gawe': TokenType.GAWE,
@@ -131,6 +138,7 @@ export const Keywords = {
   'liyane': TokenType.LIYANE,
   'selagi': TokenType.SELAGI,
   'kanggo': TokenType.KANGGO,
+  'rentang': TokenType.RENTANG,
   'terus': TokenType.TERUS,
   'mbari': TokenType.MBARI,
   'tenan': TokenType.TENAN,
@@ -143,6 +151,7 @@ export const Keywords = {
   'lanjutno': TokenType.LANJUTNO,
   'pilih': TokenType.PILIH,
   'kalo': TokenType.KALO,
+  'cocok': TokenType.COCOK,
   'yowes': TokenType.YOWES,
   'guduk': TokenType.GUDUK,
   'cobak': TokenType.COBAK,
@@ -166,6 +175,7 @@ export const Keywords = {
   'soko': TokenType.SOKO,
   'ing': TokenType.ING,
   'dadi': TokenType.DADI,
+  'rentang': TokenType.KANGGO,
   'biasane': TokenType.BIASANE,
   'kabeh': TokenType.KABEH,
   'ta': TokenType.TA,

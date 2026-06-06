@@ -660,6 +660,124 @@ cetakno(userInfo[1])  // Output: 28
 
 ---
 
+## New Features (v2.1.0)
+
+### Numeric Separator
+
+Use underscores inside numeric literals to make large numbers readable. The underscores are ignored at runtime.
+
+```jawascript
+iki iku juta yoiku 1_000_000
+iki iku hex yoiku 0xFF_FF
+cetakno(juta)  // Output: 1000000
+```
+
+### Raw String
+
+Prefix a string with `r` to disable escape sequences. Backslashes are kept as literal characters.
+
+```jawascript
+iki iku path yoiku r"C:\windows\system32\user"
+cetakno(path)  // Output: C:\windows\system32\user (no escaping needed)
+```
+
+### Range Iterator
+
+Create numeric ranges with the `..` operator. Ranges are iterable in `kanggo...soko` loops.
+
+```jawascript
+kanggo i soko 1..4 terus
+  cetakno(i)  // Output: 1, 2, 3, 4
+mbari
+
+// Or use the `rentang` keyword
+kanggo i soko rentang 3 terus
+  cetakno(i)  // Output: 0, 1, 2
+mbari
+```
+
+### Iterator Helpers
+
+Javanese-flavored aliases for array iteration methods.
+
+| JPL | JavaScript | Description |
+| :--- | :--- | :--- |
+| `.kurangi(fn)` | `.reduce(...)` | Reduce to a single value |
+| `.temokake(fn)` | `.find(...)` | Find first matching element |
+| `.temokakeIndeks(fn)` | `.findIndex(...)` | Find first matching index |
+| `.ratakan(depth?)` | `.flat(...)` | Flatten nested arrays |
+| `.petakRata(fn)` | `.flatMap(...)` | Map then flatten |
+| `.rangkep(n)` | `.fill(n)` | Fill with a value |
+
+```jawascript
+iki iku nums yoiku [1, 2, 3, 4, 5]
+cetakno(nums.kurangi((a, b) dadi a + b, 0))  // Output: 15
+cetakno(nums.temokake(x dadi x > 3))          // Output: 4
+```
+
+### RegExp Literal
+
+Write regular expressions directly with `/.../flags` syntax.
+
+```jawascript
+iki iku pola yoiku /[0-9]+/g
+iki iku emailPattern yoiku /^[^\s@]+@[^\s@]+$/
+cetakno(emailPattern.tes("user@jawir.id"))  // Output: tenan (true)
+cetakno(emailPattern.tes("ora-valid"))      // Output: salah (false)
+```
+
+### Enum (`cacah`)
+
+Declare a fixed set of named constants. Each member has a numeric value (auto-incremented, or explicitly assigned).
+
+```jawascript
+cacah Werna yoiku
+  abang,
+  ijo,
+  kuning,
+  biru = 10,
+  ungu
+mbari
+
+cetakno(Werna.kuning)        // Output: 2
+cetakno(Werna.biru)          // Output: 10
+cetakno(Werna.ikuEnum(ijo))  // Output: tenan (true)
+cetakno(Werna.jenenge(10))   // Output: "biru"
+cetakno(Werna.kabeh)         // Output: ["abang","ijo","kuning","biru","ungu"]
+```
+
+### Pattern Matching (`cocok`)
+
+Branch on a value with structured patterns. Supports literal values, bindings, wildcards, array patterns, and object patterns.
+
+```jawascript
+cocok data terus
+  kalo 0 dadi cetakno("nol")
+  kalo 1, 2, 3 dadi cetakno("siji-siji")
+  kalo x ngendi x < 0 dadi cetakno("negatif: " + x)
+  kalo [1, ...sisa] dadi cetakno("kaping siji: 1, sisa: " + sisa)
+  kalo { jeneng, umur } dadi cetakno("jeneng: " + jeneng + ", umur: " + umur)
+  kalo _ dadi cetakno("liyane")
+mbari
+```
+
+The `_` wildcard matches anything without binding.
+
+### Inline Assertion (`pasten`)
+
+Verify conditions and values inline. Failed assertions throw an error with a Javanese message.
+
+```jawascript
+pasten(1 + 1 plek 2)                                    // passes silently
+pasten(1 + 1 plek 3, "matematika dasar")               // throws "pasten gagal: matematika dasar"
+pastenPodo([1, 2, 3], [1, 2, 3])                        // deep-equality check
+pastenPodo(aktual, dikarepake, "login kudu balikake token")  // custom message
+```
+
+Use these in test scripts or as runtime guards. `pastenPodo` is short for "pasten podo" (assert equals).
+
+---
+
 ## Special Keywords
 
 | JPL | JavaScript | Description |

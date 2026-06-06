@@ -234,6 +234,75 @@ export class Interpreter {
     this.globals.define("Simbol", Symbol);
     this.globals.define("Peta", Map);
     this.globals.define("Kumpulan", Set);
+    this.globals.define("HimpunanLemah", WeakSet);
+    this.globals.define("PetaLemah", WeakMap);
+
+    this.globals.define("URL", {
+        arity: () => 1,
+        call: (interpreter, args) => {
+            const arg = args[0];
+            if (args.length === 1) return new URL(arg);
+            return new URL(arg, args[1]);
+        },
+        toString: () => "<native URL>"
+    });
+
+    this.globals.define("URLParamCari", {
+        arity: () => 0,
+        call: (interpreter, args) => {
+            if (args.length === 0) return new URLSearchParams();
+            return new URLSearchParams(args[0]);
+        },
+        toString: () => "<native URLParamCari>"
+    });
+
+    this.globals.define("Himpunan", {
+        arity: () => 0,
+        call: (interpreter, args) => {
+            if (args.length === 0) return new Set();
+            if (Array.isArray(args[0])) return new Set(args[0]);
+            return new Set([args[0]]);
+        },
+        toString: () => "<native Himpunan>"
+    });
+
+    this.globals.define("Array", Array);
+    this.globals.define("Map", Map);
+    this.globals.define("Set", Set);
+    this.globals.define("WeakMap", WeakMap);
+    this.globals.define("WeakSet", WeakSet);
+    this.globals.define("Date", Date);
+    this.globals.define("RegExp", RegExp);
+    this.globals.define("Error", Error);
+    this.globals.define("TypeError", TypeError);
+    this.globals.define("RangeError", RangeError);
+
+    this.globals.define("pasten", (condition, message) => {
+        if (!this.isTruthy(condition)) {
+            throw new Error(`Assertion failed: ${message !== undefined ? this.stringify(message) : 'kondisi palsu'}`);
+        }
+        return true;
+    });
+
+    this.globals.define("pastenPodo", (actual, expected, message) => {
+        if (actual !== expected) {
+            throw new Error(`Assertion failed: ngarep ${this.stringify(expected)} tapi oleh ${this.stringify(actual)}${message ? ' — ' + this.stringify(message) : ''}`);
+        }
+        return true;
+    });
+
+    this.globals.define("Jupukno", {
+        arity: () => 2,
+        call: async (interpreter, args) => {
+            const path = args[0];
+            const imports = args[1];
+            return await interpreter.loadModule(path, imports);
+        },
+        toString: () => "<native Jupukno>"
+    });
+
+    this.moduleCache = new Map();
+    this.currentDir = process.cwd();
 
     this.globals.define("Wektu", {
         ngenteni: (fn, ms) => setTimeout(fn, ms),
@@ -264,6 +333,66 @@ export class Interpreter {
             console.error("Kesalahan sing ora dingerteni: " + error);
         }
     }
+  }
+
+  async loadModule(modulePath, imports) {
+    if (typeof modulePath !== 'string') {
+        throw new Error("Jupukno: path kudu string.");
+    }
+    const fs = await import('fs');
+    const pathMod = await import('path');
+
+    let resolvedPath = modulePath;
+    if (!pathMod.isAbsolute(modulePath)) {
+      resolvedPath = pathMod.resolve(this.currentDir, modulePath);
+    }
+    if (!resolvedPath.endsWith('.jawa')) {
+      resolvedPath += '.jawa';
+    }
+    if (this.moduleCache.has(resolvedPath)) {
+      return this.moduleCache.get(resolvedPath);
+    }
+    if (!fs.existsSync(resolvedPath)) {
+      throw new Error(`Jupukno: File '${resolvedPath}' ora ditemokake.`);
+    }
+    const code = fs.readFileSync(resolvedPath, 'utf8');
+    const lexer = new (await import('./lexer.js')).Lexer(code);
+    const tokens = lexer.scanTokens();
+    const parser = new (await import('./parser.js')).Parser(tokens);
+    const statements = parser.parse();
+
+    const previousDir = this.currentDir;
+    this.currentDir = pathMod.dirname(resolvedPath);
+    const moduleEnv = new Environment(this.globals);
+    const previousEnv = this.environment;
+    this.environment = moduleEnv;
+    const exports = {};
+    this._currentExports = exports;
+    moduleEnv.define("metokno", (name, value) => {
+      exports[name] = value;
+    });
+    moduleEnv.define("metokake", (obj) => {
+      Object.assign(exports, obj);
+    });
+    try {
+      for (const stmt of statements) {
+        await this.execute(stmt);
+      }
+    } finally {
+      this.environment = previousEnv;
+      this.currentDir = previousDir;
+    }
+    this.moduleCache.set(resolvedPath, exports);
+    if (imports && typeof imports === 'object') {
+      const filtered = {};
+      for (const key of Object.keys(imports)) {
+        if (key in exports) {
+          filtered[imports[key] || key] = exports[key];
+        }
+      }
+      return filtered;
+    }
+    return exports;
   }
 
   async execute(stmt) { if (stmt) await stmt.accept(this); }
@@ -428,6 +557,84 @@ export class Interpreter {
   visitMandekStmt(stmt) { throw new Break(); }
   visitLanjutnoStmt(stmt) { throw new Continue(); }
 
+  async visitForOfStmt(stmt) {
+      const iterable = await this.evaluate(stmt.iterable);
+      const items = this.toIterable(iterable);
+      const previous = this.environment;
+      this.environment = new Environment(this.environment);
+      try {
+          for (const item of items) {
+              try {
+                  if (stmt.isConst) this.environment.define(stmt.name.lexeme, item);
+                  else { this.environment.values.set(stmt.name.lexeme, item); }
+                  await this.execute(stmt.body);
+              } catch (e) {
+                  if (e instanceof Break) return null;
+                  if (e instanceof Continue) continue;
+                  throw e;
+              }
+          }
+      } finally {
+          this.environment = previous;
+      }
+      return null;
+  }
+
+  async visitRentangStmt(stmt) {
+      const start = await this.evaluate(stmt.start);
+      let end = null;
+      if (stmt.end !== null) end = await this.evaluate(stmt.end);
+      const previous = this.environment;
+      this.environment = new Environment(this.environment);
+      try {
+          if (end === null) {
+              // Iterate from start (must be a range or array)
+              const items = this.toIterable(start);
+              for (const item of items) {
+                  try {
+                      this.environment.values.set("iki", item);
+                      await this.execute(stmt.body);
+                  } catch (e) {
+                      if (e instanceof Break) return null;
+                      if (e instanceof Continue) continue;
+                      throw e;
+                  }
+              }
+          } else {
+              if (typeof start !== 'number' || typeof end !== 'number') {
+                  throw new Error("Error: 'rentang' butuh angka.");
+              }
+              for (let i = start; i <= end; i++) {
+                  try {
+                      this.environment.values.set("iki", i);
+                      await this.execute(stmt.body);
+                  } catch (e) {
+                      if (e instanceof Break) return null;
+                      if (e instanceof Continue) continue;
+                      throw e;
+                  }
+              }
+          }
+      } finally {
+          this.environment = previous;
+      }
+      return null;
+  }
+
+  toIterable(value) {
+      if (value == null) return [];
+      if (Array.isArray(value)) return value;
+      if (typeof value === 'string') return [...value];
+      if (typeof value[Symbol.iterator] === 'function') return value;
+      if (value && typeof value.next === 'function') return value;
+      if (typeof value === 'object') {
+          // Map, Set, etc.
+          if (value instanceof Map || value instanceof Set) return [...value];
+          return Object.values(value);
+      }
+      return [value];
+  }
+
   async visitCommandStmt(stmt) {
     const cmd = stmt.name;
     if (cmd === 'clear') {
@@ -481,6 +688,160 @@ export class Interpreter {
   async visitUncalenStmt(stmt) {
       const value = await this.evaluate(stmt.value);
       throw value;
+  }
+
+  async visitEnumStmt(stmt) {
+      const name = stmt.name.lexeme;
+      const enumObj = {
+          jeneng: name,
+          ikuEnum: (v) => {
+              for (const v2 of stmt.variants) {
+                  if (v2.value === v) return true;
+              }
+              return false;
+          },
+          jenenge: (v) => {
+              for (const v2 of stmt.variants) {
+                  if (v2.value === v) return v2.name.lexeme;
+              }
+              return undefined;
+          },
+          nilai: (nama) => {
+              for (const v of stmt.variants) {
+                  if (v.name.lexeme === nama) return v.value;
+              }
+              return undefined;
+          },
+          kabeh: () => stmt.variants.map(v => ({ jeneng: v.name.lexeme, nilai: v.value })),
+          toString: () => `<enum ${name}>`
+      };
+      for (const v of stmt.variants) {
+          enumObj[v.name.lexeme] = v.value;
+      }
+      this.environment.define(name, enumObj);
+      return null;
+  }
+
+  async visitMetoknoStmt(stmt) {
+      if (stmt.kind === 'named') {
+          for (const { name } of stmt.items) {
+              try {
+                  const val = this.environment.get({ lexeme: name.lexeme, line: name.line });
+                  this._currentExports[name.lexeme] = val;
+              } catch (e) { /* skip */ }
+          }
+      } else if (stmt.kind === 'default') {
+          const val = await this.evaluate(stmt.items[0]);
+          this._currentExports['default'] = val;
+      } else if (stmt.kind === 'all') {
+          // export *: export all names from current env
+          for (const [k, v] of this.environment.values) {
+              this._currentExports[k] = v;
+          }
+      }
+      return null;
+  }
+
+  async visitJupuknoStmt(stmt) {
+      const mod = await this.loadModule(stmt.source, null);
+      if (stmt.kind === 'named') {
+          for (const { name, alias } of stmt.items) {
+              if (name.lexeme in mod) {
+                  this.environment.define(alias.lexeme, mod[name.lexeme]);
+              }
+          }
+      } else if (stmt.kind === 'default') {
+          if ('default' in mod) {
+              this.environment.define(stmt.items[0].name.lexeme, mod.default);
+          }
+      } else if (stmt.kind === 'all') {
+          this.environment.define(stmt.items[0].alias.lexeme, mod);
+      }
+      return null;
+  }
+
+  async visitMatchStmt(stmt) {
+      const value = await this.evaluate(stmt.expression);
+      for (const arm of stmt.arms) {
+          for (const pattern of arm.patterns) {
+              const bindings = this.matchPattern(pattern, value);
+              if (bindings !== null) {
+                  if (arm.guard !== null) {
+                      const prev = this.environment;
+                      this.environment = new Environment(this.environment);
+                      for (const [k, v] of Object.entries(bindings)) {
+                          this.environment.values.set(k, v);
+                      }
+                      const guardResult = await this.evaluate(arm.guard);
+                      this.environment = prev;
+                      if (!this.isTruthy(guardResult)) continue;
+                  }
+                  const prev = this.environment;
+                  this.environment = new Environment(this.environment);
+                  for (const [k, v] of Object.entries(bindings)) {
+                      this.environment.values.set(k, v);
+                  }
+                  try {
+                      await this.execute(arm.body);
+                  } finally {
+                      this.environment = prev;
+                  }
+                  return null;
+              }
+          }
+      }
+      if (stmt.defaultBranch !== null) {
+          await this.execute(stmt.defaultBranch);
+      }
+      return null;
+  }
+
+  matchPattern(pattern, value) {
+      if (pattern instanceof AST.WildcardPattern) return {};
+      if (pattern instanceof AST.BindingPattern) return { [pattern.name.lexeme]: value };
+      if (pattern instanceof AST.LiteralPattern) {
+          if (pattern.value === value) return {};
+          return null;
+      }
+      if (pattern instanceof AST.ArrayPattern) {
+          if (!Array.isArray(value)) return null;
+          if (pattern.rest !== null) {
+              if (value.length < pattern.elements.length) return null;
+              const bindings = {};
+              for (let i = 0; i < pattern.elements.length; i++) {
+                  const sub = this.matchPattern(pattern.elements[i], value[i]);
+                  if (sub === null) return null;
+                  Object.assign(bindings, sub);
+              }
+              if (pattern.rest instanceof AST.BindingPattern) {
+                  bindings[pattern.rest.name.lexeme] = value.slice(pattern.elements.length);
+              } else if (pattern.rest instanceof AST.WildcardPattern) {
+                  // ignore
+              }
+              return bindings;
+          } else {
+              if (value.length !== pattern.elements.length) return null;
+              const bindings = {};
+              for (let i = 0; i < pattern.elements.length; i++) {
+                  const sub = this.matchPattern(pattern.elements[i], value[i]);
+                  if (sub === null) return null;
+                  Object.assign(bindings, sub);
+              }
+              return bindings;
+          }
+      }
+      if (pattern instanceof AST.ObjectPattern) {
+          if (value === null || typeof value !== 'object') return null;
+          const bindings = {};
+          for (const { key, pat } of pattern.properties) {
+              if (!(key.lexeme in value)) return null;
+              const sub = this.matchPattern(pat, value[key.lexeme]);
+              if (sub === null) return null;
+              Object.assign(bindings, sub);
+          }
+          return bindings;
+      }
+      return null;
   }
 
   async visitAssignExpr(expr) {
@@ -604,6 +965,7 @@ export class Interpreter {
           'indeksSaka': 'indexOf',
           'saben': 'forEach',
           'ngurangi': 'reduce',
+          'kurangi': 'reduce',
           'kalebu': 'includes',
           'ngemot': 'includes',
           'walik': 'reverse',
@@ -611,7 +973,30 @@ export class Interpreter {
           'kabeh': 'every',
           'rapikno': 'trim',
           'dimulaiKaro': 'startsWith',
-          'diakhiriKaro': 'endsWith'
+          'diakhiriKaro': 'endsWith',
+          'rangkep': 'concat',
+          'rangkepi': 'concat',
+          'renggangake': 'flat',
+          'ratakan': 'flat',
+          'rangkepPeta': 'flatMap',
+          'petakRata': 'flatMap',
+          'nomeren': 'fill',
+          'isi': 'fill',
+          'kopien': 'slice',
+          'salin': 'slice',
+          'cekak': 'splice',
+          'pundhut': 'splice',
+          'tes': 'test',
+          'gantiTabo': 'replaceAll',
+          'nambah': 'add',
+          'ukuran': 'size',
+          'hapus': 'delete',
+          'wisKosong': 'clear',
+          'nduwe': 'has',
+          'jupuk': 'get',
+          'pasang': 'set',
+          'cocok': 'match',
+          'cocokke': 'match'
       };
 
       const mappedName = methodMap[name] || name;
@@ -683,6 +1068,59 @@ export class Interpreter {
                       return arr;
                   };
               }
+              if (mappedName === 'reduce') {
+                  return async (callback, initial) => {
+                      let acc;
+                      let start = 0;
+                      if (initial !== undefined) { acc = initial; }
+                      else { acc = object[0]; start = 1; }
+                      for (let i = start; i < object.length; i++) {
+                          acc = await callback(acc, object[i], i, object);
+                      }
+                      return acc;
+                  };
+              }
+              if (mappedName === 'find') {
+                  return async (callback) => {
+                      for (let i = 0; i < object.length; i++) {
+                          if (this.isTruthy(await callback(object[i], i, object))) return object[i];
+                      }
+                      return undefined;
+                  };
+              }
+              if (mappedName === 'findIndex') {
+                  return async (callback) => {
+                      for (let i = 0; i < object.length; i++) {
+                          if (this.isTruthy(await callback(object[i], i, object))) return i;
+                      }
+                      return -1;
+                  };
+              }
+              if (mappedName === 'flat') {
+                  return (depth) => {
+                      const d = depth === undefined ? 1 : depth;
+                      const result = [];
+                      const flatten = (arr, dd) => {
+                          for (const item of arr) {
+                              if (Array.isArray(item) && dd > 0) flatten(item, dd - 1);
+                              else result.push(item);
+                          }
+                      };
+                      flatten(object, d);
+                      return result;
+                  };
+              }
+              if (mappedName === 'flatMap') {
+                  return async (callback) => {
+                      const result = [];
+                      for (let i = 0; i < object.length; i++) {
+                          const r = await callback(object[i], i, object);
+                          if (Array.isArray(r)) result.push(...r);
+                          else result.push(r);
+                      }
+                      return result;
+                  };
+              }
           }
 
           const val = object[mappedName];
@@ -740,6 +1178,24 @@ export class Interpreter {
           obj[key] = await this.evaluate(value);
       }
       return obj;
+  }
+
+  async visitRangeExpr(expr) {
+      const start = await this.evaluate(expr.start);
+      const end = await this.evaluate(expr.end);
+      if (typeof start !== 'number' || typeof end !== 'number') {
+          throw new Error(`[line ${this.currentLine}] Error: Range butuh angka.`);
+      }
+      const inclusive = expr.inclusive;
+      const len = end - start + (inclusive ? 1 : 0);
+      return {
+          [Symbol.iterator]() { return this; },
+          next() {
+              if (this._idx === undefined) this._idx = 0;
+              if (this._idx >= len) return { done: true };
+              return { value: start + this._idx++, done: false };
+          }
+      };
   }
 
   async visitTupleExpr(expr) {

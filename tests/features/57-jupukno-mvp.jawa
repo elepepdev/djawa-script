@@ -1,0 +1,10 @@
+// Test: jupukno MVP (load module from relative path)
+jupukno
+  pi,
+  sapa,
+  tambahake
+mbari soko "./test-module.jawa"
+
+cetakno("pi = " + pi);
+cetakno("sapa = " + sapa("Jawa"));
+cetakno("tambahake(3, 4) = " + tambahake(3, 4));

@@ -27,10 +27,11 @@ describe('JawaScript Interpreter Feature Tests', () => {
         const parser = new Parser(tokens);
         const statements = parser.parse();
         
-        const interpreter = new Interpreter({ 
+        const interpreter = new Interpreter({
           print: mockPrint,
-          prompt: mockPrompt 
+          prompt: mockPrompt
         });
+        interpreter.currentDir = featuresDir;
         await interpreter.interpret(statements);
         
         const combinedOutput = outputs.join('\n');

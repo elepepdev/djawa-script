@@ -248,3 +248,122 @@ Iterasi liwat Daftar:"
 exports[`JawaScript Interpreter Feature Tests should correctly execute 45-symbol.jawa 1`] = `"--- Tes Tipe Data Simbol ---"`;
 
 exports[`JawaScript Interpreter Feature Tests should correctly execute 46-proxy-reflect.jawa 1`] = `"--- Tes Proxy (Perantara) & Reflect (Pantulan) ---"`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 47-numeric-separator.jawa 1`] = `
+"--- Numeric Separator ---
+1000000
+0.000001
+1000000000"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 48-raw-string.jawa 1`] = `
+"--- Raw String ---
+C:\\path\\to\\file.txt
+<div class="test">halo</div>
+path\\sing\\sehat\\windows
+\\d{3}-\\d{4}
+--- Rampung ---"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 49-range-iterator.jawa 1`] = `
+"--- Range Iterator ---
+rentang 1..5:"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 50-iterator-helpers.jawa 1`] = `
+"--- Iterator Helpers ---
+kurangi (sum):
+kurangi (max):
+find:
+findIndex:
+flat:
+[1, 2, 3, 4, 5]
+flatMap:
+rangkep (concat):
+[1, 2, 3, 4]
+--- Rampung ---"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 51-regex-literal.jawa 1`] = `
+"--- RegExp Literal ---
+cocok:
+[123]
+tes email valid:
+true
+tes email invalid:
+false
+--- Rampung ---"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 52-enum.jawa 1`] = `
+"--- Enum (cacah) ---
+abang = 0
+ijo = 1
+kuning = 2
+biru = 10
+ungu = 11
+ikuEnum(ijo) = true
+jenenge(10) = biru
+nilai('ungu') = 11
+kabeh:"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 53-pattern-matching.jawa 1`] = `
+"--- Pattern Matching (cocok) ---
+nol
+siji-siji
+negatif: -5
+gedhe banget: 200
+liyane: 50
+--- wildcard binding ---
+match array:
+tiga: 1,2,3
+kaping siji: 1, sisa: 4
+kosong
+--- Rampung ---"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 54-stdlib-tambahan.jawa 1`] = `
+"--- Stdlib Tambah ---
+Himpunan ukuran:
+3
+Himpunan nduwe(2):
+true
+--- URL ---
+hostname: contoh.com
+pathname: /path
+search: ?x=1&y=2
+--- Rampung ---"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 55-pasten.jawa 1`] = `
+"--- Pasten (Assertion) ---
+cocok
+10
+--- Rampung ---"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 56-for-of-fixed.jawa 1`] = `
+"--- Kanggo x soko arr ---
+10
+20
+30
+--- iterasi string ---
+B
+u
+d
+i
+--- iterasi obyek ---
+1
+2
+3
+--- Rampung ---"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 57-jupukno-mvp.jawa 1`] = `
+"pi = 3.14159
+sapa = Sugeng rawuh, Jawa
+tambahake(3, 4) = 7"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute test-module.jawa 1`] = `""`;

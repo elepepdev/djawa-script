@@ -1,0 +1,8 @@
+// Test: Raw string (r"..." dan r'...')
+cetakno("--- Raw String ---");
+cetakno(r"C:\path\to\file.txt");
+cetakno(r'<div class="test">halo</div>');
+cetakno(r'path\sing\sehat\windows');
+iki iku pola yoiku r"\d{3}-\d{4}";
+cetakno(pola);
+cetakno("--- Rampung ---");

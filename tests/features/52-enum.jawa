@@ -1,0 +1,25 @@
+// Test: Enum (cacah)
+cetakno("--- Enum (cacah) ---");
+
+cacah Werna yoiku
+  abang,
+  ijo,
+  kuning,
+  biru = 10,
+  ungu
+mbari
+
+cetakno("abang = " + Werna.abang);
+cetakno("ijo = " + Werna.ijo);
+cetakno("kuning = " + Werna.kuning);
+cetakno("biru = " + Werna.biru);
+cetakno("ungu = " + Werna.ungu);
+cetakno("ikuEnum(ijo) = " + Werna.ikuEnum(Werna.ijo));
+cetakno("jenenge(10) = " + Werna.jenenge(Werna.biru));
+cetakno("nilai('ungu') = " + Werna.nilai("ungu"));
+cetakno("kabeh:");
+kanggo v soko Werna.kabeh() terus
+  cetakno("  " + v.jeneng + " = " + v.nilai)
+mbari
+
+cetakno("--- Rampung ---");

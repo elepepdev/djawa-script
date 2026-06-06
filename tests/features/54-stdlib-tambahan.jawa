@@ -1,0 +1,20 @@
+// Test: Himpunan (Set) & PetaLemah (WeakMap) & URL
+cetakno("--- Stdlib Tambah ---");
+
+iki iku him yoiku Himpunan();
+him.nambah(1);
+him.nambah(2);
+him.nambah(2);
+him.nambah(3);
+cetakno("Himpunan ukuran:");
+cetakno(him.ukuran);
+cetakno("Himpunan nduwe(2):");
+cetakno(him.nduwe(2));
+
+cetakno("--- URL ---");
+iki iku url yoiku URL("https://contoh.com/path?x=1&y=2");
+cetakno("hostname: " + url.hostname);
+cetakno("pathname: " + url.pathname);
+cetakno("search: " + url.search);
+
+cetakno("--- Rampung ---");

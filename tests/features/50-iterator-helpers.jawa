@@ -1,0 +1,27 @@
+// Test: Iterator helpers tambahan (kurangi, find, findIndex, flat, flatMap)
+cetakno("--- Iterator Helpers ---");
+
+iki iku angka yoiku [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+cetakno("kurangi (sum):");
+cetakno(angka.kurangi((a, b) => a + b, 0));
+
+cetakno("kurangi (max):");
+cetakno([3, 1, 4, 1, 5, 9, 2, 6].kurangi((a, b) => a > b ? a : b));
+
+cetakno("find:");
+cetakno(angka.temokake(x => x > 5));
+
+cetakno("findIndex:");
+cetakno(angka.temokakeIndeks(x => x == 7));
+
+cetakno("flat:");
+cetakno([[1, 2], [3, 4], [5]].ratakan());
+
+cetakno("flatMap:");
+cetakno([1, 2, 3].petakRata(x => [x, x * 10]));
+
+cetakno("rangkep (concat):");
+cetakno([1, 2].rangkep([3, 4]));
+
+cetakno("--- Rampung ---");

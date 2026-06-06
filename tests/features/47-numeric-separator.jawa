@@ -1,0 +1,8 @@
+// Test: Numeric separator (1_000_000)
+cetakno("--- Numeric Separator ---");
+cetakno(1_000_000);
+cetakno(0.000_001);
+cetakno(1_000_000_000);
+iki iku bytes yoiku 0b1010_0001_1000;
+cetakno(bytes);
+cetakno("--- Rampung ---");

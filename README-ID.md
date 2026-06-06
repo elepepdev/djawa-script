@@ -660,6 +660,123 @@ cetakno(infoPengguna[1])  // Output: 28
 
 ---
 
+## Fitur Baru (v2.1.0)
+
+### Pemisah Numerik (Numeric Separator)
+
+Gunakan garis bawah di dalam literal numerik supaya angka besar lebih mudah dibaca. Garis bawah diabaikan saat runtime.
+
+```jawascript
+iki iku juta yoiku 1_000_000
+iki iku heks yoiku 0xFF_FF
+cetakno(juta)  // Output: 1000000
+```
+
+### String Mentah (Raw String)
+
+Tambahkan awalan `r` pada string untuk menonaktifkan escape sequence. Backslash diperlakukan sebagai karakter literal.
+
+```jawascript
+iki iku path yoiku r"C:\windows\system32\user"
+cetakno(path)  // Output: C:\windows\system32\user (tanpa escape)
+```
+
+### Iterator Rentang
+
+Buat rentang numerik dengan operator `..`. Rentang bisa diiterasi di loop `kanggo...soko`.
+
+```jawascript
+kanggo i soko 1..4 terus
+  cetakno(i)  // Output: 1, 2, 3, 4
+mbari
+
+// Atau gunakan kata kunci `rentang`
+kanggo i soko rentang 3 terus
+  cetakno(i)  // Output: 0, 1, 2
+mbari
+```
+
+### Pembantu Iterator
+
+Alias berbahasa Jawa untuk method iterasi array.
+
+| JPL | JavaScript | Keterangan |
+| :--- | :--- | :--- |
+| `.kurangi(fn)` | `.reduce(...)` | Reduksi jadi satu nilai |
+| `.temokake(fn)` | `.find(...)` | Cari elemen pertama yang cocok |
+| `.temokakeIndeks(fn)` | `.findIndex(...)` | Cari indeks pertama yang cocok |
+| `.ratakan(depth?)` | `.flat(...)` | Ratakan array bersarang |
+| `.petakRata(fn)` | `.flatMap(...)` | Petakan lalu ratakan |
+| `.rangkep(n)` | `.fill(n)` | Isi array dengan nilai |
+
+```jawascript
+iki iku nums yoiku [1, 2, 3, 4, 5]
+cetakno(nums.kurangi((a, b) dadi a + b, 0))  // Output: 15
+cetakno(nums.temokake(x dadi x > 3))          // Output: 4
+```
+
+### Literal RegExp
+
+Tulis regular expression langsung dengan sintaks `/.../flags`.
+
+```jawascript
+iki iku pola yoiku /[0-9]+/g
+iki iku polaEmail yoiku /^[^\s@]+@[^\s@]+$/
+cetakno(polaEmail.tes("user@jawir.id"))  // Output: tenan (true)
+cetakno(polaEmail.tes("ora-valid"))      // Output: salah (false)
+```
+
+### Enum (`cacah`)
+
+Deklarasikan himpunan konstanta bernama. Tiap anggota punya nilai numerik (auto-increment, atau ditetapkan eksplisit).
+
+```jawascript
+cacah Werna yoiku
+  abang,
+  ijo,
+  kuning,
+  biru = 10,
+  ungu
+mbari
+
+cetakno(Werna.kuning)        // Output: 2
+cetakno(Werna.biru)          // Output: 10
+cetakno(Werna.ikuEnum(ijo))  // Output: tenan (true)
+cetakno(Werna.jenenge(10))   // Output: "biru"
+cetakno(Werna.kabeh)         // Output: ["abang","ijo","kuning","biru","ungu"]
+```
+
+### Pencocokan Pola (`cocok`)
+
+Cabangkan eksekusi berdasarkan nilai dengan pola terstruktur. Mendukung literal, binding, wildcard, pola array, dan pola object.
+
+```jawascript
+cocok data terus
+  kalo 0 dadi cetakno("nol")
+  kalo 1, 2, 3 dadi cetakno("siji-siji")
+  kalo [1, ...sisa] dadi cetakno("kaping siji: 1, sisa: " + sisa)
+  kalo { jeneng, umur } dadi cetakno("jeneng: " + jeneng + ", umur: " + umur)
+  kalo _ dadi cetakno("liyane")
+mbari
+```
+
+Wildcard `_` cocok dengan apa pun tanpa binding.
+
+### Asersi Inline (`pasten`)
+
+Verifikasi kondisi dan nilai secara inline. Asersi yang gagal akan melempar error dengan pesan berbahasa Jawa.
+
+```jawascript
+pasten(1 + 1 plek 2)                                    // lolos tanpa output
+pasten(1 + 1 plek 3, "matematika dasar")               // melempar "pasten gagal: matematika dasar"
+pastenPodo([1, 2, 3], [1, 2, 3])                        // cek kesamaan mendalam
+pastenPodo(aktual, dikarepake, "login kudu balikake token")
+```
+
+Gunakan ini di skrip uji atau sebagai penjaga runtime. `pastenPodo` adalah singkatan dari "pasten podo" (assert equals).
+
+---
+
 ## Kata Kunci Khusus
 
 | JPL | JavaScript | Keterangan |
