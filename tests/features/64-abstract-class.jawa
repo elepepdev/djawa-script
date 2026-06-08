@@ -1,0 +1,40 @@
+// Test: Abstract Class (abstrak kelas)
+cetakno("--- Abstract Class ---")
+
+// Test 1: Define abstract class with abstract method (Javanese)
+abstrak kelas Bentuk terus
+  abstrak gawe area()
+mbari
+
+// Test 2: Concrete subclass implementing abstract method
+kelas Bunder turunan soko Bentuk terus
+  gawe wujudno(r) terus
+    iki.r yoiku r
+  mbari
+
+  gawe area() terus
+    balekno 3.14 * iki.r * iki.r
+  mbari
+mbari
+
+jarno c yoiku anyar Bunder(5)
+cetakno("area:", c.area())
+
+// Test 3: Abstract class with Javanese keyword
+abstrak kelas Shape terus
+  abstrak gawe getName()
+mbari
+
+kelas Circle turunan soko Shape terus
+  gawe getName() terus
+    balekno "Circle"
+  mbari
+mbari
+
+jarno s yoiku anyar Circle()
+cetakno(s.getName())
+
+// Test 4: Try to instantiate abstract class directly
+cetakno("Nyoba instantiate kelas abstrak:")
+jarno x yoiku anyar Bentuk()
+cetakno("--- Rampung ---")

@@ -1,0 +1,38 @@
+// Test: Tagged Template Literals (TaggedTemplate)
+cetakno("--- Tagged Template ---");
+
+// Simple tag: uppercase a single expression
+gawe upperTag(strings, value) terus
+  jarno result yoiku strings[0] + value.toUpperCase() + strings[1]
+  balekno result
+mbari
+
+jarno name yoiku "jawa"
+jarno result yoiku upperTag`Halo ${name}!`
+cetakno(result)
+
+// Tag with two expressions
+gawe joinTag(strings, a, b) terus
+  balekno strings[0] + a + strings[1] + b + strings[2]
+mbari
+
+jarno joined yoiku joinTag`${"x"} tengahan ${"y"}`
+cetakno(joined)
+
+// Tag that uses only strings
+gawe reverseStrings(strings) terus
+  balekno strings[0] + strings[1] + strings[2]
+mbari
+
+jarno reversed yoiku reverseStrings`a${1}b${2}c`
+cetakno(reversed)
+
+// Tag with no expressions
+gawe plainTag(strings) terus
+  balekno strings[0] + " (tagged)"
+mbari
+
+jarno plain yoiku plainTag`hello world`
+cetakno(plain)
+
+cetakno("--- Rampung ---")

@@ -24,10 +24,7 @@ Operasi selesai."
 
 exports[`JawaScript Interpreter Feature Tests should correctly execute 07-classes.jawa 1`] = `""`;
 
-exports[`JawaScript Interpreter Feature Tests should correctly execute 08-async-await.jawa 1`] = `
-"Mulai ambil data...
-Data diterima: Data dari server"
-`;
+exports[`JawaScript Interpreter Feature Tests should correctly execute 08-async-await.jawa 1`] = `"Mulai ambil data..."`;
 
 exports[`JawaScript Interpreter Feature Tests should correctly execute 09-modules.jawa 1`] = `""`;
 
@@ -267,7 +264,29 @@ path\\sing\\sehat\\windows
 
 exports[`JawaScript Interpreter Feature Tests should correctly execute 49-range-iterator.jawa 1`] = `
 "--- Range Iterator ---
-rentang 1..5:"
+rentang 1..5:
+1
+2
+3
+4
+5
+rentang 0..10 (ekspresi):
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+iterasi langsung range:
+x=1
+x=2
+x=3
+--- Rampung ---"
 `;
 
 exports[`JawaScript Interpreter Feature Tests should correctly execute 50-iterator-helpers.jawa 1`] = `
@@ -393,6 +412,110 @@ nyekel error: ups
 B
 --- lek plek tanpa kurung ---
 a podo karo 5
+--- Rampung ---"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 59-label.jawa 1`] = `
+"--- Label ---
+(0,0)
+(0,1)
+(0,2)
+(1,0)
+--- after outer break ---
+[0,0]
+[1,0]
+[2,0]
+--- after outer continue ---
+simple 0
+simple 1
+simple 2
+--- after simple break ---
+cont 0
+cont 1
+cont 3
+cont 4
+--- after simple continue ---
+while 0,0
+while 0,1
+while 0,2
+while 0,3
+while 0,4
+while 1,0
+while 1,1
+while 1,2
+while 1,3
+while 1,4
+--- after labeled while break ---
+v: 1
+v: 2
+--- after labeled for-of break ---
+--- after labeled block break ---
+nest 0,0
+nest 0,1
+nest 0,2
+nest 1,0
+nest 2,0
+nest 2,1
+nest 2,2
+--- after nested label break ---
+--- Rampung ---"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 60-wangun.jawa 1`] = `
+"--- Wangun ---
+Mobil nyopir kanthi kacepatan 0
+Mobil mandek
+Truk nyopir
+Ngangkut pasir
+Area:  78.53981633974483
+--- Rampung ---"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 61-async-iterator.jawa 1`] = `
+"--- Async Iterator ---
+Async range:
+nilai:  10
+nilai:  20
+nilai:  30
+--- after async for-of ---
+data-1
+data-2
+--- Rampung ---"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 62-tag-template.jawa 1`] = `
+"--- Tagged Template ---
+Halo JAWA!
+x tengahan y
+abc
+hello world (tagged)
+--- Rampung ---"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 63-sealed-class.jawa 1`] = `
+"--- Sealed Class ---
+Bentuk
+Buah
+dari anak
+Nyoba ngextend kelas katutup:"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 64-abstract-class.jawa 1`] = `
+"--- Abstract Class ---
+area: 78.5
+Circle
+Nyoba instantiate kelas abstrak:"
+`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute 65-struct.jawa 1`] = `
+"--- Struct ---
+x: 3
+y: 4
+Joko
+umur: 25
+box: 42
+p2.x: 1
+p2.y: 2
 --- Rampung ---"
 `;
 

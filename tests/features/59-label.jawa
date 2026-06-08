@@ -1,0 +1,76 @@
+// Test: Label untuk break dan continue
+cetakno("--- Label ---");
+
+// Test 1: Labeled break out of outer loop
+jarno result yoiku ""
+luar: kanggo (jarno i yoiku 0; i < 3; i yoiku i + 1) terus
+    kanggo (jarno j yoiku 0; j < 3; j yoiku j + 1) terus
+        lek i == 1 lan j == 1 terus mandek luar mbari
+        cetakno("(" + i + "," + j + ")")
+    mbari
+mbari
+cetakno("--- after outer break ---");
+
+// Test 2: Labeled continue to outer loop
+jarno result2 yoiku ""
+luar: kanggo (jarno i yoiku 0; i < 3; i yoiku i + 1) terus
+    kanggo (jarno j yoiku 0; j < 3; j yoiku j + 1) terus
+        lek j == 1 terus lanjutno luar mbari
+        cetakno("[" + i + "," + j + "]")
+    mbari
+mbari
+cetakno("--- after outer continue ---");
+
+// Test 3: Simple break (no label) still works
+kanggo (jarno i yoiku 0; i < 10; i yoiku i + 1) terus
+    lek i == 3 terus mandek mbari
+    cetakno("simple " + i)
+mbari
+cetakno("--- after simple break ---");
+
+// Test 4: Simple continue (no label) still works
+kanggo (jarno i yoiku 0; i < 5; i yoiku i + 1) terus
+    lek i == 2 terus lanjutno mbari
+    cetakno("cont " + i)
+mbari
+cetakno("--- after simple continue ---");
+
+// Test 5: Labeled break from selagi (while)
+jarno count yoiku 0
+luar: selagi count < 10 terus
+    kanggo (jarno i yoiku 0; i < 5; i yoiku i + 1) terus
+        lek count == 2 terus mandek luar mbari
+        cetakno("while " + count + "," + i)
+    mbari
+    count yoiku count + 1
+mbari
+cetakno("--- after labeled while break ---");
+
+// Test 6: Labeled break from for-of
+jarno vals yoiku [1, 2, 3, 4, 5]
+luar: kanggo jarno v soko vals terus
+    lek v == 3 terus mandek luar mbari
+    cetakno("v: " + v)
+mbari
+cetakno("--- after labeled for-of break ---");
+
+// Test 7: Labeled block (break out of block, not loop)
+luar: terus
+    kanggo (jarno i yoiku 0; i < 5; i yoiku i + 1) terus
+        lek i == 2 terus mandek luar mbari
+    mbari
+mbari
+cetakno("--- after labeled block break ---");
+
+// Test 8: Nested labels
+jarno outer yoiku "o"
+jarno inner yoiku "i"
+luar: kanggo (jarno i yoiku 0; i < 3; i yoiku i + 1) terus
+    njero: kanggo (jarno j yoiku 0; j < 3; j yoiku j + 1) terus
+        lek i == 1 lan j == 1 terus mandek njero mbari
+        cetakno("nest " + i + "," + j)
+    mbari
+mbari
+cetakno("--- after nested label break ---");
+
+cetakno("--- Rampung ---");

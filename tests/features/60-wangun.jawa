@@ -1,0 +1,58 @@
+// Test: Wangun (Interface)
+cetakno("--- Wangun ---");
+
+// Test 1: Define interface with methods
+wangun Kendaraan terus
+  gawe nyopir() terus balekno Teks mbari
+  gawe mandek() terus balekno Teks mbari
+mbari
+
+// Test 2: Class implements interface
+kelas Mobil nurut Kendaraan terus
+  wujudno() terus
+    iki._kec yoiku 0
+  mbari
+  gawe nyopir() terus
+    balekno "Mobil nyopir kanthi kacepatan " + iki._kec
+  mbari
+  gawe mandek() terus
+    balekno "Mobil mandek"
+  mbari
+mbari
+
+jarno m yoiku anyar Mobil()
+cetakno(m.nyopir())
+cetakno(m.mandek())
+
+// Test 3: Multiple interfaces
+wangun Ngangkut terus
+  gawe angkut(barang) terus balekno Teks mbari
+mbari
+
+kelas Truk nurut Kendaraan, Ngangkut terus
+  wujudno() terus
+    iki._kec yoiku 10
+  mbari
+  gawe nyopir() terus balekno "Truk nyopir" mbari
+  gawe mandek() terus balekno "Truk mandek" mbari
+  gawe angkut(barang) terus balekno "Ngangkut " + barang mbari
+mbari
+
+jarno t yoiku anyar Truk()
+cetakno(t.nyopir())
+cetakno(t.angkut("pasir"))
+
+// Test 4: Interface with English keywords
+wangun Shape terus
+  gawe area() terus balekno Nomer mbari
+mbari
+
+kelas Circle nurut Shape terus
+  wujudno(r) terus iki._r yoiku r mbari
+  gawe area() terus balekno Mtk.PI * iki._r * iki._r mbari
+mbari
+
+jarno c yoiku anyar Circle(5)
+cetakno("Area: ", c.area())
+
+cetakno("--- Rampung ---")

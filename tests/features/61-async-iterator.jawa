@@ -1,0 +1,46 @@
+// Test: Async Iterator (kanggo tenangan ... soko ...)
+cetakno("--- Async Iterator ---");
+
+// Build an async iterable
+jarno asyncRange yoiku {}
+jarno i yoiku 0
+jarno nextFn yoiku () lakoni terus
+  i yoiku i + 1
+  lek i <= 3 terus
+    balekno { value: i * 10, done: gak }
+  mbari
+  balekno { done: tenan }
+mbari
+jarno iterObj yoiku { next: nextFn }
+asyncRange[Simbol.asyncIterator] = () lakoni terus
+  balekno iterObj
+mbari
+
+// Test async iteration
+cetakno("Async range:")
+kanggo tenangan jarno val soko asyncRange terus
+  cetakno("nilai: ", val)
+mbari
+
+cetakno("--- after async for-of ---")
+
+// Test with string values
+jarno step yoiku 0
+jarno nextFn2 yoiku () lakoni terus
+  step yoiku step + 1
+  lek step <= 2 terus
+    balekno { value: "data-" + step, done: gak }
+  mbari
+  balekno { done: tenan }
+mbari
+jarno stringIter yoiku {}
+jarno iterObj2 yoiku { next: nextFn2 }
+stringIter[Simbol.asyncIterator] = () lakoni terus
+  balekno iterObj2
+mbari
+
+kanggo tenangan iki iku item soko stringIter terus
+  cetakno(item)
+mbari
+
+cetakno("--- Rampung ---")

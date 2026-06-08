@@ -1,0 +1,48 @@
+// Test: Sealed Class (katutup kelas)
+cetakno("--- Sealed Class ---")
+
+// Test 1: Javanese keyword
+katutup kelas Bentuk terus
+  gawe deskripsi() terus
+    balekno "Bentuk"
+  mbari
+mbari
+
+jarno b yoiku anyar Bentuk()
+cetakno(b.deskripsi())
+
+// Test 2: Javanese keyword
+katutup kelas Buah terus
+  gawe info() terus
+    balekno "Buah"
+  mbari
+mbari
+
+jarno fruit yoiku anyar Buah()
+cetakno(fruit.info())
+
+// Test 3: Normal class can be extended
+kelas Induk terus
+  gawe test() terus
+    balekno "dari induk"
+  mbari
+mbari
+
+kelas Anak turunan soko Induk terus
+  gawe test() terus
+    balekno "dari anak"
+  mbari
+mbari
+
+jarno child yoiku anyar Anak()
+cetakno(child.test())
+
+// Test 4: Try to extend sealed class — runtime error
+cetakno("Nyoba ngextend kelas katutup:")
+kelas Lingkaran turunan soko Bentuk terus
+  gawe test() terus
+    balekno "hmm"
+  mbari
+mbari
+
+cetakno("--- Rampung ---")

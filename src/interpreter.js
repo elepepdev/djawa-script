@@ -12,8 +12,19 @@ class ReturnValue extends Error {
   }
 }
 
-class Break extends Error {}
-class Continue extends Error {}
+class Break extends Error {
+  constructor(label = null) {
+    super();
+    this.label = label;
+  }
+}
+
+class Continue extends Error {
+  constructor(label = null) {
+    super();
+    this.label = label;
+  }
+}
 
 export class JawaCallable {
   arity() {}
@@ -28,6 +39,7 @@ class JawaFunction extends JawaCallable {
     this.isInitializer = isInitializer;
   }
 
+  get isAbstract() { return this.declaration.isAbstract; }
   arity() { return this.declaration.params.length; }
 
   bind(instance) {
@@ -83,11 +95,13 @@ class JawaFunction extends JawaCallable {
 }
 
 class JawaClass extends JawaCallable {
-    constructor(name, superclass, methods) {
+    constructor(name, superclass, methods, isSealed = false, isAbstract = false) {
         super();
         this.name = name;
         this.superclass = superclass;
         this.methods = methods;
+        this.isSealed = isSealed;
+        this.isAbstract = isAbstract;
     }
 
     findMethod(name) {
@@ -103,6 +117,9 @@ class JawaClass extends JawaCallable {
     }
 
     async call(interpreter, args) {
+        if (this.isAbstract) {
+            throw new Error(`Error: Ora iso instantiate kelas abstrak '${this.name}'.`);
+        }
         const instance = new JawaInstance(this);
         const initializer = this.findMethod("wujudno");
         if (initializer !== null) {
@@ -112,6 +129,26 @@ class JawaClass extends JawaCallable {
     }
 
     toString() { return this.name; }
+}
+
+class JawaStruct extends JawaCallable {
+    constructor(name, fields) {
+        super();
+        this.name = name;
+        this.fields = fields; // Array of field name strings
+    }
+
+    arity() { return this.fields.length; }
+
+    async call(interpreter, args) {
+        const instance = {};
+        for (let i = 0; i < this.fields.length; i++) {
+            instance[this.fields[i]] = args[i];
+        }
+        return Object.freeze(instance);
+    }
+
+    toString() { return `struktur ${this.name}`; }
 }
 
 class JawaInstance {
@@ -428,6 +465,24 @@ export class Interpreter {
     return functionObj;
   }
 
+  async visitWangunStmt(stmt) {
+    const interfaceDef = {
+      name: stmt.name.lexeme,
+      methods: stmt.methods.map(m => ({
+        name: m.name.lexeme,
+        params: m.params.map(p => p.name.lexeme),
+        returnType: m.returnType
+      })),
+      properties: stmt.properties.map(p => ({
+        name: p.name.lexeme,
+        type: p.type,
+        isReadOnly: p.isReadOnly
+      }))
+    };
+    this.environment.define(stmt.name.lexeme, interfaceDef);
+    return null;
+  }
+
   async visitKelasStmt(stmt) {
       let superclass = null;
       if (stmt.superclass !== null) {
@@ -435,6 +490,19 @@ export class Interpreter {
           if (!(superclass instanceof JawaClass)) {
               throw new Error(`[line ${stmt.name.line}] Error: Parent class kudu dadi kelas.`);
           }
+          if (superclass.isSealed) {
+              throw new Error(`[line ${stmt.name.line}] Error: Ora iso ngextend kelas katutup '${superclass.name}'.`);
+          }
+      }
+
+      // Resolve implemented interfaces
+      const interfaces = [];
+      for (const ifaceRef of stmt.interfaces) {
+          const iface = this.environment.get(ifaceRef.name);
+          if (!iface || !iface.methods) {
+              throw new Error(`[line ${stmt.name.line}] Error: Interface '${ifaceRef.name.lexeme}' ora ditemokake.`);
+          }
+          interfaces.push(iface);
       }
 
       this.environment.define(stmt.name.lexeme, null);
@@ -451,13 +519,46 @@ export class Interpreter {
           methods.set(method.name.lexeme, functionObj);
       }
 
-      const klass = new JawaClass(stmt.name.lexeme, superclass, methods);
+      const klass = new JawaClass(stmt.name.lexeme, superclass, methods, stmt.isSealed, stmt.isAbstract);
+
+      // Validate abstract method implementation
+      if (superclass !== null) {
+        for (const [name, method] of superclass.methods) {
+          if (method.isAbstract && !methods.has(name)) {
+            throw new Error(`[line ${stmt.name.line}] Error: Kelas '${stmt.name.lexeme}' kudu implementasi method abstrak '${name}' soko '${superclass.name}'.`);
+          }
+        }
+      }
+
+      // Validate interface compliance
+      for (const iface of interfaces) {
+          for (const imethod of iface.methods) {
+              if (!methods.has(imethod.name)) {
+                  throw new Error(`[line ${stmt.name.line}] Error: Kelas '${stmt.name.lexeme}' kudu implementasi method '${imethod.name}' soko interface '${iface.name}'.`);
+              }
+          }
+          for (const iprop of iface.properties) {
+              // Check if class has a matching getter method
+              if (!methods.has(iprop.name) && !iprop.name.startsWith('_')) {
+                  throw new Error(`[line ${stmt.name.line}] Error: Kelas '${stmt.name.lexeme}' kudu duwe properti '${iprop.name}' soko interface '${iface.name}'.`);
+              }
+          }
+      }
+
+      // Store interfaces on the class for instanceof checks
+      klass.interfaces = interfaces;
 
       if (superclass !== null) {
           this.environment = this.environment.enclosing;
       }
 
       this.environment.assign(stmt.name, klass);
+      return null;
+  }
+
+  async visitStrukturStmt(stmt) {
+      const struct = new JawaStruct(stmt.name.lexeme, stmt.fields.map(f => f.lexeme));
+      this.environment.define(stmt.name.lexeme, struct);
       return null;
   }
 
@@ -521,10 +622,25 @@ export class Interpreter {
   async visitSelagiStmt(stmt) {
     try {
         while (this.isTruthy(await this.evaluate(stmt.condition))) {
-            await this.execute(stmt.body);
+            try {
+                await this.execute(stmt.body);
+            } catch (e) {
+                if (e instanceof Break) {
+                    if (e.label === null || e.label === stmt._label) return null;
+                    throw e;
+                }
+                if (e instanceof Continue) {
+                    if (e.label === null || e.label === stmt._label) continue;
+                    throw e;
+                }
+                throw e;
+            }
         }
     } catch (e) {
-        if (e instanceof Break) return null;
+        if (e instanceof Break) {
+            if (e.label === null || e.label === stmt._label) return null;
+            throw e;
+        }
         throw e;
     }
     return null;
@@ -539,10 +655,16 @@ export class Interpreter {
               try {
                   await this.execute(stmt.body);
               } catch (e) {
-                  if (e instanceof Break) break;
+                  if (e instanceof Break) {
+                      if (e.label === null || e.label === stmt._label) break;
+                      throw e;
+                  }
                   if (e instanceof Continue) {
-                      if (stmt.increment !== null) await this.evaluate(stmt.increment);
-                      continue;
+                      if (e.label === null || e.label === stmt._label) {
+                          if (stmt.increment !== null) await this.evaluate(stmt.increment);
+                          continue;
+                      }
+                      throw e;
                   }
                   throw e;
               }
@@ -554,11 +676,74 @@ export class Interpreter {
       return null;
   }
 
-  visitMandekStmt(stmt) { throw new Break(); }
-  visitLanjutnoStmt(stmt) { throw new Continue(); }
+  async visitLabeledStmt(stmt) {
+    try {
+      if (stmt.stmt instanceof AST.Selagi || stmt.stmt instanceof AST.Kanggo ||
+          stmt.stmt instanceof AST.ForOf || stmt.stmt instanceof AST.RentangStmt) {
+        stmt.stmt._label = stmt.name.lexeme;
+      }
+      await this.execute(stmt.stmt);
+    } catch (e) {
+      if ((e instanceof Break || e instanceof Continue) && e.label === stmt.name.lexeme) {
+        return null;
+      }
+      throw e;
+    }
+    return null;
+  }
+
+  visitMandekStmt(stmt) { throw new Break(stmt.label ? stmt.label.lexeme : null); }
+  visitLanjutnoStmt(stmt) { throw new Continue(stmt.label ? stmt.label.lexeme : null); }
+
+  async _callValue(fn, args) {
+    if (typeof fn === 'function') return await fn(...args);
+    if (fn instanceof JawaCallable) return await fn.call(this, args);
+    throw new Error("Error: dudu fungsi.");
+  }
 
   async visitForOfStmt(stmt) {
       const iterable = await this.evaluate(stmt.iterable);
+
+      if (stmt.isAsync) {
+        const asyncIterFn = iterable && iterable[Symbol.asyncIterator]
+          ? iterable[Symbol.asyncIterator]
+          : null;
+        if (!asyncIterFn) {
+          throw new Error("Error: Obyek ora support async iteration (butuh Symbol.asyncIterator).");
+        }
+        const asyncIter = await this._callValue(asyncIterFn, []);
+        if (!asyncIter || typeof asyncIter.next === 'undefined') {
+          throw new Error("Error: Obyek ora support async iteration (butuh Symbol.asyncIterator).");
+        }
+        const previous = this.environment;
+        this.environment = new Environment(this.environment);
+        const _next = asyncIter.next;
+        try {
+          let result = await this._callValue(_next, []);
+          while (!result.done) {
+            try {
+              if (stmt.isConst) this.environment.define(stmt.name.lexeme, result.value);
+              else { this.environment.values.set(stmt.name.lexeme, result.value); }
+              await this.execute(stmt.body);
+            } catch (e) {
+              if (e instanceof Break) {
+                if (e.label === null || e.label === stmt._label) return null;
+                throw e;
+              }
+              if (e instanceof Continue) {
+                if (e.label === null || e.label === stmt._label) continue;
+                throw e;
+              }
+              throw e;
+            }
+            result = await this._callValue(_next, []);
+          }
+        } finally {
+          this.environment = previous;
+        }
+        return null;
+      }
+
       const items = this.toIterable(iterable);
       const previous = this.environment;
       this.environment = new Environment(this.environment);
@@ -569,8 +754,14 @@ export class Interpreter {
                   else { this.environment.values.set(stmt.name.lexeme, item); }
                   await this.execute(stmt.body);
               } catch (e) {
-                  if (e instanceof Break) return null;
-                  if (e instanceof Continue) continue;
+                  if (e instanceof Break) {
+                      if (e.label === null || e.label === stmt._label) return null;
+                      throw e;
+                  }
+                  if (e instanceof Continue) {
+                      if (e.label === null || e.label === stmt._label) continue;
+                      throw e;
+                  }
                   throw e;
               }
           }
@@ -595,8 +786,14 @@ export class Interpreter {
                       this.environment.values.set("iki", item);
                       await this.execute(stmt.body);
                   } catch (e) {
-                      if (e instanceof Break) return null;
-                      if (e instanceof Continue) continue;
+                      if (e instanceof Break) {
+                          if (e.label === null || e.label === stmt._label) return null;
+                          throw e;
+                      }
+                      if (e instanceof Continue) {
+                          if (e.label === null || e.label === stmt._label) continue;
+                          throw e;
+                      }
                       throw e;
                   }
               }
@@ -609,8 +806,14 @@ export class Interpreter {
                       this.environment.values.set("iki", i);
                       await this.execute(stmt.body);
                   } catch (e) {
-                      if (e instanceof Break) return null;
-                      if (e instanceof Continue) continue;
+                      if (e instanceof Break) {
+                          if (e.label === null || e.label === stmt._label) return null;
+                          throw e;
+                      }
+                      if (e instanceof Continue) {
+                          if (e.label === null || e.label === stmt._label) continue;
+                          throw e;
+                      }
                       throw e;
                   }
               }
@@ -640,7 +843,7 @@ export class Interpreter {
     if (cmd === 'clear') {
       console.clear();
     } else if (cmd === 'credits') {
-      this.printHandler('Fatih Faisal Faruk');
+      this.printHandler('Made by Fatih Faisal Faruk');
     }
     return null;
   }
@@ -1215,6 +1418,23 @@ export class Interpreter {
       }
       result += expr.strings[expr.strings.length - 1];
       return result;
+  }
+
+  async visitTaggedTemplateExpr(expr) {
+      const tag = await this.evaluate(expr.tag);
+      const template = expr.template;
+      const strings = template.strings;
+      const evaluated = [];
+      for (const e of template.expressions) {
+          evaluated.push(await this.evaluate(e));
+      }
+      if (typeof tag === 'function') {
+          return tag(strings, ...evaluated);
+      }
+      if (tag instanceof JawaCallable) {
+          return await tag.call(this, [strings, ...evaluated]);
+      }
+      throw new Error("Tag kudu function.");
   }
 
   isTruthy(object) {

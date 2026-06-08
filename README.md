@@ -17,6 +17,7 @@
   - [Code Blocks: `terus` & `mbari`](#code-blocks-terus--mbari)
   - [Comments](#comments)
   - [Variables](#variables)
+  - [Destructuring](#destructuring)
   - [Data Types](#data-types)
   - [Console & User Input](#console--user-input)
 - [Type System (Optional)](#type-system-optional)
@@ -28,6 +29,7 @@
 - [Functions](#functions)
   - [Regular Functions: `gawe`](#regular-functions-gawe)
   - [Arrow Functions: `lakoni`](#arrow-functions-lakoni)
+  - [Rest & Spread](#rest--spread)
   - [Generator Functions: `tenangan` & `asilno`](#generator-functions)
   - [Async Functions: `tenangan` & `enteni`](#async-functions-tenangan--enteni)
 - [Error Handling](#error-handling)
@@ -41,7 +43,16 @@
 - [Unique Features](#unique-features)
   - [Null/Undefined Checks: `iku ono` & `iku ilang`](#nullundefined-checks-iku-ono--iku-ilang)
   - [Tuple (Immutable Data)](#tuple-immutable-data)
+- [New Features (v2.3.0)](#new-features-v230)
+  - [Sealed Class](#sealed-class-katutup-kelas)
+  - [Abstract Class](#abstract-class-abstrak-kelas)
+  - [Interface](#interface-wangun)
+  - [Struct](#struct-struktur)
+  - [Labeled Statements](#labeled-statements)
+  - [Async Iterator](#async-iterator-kanggo-tenangan--soko-)
+  - [Tagged Template Literals](#tagged-template-literals)
 - [Special Keywords](#special-keywords)
+  - [Alternative Keywords](#alternative-keywords)
 - [Object-Oriented Programming (OOP)](#object-oriented-programming-oop)
 - [Module System](#module-system)
 - [Metaprogramming: `Perantara` & `Pantulan`](#metaprogramming-perantara--pantulan)
@@ -49,8 +60,10 @@
   - [Global Values & Constructors](#global-values--constructors)
   - [`Mtk` — Math Object](#mtk--math-object)
   - [`Tanggalan` — Date Object](#tanggalan--date-object)
-  - [`DataJSON` — JSON Object](#datajson--json-object)
+  - [`JSON` — JSON Object](#json--json-object)
   - [Global Functions](#global-functions)
+  - [`Wektu` — Time Utilities](#wektu--time-utilities)
+  - [Additional Built-in Objects](#additional-built-in-objects)
   - [Promise Methods: `.banjur` & `.nyekel`](#promise-methods-banjur--nyekel)
   - [Array Methods](#array-methods)
   - [String Methods](#string-methods)
@@ -126,6 +139,34 @@ iki iku name yoiku "Budi"
 // Mutable variable
 jarno age yoiku 25
 age yoiku age tambah 1  // age is now 26
+```
+
+### Destructuring
+
+Unpack values from objects or arrays into variables using the same `{ }` and `[ ]` syntax.
+
+**Object destructuring:**
+```jawascript
+jarno user yoiku { name: "Budi", age: 30 }
+jarno { name, age } yoiku user
+cetakno(name)  // Output: Budi
+cetakno(age)   // Output: 30
+```
+
+**Array destructuring:**
+```jawascript
+jarno arr yoiku [1, 2, 3]
+jarno [a, b] yoiku arr
+cetakno(a)  // Output: 1
+cetakno(b)  // Output: 2
+```
+
+**Destructuring with default values and renaming:**
+```jawascript
+jarno { name, city dadi kutha } yoiku { name: "Budi" }
+cetakno(kutha)  // Output: undefined (no default)
+jarno [x, y yoiku 5] yoiku [1]
+cetakno(y)  // Output: 5
 ```
 
 ### Data Types
@@ -404,6 +445,27 @@ mbari
 cetakno(greet("Sastro"))  // Output: Welcome, Sastro
 ```
 
+### Rest & Spread
+
+Use `...` to collect remaining arguments (rest) or expand iterables (spread).
+
+**Rest parameters:**
+```jawascript
+gawe sum(...numbers) terus
+  balekno numbers.kurangi((a, b) dadi a + b, 0)
+mbari
+cetakno(sum(1, 2, 3))  // Output: 6
+```
+
+**Spread in arrays and function calls:**
+```jawascript
+jarno arr1 yoiku [1, 2, 3]
+jarno arr2 yoiku [...arr1, 4, 5]
+cetakno(arr2)  // Output: [1, 2, 3, 4, 5]
+
+cetakno(sum(...arr1))  // Output: 6
+```
+
 ### Generator Functions
 
 Use `tenangan` to declare a generator and `asilno` (`yield`) to pause and return a value.
@@ -419,6 +481,25 @@ mbari
 jarno gen yoiku idGenerator anyar()
 cetakno(gen.next().value)  // Output: 0
 cetakno(gen.next().value)  // Output: 1
+```
+
+Use `asilno kabeh` to delegate to another generator (equivalent to `yield*`):
+
+```jawascript
+gawe tenangan inner() terus
+  asilno 1
+  asilno 2
+mbari
+
+gawe tenangan outer() terus
+  asilno kabeh inner()
+  asilno 3
+mbari
+
+jarno g yoiku outer anyar()
+cetakno(g.next().value)  // Output: 1
+cetakno(g.next().value)  // Output: 2
+cetakno(g.next().value)  // Output: 3
 ```
 
 ### Async Functions: `tenangan` & `enteni`
@@ -778,13 +859,13 @@ Use these in test scripts or as runtime guards. `pastenPodo` is short for "paste
 
 ---
 
-## Tanda Kurung Opsional (v2.2.0)
+## Optional Parentheses (v2.2.0)
 
-Demi filosofi **"berbicara kepada komputer secara langsung"**, tanda kurung `()` di sekitar argumen konstruk-konstruk berikut menjadi **opsional** pada level statement.
+Following the philosophy of **"speaking to the computer directly"**, parentheses `()` around arguments in the following constructs become **optional** at the statement level.
 
-### Konstruk yang Mendukung
+### Supported Constructs
 
-| Konstruksi | Bentuk dengan kurung | Bentuk tanpa kurung |
+| Construct | With parentheses | Without parentheses |
 | :--- | :--- | :--- |
 | `lek` (if) | `lek (x > 0) terus ...` | `lek x > 0 terus ...` |
 | `lek misale` (else if) | `lek misale (x > 0) terus ...` | `lek misale x > 0 terus ...` |
@@ -794,25 +875,25 @@ Demi filosofi **"berbicara kepada komputer secara langsung"**, tanda kurung `()`
 | `cetakno` (1 arg) | `cetakno (x)` | `cetakno x` |
 | `nyekel` (catch) | `nyekel (e) terus ...` | `nyekel e terus ...` |
 
-### Contoh
+### Examples
 
 ```jawascript
-// lek tanpa kurung
+// lek without parentheses
 lek umur >= 17 terus
   cetakno("Dewasa")
 mbari
 
-// cetakno multi-argumen tanpa kurung
+// cetakno multi-argument without parentheses
 cetakno "halo", "dunia", "!"
 
-// nyekel tanpa kurung
+// nyekel without parentheses
 cobak terus
   uncalen "ada kesalahan"
 mbari nyekel e terus
   cetakno "error: " + e
 mbari
 
-// Bentuk campuran tetap valid dalam file yang sama
+// Mixed styles are valid in the same file
 jarno skor = 85
 lek (skor >= 90) terus
   cetakno("A")
@@ -821,15 +902,130 @@ mbari lek misale skor >= 80 terus
 mbari
 ```
 
-### Yang Tetap Wajib Kurung
+### Constructs That Still Require Parentheses
 
-Untuk menjaga parser tetap sederhana dan tidak ambigu, tanda kurung tetap **wajib** pada:
+To keep the parser simple and unambiguous, parentheses remain **required** for:
 
-- Deklarasi fungsi: `gawe nama (a, b) terus ... mbari` (multi-param, destructuring)
-- Arrow function: `(x, y) lakoni ...`
+- Function declarations: `gawe nama (a, b) terus ... mbari` (multi-param, destructuring)
+- Arrow functions: `(x, y) lakoni ...`
 - C-style `for`: `kanggo (i = 0; i < 10; i = i + 1) terus ...`
-- Function call ekspresi: `f (a, b)`, `tuple (a, b)`, `takon (msg)`, `new Foo (a, b)`
-- Grouping ekspresi: `(a + b)`
+- Function call expressions: `f (a, b)`, `tuple (a, b)`, `takon (msg)`, `new Foo (a, b)`
+- Grouping expressions: `(a + b)`
+
+---
+
+## New Features (v2.3.0)
+
+### Sealed Class (`katutup kelas`)
+
+Prevent a class from being subclassed by prefixing it with `katutup` (sealed). Any attempt to extend a sealed class throws a runtime error.
+
+```jawascript
+katutup kelas Bentuk terus
+  gawe info() terus
+    balekno "Bentuk"
+  mbari
+mbari
+
+// kelas Bunder turunan soko Bentuk terus  // Error: ora iso ngextend kelas katutup
+```
+
+### Abstract Class (`abstrak kelas`)
+
+Define a class that cannot be instantiated directly. Use `abstrak gawe` for methods that subclasses must implement.
+
+```jawascript
+abstrak kelas Bentuk terus
+  abstrak gawe area()
+mbari
+
+kelas Bunder turunan soko Bentuk terus
+  gawe area() terus
+    balekno Mtk.PI * iki.r * iki.r
+  mbari
+mbari
+
+// jarno b yoiku Bentuk anyar()  // Error: Ora iso instantiate kelas abstrak
+jarno b yoiku Bunder anyar(5)    // OK
+```
+
+### Interface (`wangun`)
+
+Define a contract with method signatures using `wangun`. Classes implement interfaces with `nurut` (implements).
+
+```jawascript
+wangun Shape terus
+  gawe area() terus balekno Nomer mbari
+mbari
+
+kelas Circle nurut Shape terus
+  gawe area() terus balekno Mtk.PI * iki.r * iki.r mbari
+mbari
+
+jarno c yoiku anyar Circle(5)
+cetakno(c.area())
+```
+
+Multiple interfaces can be implemented by separating with commas: `kelas Foo nurut A, B, C terus`.
+
+### Struct (`struktur`)
+
+A lightweight value type with immutable instances. Fields are defined as a comma-separated list.
+
+```jawascript
+struktur Titik terus x, y mbari
+jarno p yoiku anyar Titik(3, 4)
+cetakno(p.x)  // Output: 3
+// p.x yoiku 5  // Error: struct values are frozen (immutable)
+```
+
+### Labeled Statements
+
+Attach a label to a statement to use with `mandek` (break) or `lanjutno` (continue) for nested loops.
+
+```jawascript
+luar: kanggo (jarno i yoiku 0; i < 3; i++) terus
+  jero: kanggo (jarno j yoiku 0; j < 3; j++) terus
+    lek (i plek 1 lan j plek 1) terus
+      mandek luar  // breaks out of both loops
+    mbari
+    cetakno(i, j)
+  mbari
+mbari
+```
+
+### Async Iterator (`kanggo tenangan ... soko ...`)
+
+Iterate over async iterables using `kanggo tenangan` (for await...of).
+
+```jawascript
+tenangan gawe delayedNumbers() terus
+  asilno 1
+  asilno 2
+  asilno 3
+mbari
+
+kanggo tenangan i soko delayedNumbers() terus
+  cetakno(i)  // Output: 1, 2, 3
+mbari
+```
+
+### Tagged Template Literals
+
+Tag a template literal with a function to process the template parts.
+
+```jawascript
+gawe upper(strings, ...values) terus
+  jarno result yoiku ""
+  kanggo (jarno i yoiku 0; i < values.length; i++) terus
+    result += strings[i] + String(values[i]).gedekno()
+  mbari
+  balekno result + strings[strings.length - 1]
+mbari
+
+iki iku name yoiku "Java"
+cetakno(upper`Hello ${name}!`)  // Output: Hello JAVA!
+```
 
 ---
 
@@ -875,6 +1071,28 @@ cetakno(myBox.area)    // Output: 50
 myBox.size yoiku 7
 cetakno(myBox.area)    // Output: 49
 ```
+
+### Alternative Keywords
+
+JPL also accepts additional Javanese synonyms for several primary keywords:
+
+| Synonym | Equivalent Keyword |
+| :--- | :--- |
+| `carane` | `gawe` (function) |
+| `susuk` | `balekno` (return) |
+| `ngomong` | `cetakno` (print) |
+| `yo` | `terus` (block open) |
+| `mari` | `mbari` (block close) |
+| `saestu`, `iyo` | `tenan` (true) |
+| `mbelgedhes` | `gak` (false) |
+| `muspro` | `kosong` (null) |
+| `luput` | `uncalen` (throw) |
+| `yen`, `menawi` | `lek` (if) |
+| `utowo` | `liyane` (else) |
+| `saksuwene` | `selagi` (while) |
+| `mbaleni` | `kanggo` (for) |
+
+These work interchangeably anywhere the primary keyword is used.
 
 ---
 
@@ -1072,7 +1290,7 @@ cetakno(list)  // Output: []
 iki iku obj1 yoiku { a: 1 }
 iki iku obj2 yoiku { b: 2 }
 iki iku merged yoiku Obyek.wenehno({}, obj1, obj2)
-cetakno(DataJSON.stringkan(merged))  // Output: {"a":1,"b":2}
+cetakno(JSON.tulisan(merged))  // Output: {"a":1,"b":2}
 cetakno(Obyek.kunci(merged))         // Output: ['a', 'b']
 
 // Symbol — creates a unique key that won't collide with other properties
@@ -1127,12 +1345,12 @@ cetakno(user[uid])          // Output: 987-xyz
 | `Tanggalan.saiki()` | `Date.now()` | Milliseconds since Jan 1, 1970 UTC |
 | `Tanggalan anyar()` | `new Date()` | Current date and time |
 
-### `DataJSON` — JSON Object
+### `JSON` — JSON Object
 
 | Method | JavaScript Equivalent | Description |
 | :--- | :--- | :--- |
-| `DataJSON.urai(str)` | `JSON.parse(str)` | Parse a JSON string into an object |
-| `DataJSON.stringkan(obj)` | `JSON.stringify(obj)` | Convert an object to a JSON string |
+| `JSON.obyek(str)` | `JSON.parse(str)` | Parse a JSON string into an object |
+| `JSON.tulisan(obj)` | `JSON.stringify(obj)` | Convert an object to a JSON string |
 
 ### Global Functions
 
@@ -1170,6 +1388,32 @@ jarno intervalId yoiku setWaktuInterval(gawe () terus
   mbari
 mbari, 1000)
 ```
+
+Alternatively, use the `Wektu` (Time) object:
+
+```jawascript
+Wektu.ngenteni(() dadi cetakno("after 1s"), 1000)
+jarno id yoiku Wektu.mbaleni(() dadi cetakno("every 2s"), 2000)
+Wektu.mandek(id)  // clear interval/timeout
+```
+
+### `Wektu` — Time Utilities
+
+| Method | JavaScript Equivalent | Description |
+| :--- | :--- | :--- |
+| `Wektu.ngenteni(fn, ms)` | `setTimeout(fn, ms)` | Run function after a delay |
+| `Wektu.mbaleni(fn, ms)` | `setInterval(fn, ms)` | Run function repeatedly |
+| `Wektu.mandek(id)` | `clearTimeout(id)` / `clearInterval(id)` | Cancel a timer |
+
+### Additional Built-in Objects
+
+| JPL | JavaScript | Description |
+| :--- | :--- | :--- |
+| `Himpunan(iterable?)` | `Set` | A collection of unique values |
+| `PetaLemah()` | `WeakMap` | WeakMap with garbage-collected keys |
+| `HimpunanLemah()` | `WeakSet` | WeakSet with garbage-collected values |
+| `URL(url, base?)` | `URL` | Parse and construct URLs |
+| `URLParamCari(params?)` | `URLSearchParams` | Work with URL query parameters |
 
 ### Promise Methods: `.banjur` & `.nyekel`
 

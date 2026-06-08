@@ -48,21 +48,39 @@ export class Lexer {
         if (this.match('/')) {
           while (this.peek() !== '\n' && !this.isAtEnd()) this.advance();
         } else if (this.match('*')) {
-          this.addToken(TokenType.SLASH_COMMAND);
+          while (!this.isAtEnd()) {
+            if (this.advance() === '*' && this.peek() === '/') { this.advance(); break; }
+          }
+        } else if (this.isAlpha(this.peek())) {
+          // Slash command (/clear, /credits) or regex /word/ or bare /
+          const savedCurrent = this.current;
+          while (this.isAlpha(this.peek())) this.advance();
+          const word = this.source.substring(this.start + 1, this.current);
+
+          if ((word === 'clear' || word === 'credits') && !this.isAlphaNumeric(this.peek())) {
+            // Check for closing '/' — if present, it's regex /clear/gi, not a command
+            let temp = this.current;
+            while (temp < this.source.length && (this.source[temp] === ' ' || this.source[temp] === '\t' || this.source[temp] === '\n')) temp++;
+            if (temp < this.source.length && this.source[temp] === '/') {
+              this.current = savedCurrent;
+              this.regex();
+            } else {
+              if (word === 'clear') this.addToken(TokenType.CLEAR);
+              else this.addToken(TokenType.CREDITS);
+            }
+          } else {
+            // Not a known command — backtrack and handle normally
+            this.current = savedCurrent;
+            if (this.regexAllowed) {
+              this.regex();
+            } else {
+              this.addToken(this.match('=') ? TokenType.BAGI_KARO : TokenType.BAGI);
+            }
+          }
         } else if (this.regexAllowed) {
           this.regex();
         } else {
-          // Check for slash commands like /clear or /credits
-          const cmdStart = this.current;
-          while (this.isAlpha(this.peek())) this.advance();
-          const cmd = this.source.substring(this.start + 1, this.current);
-          if (cmd === 'clear') {
-            this.addToken(TokenType.CLEAR);
-          } else if (cmd === 'credits') {
-            this.addToken(TokenType.CREDITS);
-          } else {
-            this.addToken(this.match('=') ? TokenType.BAGI_KARO : TokenType.BAGI);
-          }
+          this.addToken(this.match('=') ? TokenType.BAGI_KARO : TokenType.BAGI);
         }
         break;
       case '=':
@@ -167,6 +185,7 @@ export class Lexer {
   regex() {
     let pattern = "";
     let inClass = false;
+    let closed = false;
     while (!this.isAtEnd()) {
       const c = this.peek();
       if (c === '\n') { this.line++; }
@@ -177,10 +196,10 @@ export class Lexer {
       }
       if (c === '[') inClass = true;
       else if (c === ']') inClass = false;
-      else if (c === '/' && !inClass) { this.advance(); break; }
+      else if (c === '/' && !inClass) { this.advance(); closed = true; break; }
       pattern += this.advance();
     }
-    if (this.isAtEnd()) throw new Error("Unterminated regex literal.");
+    if (!closed) throw new Error("Unterminated regex literal.");
     let flags = "";
     while (this.isAlpha(this.peek())) flags += this.advance();
     try {
@@ -308,6 +327,7 @@ export class Lexer {
       TokenType.RIGHT_PAREN, TokenType.RIGHT_BRACKET, TokenType.MBARI,
       TokenType.TENAN, TokenType.GAK, TokenType.KOSONG, TokenType.ORADIDEFINISIKAN,
       TokenType.IKI,
+      TokenType.PING, TokenType.PING_KARO,
     ];
     this.regexAllowed = !closeTokens.includes(type);
   }

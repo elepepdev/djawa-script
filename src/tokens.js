@@ -36,10 +36,15 @@ export const TokenType = {
   ASILNO: 'ASILNO',         // yield
   LAKONI: 'LAKONI',         // =>
   KELAS: 'KELAS',           // class
+  ABSTRAK: 'ABSTRAK',       // abstract
+  KATUTUP: 'KATUTUP',       // sealed
   TURUNAN_SOKO: 'TURUNAN_SOKO', // extends
   WUJUDNO: 'WUJUDNO',       // constructor
   INDUK: 'INDUK',           // super
   IKI: 'IKI',               // this
+  WANGUN: 'WANGUN',         // interface
+  STRUKTUR: 'STRUKTUR',     // struct
+  NURUT: 'NURUT',           // implements
   TETEP: 'TETEP',           // static
   ENTUK: 'ENTUK',           // get
   PASANG: 'PASANG',         // set
@@ -163,9 +168,15 @@ export const Keywords = {
   'asilno': TokenType.ASILNO,
   'lakoni': TokenType.LAKONI,
   'kelas': TokenType.KELAS,
+  'abstrak': TokenType.ABSTRAK,
+  'katutup': TokenType.KATUTUP,
+  'turunan soko': TokenType.TURUNAN_SOKO,
   'wujudno': TokenType.WUJUDNO,
   'induk': TokenType.INDUK,
   'iki': TokenType.IKI,
+  'wangun': TokenType.WANGUN,
+  'struktur': TokenType.STRUKTUR,
+  'nurut': TokenType.NURUT,
   'tetep': TokenType.TETEP,
   'entuk': TokenType.ENTUK,
   'pasang': TokenType.PASANG,
@@ -175,14 +186,15 @@ export const Keywords = {
   'soko': TokenType.SOKO,
   'ing': TokenType.ING,
   'dadi': TokenType.DADI,
-  'rentang': TokenType.KANGGO,
+  // 'rentang': TokenType.KANGGO, // removed — 'rentang' is RENTANG (line 141)
   'biasane': TokenType.BIASANE,
   'kabeh': TokenType.KABEH,
   'ta': TokenType.TA,
 
+  'tambah': TokenType.TAMBAH,
+
   'CLEAR': 'CLEAR',
   'CREDITS': 'CREDITS',
-  'tambah': TokenType.TAMBAH,
   'kurang': TokenType.KURANG,
   'ping': TokenType.PING,
   'bagi': TokenType.BAGI,
@@ -235,34 +247,4 @@ export const Keywords = {
   'utowo': TokenType.LIYANE,
   'saksuwene': TokenType.SELAGI,
   'mbaleni': TokenType.KANGGO,
-  'new': TokenType.ANYAR,
-  'if': TokenType.LEK,
-  'else': TokenType.LIYANE,
-  'while': TokenType.SELAGI,
-  'for': TokenType.KANGGO,
-  'return': TokenType.BALEKNO,
-  'function': TokenType.GAWE,
-  'const': TokenType.IKI_IKU,
-  'let': TokenType.JARNO,
-  'var': TokenType.JARNO,
-  'async': TokenType.TENANGAN,
-  'await': TokenType.ENTENI,
-  'yield': TokenType.ASILNO,
-  'try': TokenType.COBAK,
-  'catch': TokenType.NYEKEL,
-  'finally': TokenType.PUNGKASAN,
-  'throw': TokenType.UNCALEN,
-  'class': TokenType.KELAS,
-  'extends': TokenType.TURUNAN_SOKO,
-  'constructor': TokenType.WUJUDNO,
-  'super': TokenType.INDUK,
-  'this': TokenType.IKI,
-  'static': TokenType.TETEP,
-  'switch': TokenType.PILIH,
-  'case': TokenType.KALO,
-  'default': TokenType.YOWES,
-  'true': TokenType.TENAN,
-  'false': TokenType.GAK,
-  'null': TokenType.KOSONG,
-  'undefined': TokenType.ORADIDEFINISIKAN,
 };

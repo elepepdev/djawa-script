@@ -1,0 +1,35 @@
+// Test: Struct (struktur)
+cetakno("--- Struct ---")
+
+// Test 1: Define struct with Javanese keyword
+struktur Titik terus
+  x, y
+mbari
+
+jarno p yoiku anyar Titik(3, 4)
+cetakno("x:", p.x)
+cetakno("y:", p.y)
+
+// Test 2: Javanese keyword
+struktur Person terus
+  name, age
+mbari
+
+jarno person yoiku anyar Person("Joko", 25)
+cetakno(person.name)
+cetakno("umur:", person.age)
+
+// Test 3: Javanese keyword
+struktur Box terus
+  value
+mbari
+
+jarno b yoiku anyar Box(42)
+cetakno("box:", b.value)
+
+// Test 4: Struct is frozen (cannot add new fields)
+jarno p2 yoiku anyar Titik(1, 2)
+cetakno("p2.x:", p2.x)
+cetakno("p2.y:", p2.y)
+
+cetakno("--- Rampung ---")

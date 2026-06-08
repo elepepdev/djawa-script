@@ -20,8 +20,26 @@ export class Parser {
   declaration() {
     try {
       let result = null;
-      if (this.match(TokenType.KELAS)) result = this.classDeclaration();
+      if (this.match(TokenType.ABSTRAK)) {
+        if (this.match(TokenType.KELAS)) {
+          result = this.classDeclaration(false, true);
+        } else {
+          this.current--;
+          result = this.statement();
+        }
+      } else if (this.match(TokenType.KATUTUP)) {
+        // sealed class — optional sealed keyword before class
+        if (this.match(TokenType.KELAS)) {
+          result = this.classDeclaration(true);
+        } else {
+          // 'katutup' without 'kelas' — treat as expression statement (likely error)
+          this.current--; // put back the katutup token
+          result = this.statement();
+        }
+      } else if (this.match(TokenType.KELAS)) result = this.classDeclaration(false);
+      else if (this.match(TokenType.STRUKTUR)) result = this.structDeclaration();
       else if (this.match(TokenType.CACAH)) result = this.enumDeclaration();
+      else if (this.match(TokenType.WANGUN)) result = this.interfaceDeclaration();
       else if (this.match(TokenType.METOKNO)) result = this.metoknoStatement();
       else if (this.match(TokenType.JUPUKNO)) result = this.jupuknoStatement();
       else if (this.match(TokenType.GAWE)) {
@@ -49,27 +67,97 @@ export class Parser {
     }
   }
 
-  classDeclaration() {
+  classDeclaration(isSealed = false, isAbstract = false) {
     const name = this.consume(TokenType.IDENTIFIER, "Kudune jeneng kelas.");
     let superclass = null;
     if (this.match(TokenType.TURUNAN_SOKO)) {
       this.consume(TokenType.IDENTIFIER, "Kudune jeneng parent class.");
       superclass = new AST.Variable(this.previous());
     }
+    const interfaces = [];
+    if (this.match(TokenType.NURUT)) {
+      do {
+        const iface = this.consume(TokenType.IDENTIFIER, "Kudune jeneng interface.");
+        interfaces.push(new AST.Variable(iface));
+      } while (this.match(TokenType.COMMA));
+    }
     this.consume(TokenType.TERUS, "Kudune 'terus' sakdurunge body kelas.");
     const methods = [];
     while (!this.check(TokenType.MBARI) && !this.isAtEnd()) {
       const isStatic = this.match(TokenType.TETEP);
+      const isAbstractMethod = this.match(TokenType.ABSTRAK);
       if (this.match(TokenType.GAWE)) {
-        methods.push(this.functionDeclaration("cara", false, isStatic));
+        methods.push(this.functionDeclaration("cara", false, isStatic, isAbstractMethod));
       } else if (this.match(TokenType.WUJUDNO)) {
-        methods.push(this.functionDeclaration("wujudno", false, isStatic));
+        methods.push(this.functionDeclaration("wujudno", false, isStatic, isAbstractMethod));
       } else {
         this.advance();
       }
     }
     this.consume(TokenType.MBARI, "Kudune 'mbari' sakwise body kelas.");
-    return new AST.Kelas(name, superclass, methods);
+    return new AST.Kelas(name, superclass, methods, interfaces, isSealed, isAbstract);
+  }
+
+  interfaceDeclaration() {
+    const name = this.consume(TokenType.IDENTIFIER, "Kudune jeneng interface.");
+    this.consume(TokenType.TERUS, "Kudune 'terus' sakwise 'wangun'.");
+    const methods = [];
+    const properties = [];
+    while (!this.check(TokenType.MBARI) && !this.isAtEnd()) {
+      if (this.match(TokenType.GAWE)) {
+        const isAsync = this.match(TokenType.TENANGAN);
+        let methodName = this.consumeNameLike("Kudune jeneng method ing interface.");
+        this.consume(TokenType.LEFT_PAREN, "Kudune '(' sakwise jeneng method.");
+        const params = [];
+        if (!this.check(TokenType.RIGHT_PAREN)) {
+          do {
+            const paramName = this.consume(TokenType.IDENTIFIER, "Kudune jeneng parameter.");
+            let paramType = null;
+            if (this.match(TokenType.COLON)) {
+              paramType = this.consume(TokenType.IDENTIFIER, "Kudune tipe data parameter.").lexeme;
+            }
+            params.push({ name: paramName, type: paramType });
+          } while (this.match(TokenType.COMMA));
+        }
+        this.consume(TokenType.RIGHT_PAREN, "Kudune ')' sakwise parameter.");
+        let returnType = null;
+        if (this.match(TokenType.COLON)) {
+          returnType = this.consume(TokenType.IDENTIFIER, "Kudune tipe data balikan.").lexeme;
+        }
+        this.consume(TokenType.TERUS, "Kudune 'terus' sakwise signature method.");
+        // In interface, the return type expression is optional (or just a type name)
+        // After 'terus', we expect 'balekno' or just an identifier
+        if (this.match(TokenType.BALEKNO)) {
+          returnType = this.consume(TokenType.IDENTIFIER, "Kudune tipe data balikan.").lexeme;
+        }
+        this.consume(TokenType.MBARI, "Kudune 'mbari' sakwise signature method.");
+        methods.push({ name: methodName, params, returnType, isAsync });
+      } else if (this.match(TokenType.ENTUK)) {
+        // Property getter signature: entuk <name> terus <type> mbari
+        const propName = this.consume(TokenType.IDENTIFIER, "Kudune jeneng properti.");
+        this.consume(TokenType.TERUS, "Kudune 'terus' sakwise jeneng properti.");
+        const propType = this.consume(TokenType.IDENTIFIER, "Kudune tipe data properti.").lexeme;
+        this.consume(TokenType.MBARI, "Kudune 'mbari' sakwise tipe properti.");
+        properties.push({ name: propName, type: propType, isReadOnly: true });
+      } else {
+        this.advance();
+      }
+    }
+    this.consume(TokenType.MBARI, "Kudune 'mbari' sakwise body interface.");
+    return new AST.WangunStmt(name, methods, properties);
+  }
+
+  structDeclaration() {
+    const name = this.consume(TokenType.IDENTIFIER, "Kudune jeneng struct.");
+    this.consume(TokenType.TERUS, "Kudune 'terus' sakdurunge body struct.");
+    const fields = [];
+    while (!this.check(TokenType.MBARI) && !this.isAtEnd()) {
+      const fieldName = this.consume(TokenType.IDENTIFIER, "Kudune jeneng field.");
+      if (this.match(TokenType.COMMA)) { /* optional comma */ }
+      fields.push(fieldName);
+    }
+    this.consume(TokenType.MBARI, "Kudune 'mbari' sakwise body struct.");
+    return new AST.Struktur(name, fields);
   }
 
   metoknoStatement() {
@@ -169,15 +257,10 @@ export class Parser {
     return new AST.EnumStmt(name, variants);
   }
 
-  functionDeclaration(kind, isAsync = false) {
+  functionDeclaration(kind, isAsync = false, isStatic = false, isAbstract = false) {
     let name = null;
     if (kind !== "wujudno" && kind !== "arrow") {
-      if (this.match(TokenType.IDENTIFIER) || 
-          this.match(TokenType.TAMBAH, TokenType.KURANG, TokenType.PING, TokenType.BAGI, TokenType.SISO)) {
-        name = this.previous();
-      } else {
-        throw this.error(this.peek(), `Kudune jeneng ${kind}.`);
-      }
+      name = this.consumeNameLike(`Kudune jeneng ${kind}.`);
     }
     this.consume(TokenType.LEFT_PAREN, `Kudune '(' sakwise jeneng ${kind}.`);
     const parameters = [];
@@ -220,10 +303,15 @@ export class Parser {
         this.consume(TokenType.IDENTIFIER, "Kudune tipe data balikan.");
     }
 
+    if (isAbstract) {
+      const finalName = name || { lexeme: kind === "wujudno" ? "wujudno" : "arrow", line: this.previous().line };
+      return new AST.Gawe(finalName, parameters, new AST.Block([]), false, false, true);
+    }
+
     this.consume(TokenType.TERUS, `Kudune 'terus' sakdurunge body ${kind}.`);
     const body = this.block();
     const finalName = name || { lexeme: kind === "wujudno" ? "wujudno" : "arrow", line: this.previous().line };
-    return new AST.Gawe(finalName, parameters, new AST.Block(body), isAsync);
+    return new AST.Gawe(finalName, parameters, new AST.Block(body), isAsync, false);
   }
 
   varDeclaration(isConst) {
@@ -276,6 +364,17 @@ export class Parser {
   }
 
   statement() {
+    // Label: identifier followed by colon before a statement
+    if (this.check(TokenType.IDENTIFIER) && !this.isAtEnd()) {
+      const next = this.tokens[this.current + 1];
+      if (next && next.type === TokenType.COLON) {
+        const name = this.advance();
+        this.advance();
+        const stmt = this.statement();
+        return new AST.LabeledStmt(name, stmt);
+      }
+    }
+
     if (this.match(TokenType.CLEAR)) return new AST.Command('clear');
     if (this.match(TokenType.CREDITS)) return new AST.Command('credits');
     if (this.match(TokenType.LEK)) return this.lekStatement();
@@ -288,8 +387,18 @@ export class Parser {
     if (this.match(TokenType.COCOK)) return this.cocokStatement();
     if (this.match(TokenType.COBAK)) return this.cobakStatement();
     if (this.match(TokenType.UNCALEN)) return this.uncalenStatement();
-    if (this.match(TokenType.MANDEK)) return new AST.Mandek(this.previous());
-    if (this.match(TokenType.LANJUTNO)) return new AST.Lanjutno(this.previous());
+    if (this.match(TokenType.MANDEK)) {
+      const keyword = this.previous();
+      let label = null;
+      if (this.check(TokenType.IDENTIFIER)) label = this.advance();
+      return new AST.Mandek(keyword, label);
+    }
+    if (this.match(TokenType.LANJUTNO)) {
+      const keyword = this.previous();
+      let label = null;
+      if (this.check(TokenType.IDENTIFIER)) label = this.advance();
+      return new AST.Lanjutno(keyword, label);
+    }
     if (this.match(TokenType.TERUS)) return new AST.Block(this.block());
     return this.expressionStatement();
   }
@@ -352,6 +461,8 @@ export class Parser {
   }
 
   kanggoStatement() {
+    // Check for async for-await-of: kanggo tenangan i soko expr ...
+    const isAsync = this.match(TokenType.TENANGAN);
     // for...of style: kanggo [var] x soko expr { } or rentang { }
     if (!this.check(TokenType.LEFT_PAREN)) {
       let isConst = false;
@@ -363,7 +474,7 @@ export class Parser {
       const iterable = this.expression();
       this.consume(TokenType.TERUS, "Kudune 'terus' sakdurunge body loop.");
       const body = new AST.Block(this.block());
-      return new AST.ForOf(name, iterable, body, isConst);
+      return new AST.ForOf(name, iterable, body, isConst, isAsync);
     }
 
     this.consume(TokenType.LEFT_PAREN, "Kudune '(' sakwise 'kanggo'.");
@@ -698,10 +809,19 @@ export class Parser {
   }
 
   call() {
-    let expr = this.primary();
+    let expr;
+    // Standalone template literal (no tag)
+    if (this.match(TokenType.TEMPLATE)) {
+      expr = this.buildTemplateLiteral(this.previous());
+    } else {
+      expr = this.primary();
+    }
     while (true) {
       if (this.match(TokenType.LEFT_PAREN)) {
         expr = this.finishCall(expr);
+      } else if (this.match(TokenType.TEMPLATE)) {
+        // Tagged template: expr`...`
+        expr = new AST.TaggedTemplate(expr, this.buildTemplateLiteral(this.previous()));
       } else if (this.match(TokenType.DOT)) {
         if (this.check(TokenType.IDENTIFIER) || this.isKeyword(this.peek())) {
           const name = this.advance();
@@ -738,6 +858,17 @@ export class Parser {
     return new AST.Call(callee, paren, args);
   }
 
+  buildTemplateLiteral(token) {
+    const { strings, expressions } = token.literal;
+    const parsedExpressions = expressions.map(code => {
+      const lexer = new Lexer(code);
+      const tokens = lexer.scanTokens();
+      const parser = new Parser(tokens);
+      return parser.expression();
+    });
+    return new AST.TemplateLiteral(strings, parsedExpressions);
+  }
+
   primary() {
     if (this.match(TokenType.GAK)) return new AST.Literal(false);
     if (this.match(TokenType.TENAN)) return new AST.Literal(true);
@@ -750,22 +881,16 @@ export class Parser {
     }
     if (this.match(TokenType.IKI)) return new AST.This(this.previous());
     
-    if (this.match(TokenType.TEMPLATE)) {
-      const { strings, expressions } = this.previous().literal;
-      const parsedExpressions = expressions.map(code => {
-        const lexer = new Lexer(code);
-        const tokens = lexer.scanTokens();
-        const parser = new Parser(tokens);
-        return parser.expression();
-      });
-      return new AST.TemplateLiteral(strings, parsedExpressions);
-    }
-
     if (this.match(TokenType.TAKON)) {
       this.consume(TokenType.LEFT_PAREN, "Kudune '(' sakwise 'takon'.");
       const prompt = this.expression();
       this.consume(TokenType.RIGHT_PAREN, "Kudune ')' sakwise prompt.");
       return new AST.Call(new AST.Variable({ lexeme: "takon", line: this.previous().line }), this.previous(), [prompt]);
+    }
+
+    if (this.match(TokenType.RENTANG)) {
+      // 'rentang' prefix for range expressions; delegates to the full expression parser
+      return this.expression();
     }
 
     if (this.match(TokenType.TUPLE)) {

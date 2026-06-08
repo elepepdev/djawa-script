@@ -176,6 +176,15 @@ export class TemplateLiteral extends Expr {
   accept(visitor) { return visitor.visitTemplateLiteralExpr(this); }
 }
 
+export class TaggedTemplate extends Expr {
+  constructor(tag, template) {
+    super();
+    this.tag = tag;
+    this.template = template;
+  }
+  accept(visitor) { return visitor.visitTaggedTemplateExpr(this); }
+}
+
 export class Stmt {
   accept(visitor) {}
 }
@@ -246,12 +255,13 @@ export class Kanggo extends Stmt {
 }
 
 export class ForOf extends Stmt {
-  constructor(name, iterable, body, isConst = false) {
+  constructor(name, iterable, body, isConst = false, isAsync = false) {
     super();
     this.name = name;
     this.iterable = iterable;
     this.body = body;
     this.isConst = isConst;
+    this.isAsync = isAsync;
   }
   accept(visitor) { return visitor.visitForOfStmt(this); }
 }
@@ -267,13 +277,14 @@ export class RentangStmt extends Stmt {
 }
 
 export class Gawe extends Stmt {
-  constructor(name, params, body, isAsync = false, isGenerator = false) {
+  constructor(name, params, body, isAsync = false, isGenerator = false, isAbstract = false) {
     super();
     this.name = name;
     this.params = params;
     this.body = body;
     this.isAsync = isAsync;
     this.isGenerator = isGenerator;
+    this.isAbstract = isAbstract;
   }
   accept(visitor) { return visitor.visitGaweStmt(this); }
 }
@@ -288,13 +299,35 @@ export class Balekno extends Stmt {
 }
 
 export class Kelas extends Stmt {
-  constructor(name, superclass, methods) {
+  constructor(name, superclass, methods, interfaces = [], isSealed = false, isAbstract = false) {
     super();
     this.name = name;
     this.superclass = superclass;
     this.methods = methods;
+    this.interfaces = interfaces; // Array of AST.Variable references
+    this.isSealed = isSealed;
+    this.isAbstract = isAbstract;
   }
   accept(visitor) { return visitor.visitKelasStmt(this); }
+}
+
+export class Struktur extends Stmt {
+  constructor(name, fields) {
+    super();
+    this.name = name;
+    this.fields = fields; // Array of Token (identifiers)
+  }
+  accept(visitor) { return visitor.visitStrukturStmt(this); }
+}
+
+export class WangunStmt extends Stmt {
+  constructor(name, methods, properties) {
+    super();
+    this.name = name;
+    this.methods = methods; // Array of {name, params, returnType}
+    this.properties = properties; // Array of {name, type, isReadOnly}
+  }
+  accept(visitor) { return visitor.visitWangunStmt(this); }
 }
 
 export class Cobak extends Stmt {
@@ -318,19 +351,30 @@ export class Uncalen extends Stmt {
 }
 
 export class Mandek extends Stmt {
-  constructor(keyword) {
+  constructor(keyword, label = null) {
     super();
     this.keyword = keyword;
+    this.label = label;
   }
   accept(visitor) { return visitor.visitMandekStmt(this); }
 }
 
 export class Lanjutno extends Stmt {
-  constructor(keyword) {
+  constructor(keyword, label = null) {
     super();
     this.keyword = keyword;
+    this.label = label;
   }
   accept(visitor) { return visitor.visitLanjutnoStmt(this); }
+}
+
+export class LabeledStmt extends Stmt {
+  constructor(name, stmt) {
+    super();
+    this.name = name;
+    this.stmt = stmt;
+  }
+  accept(visitor) { return visitor.visitLabeledStmt(this); }
 }
 
 export class Command extends Stmt {
