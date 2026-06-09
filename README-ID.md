@@ -52,6 +52,7 @@
 - [Fitur Unik](#fitur-unik)
   - [Pengecekan Null/Undefined: `iku ono` & `iku ilang`](#pengecekan-nullundefined-iku-ono--iku-ilang)
   - [Tuple (Data Immutable)](#tuple-data-immutable)
+- [Tanda Kurung Opsional](#tanda-kurung-opsional)
 - [Kata Kunci Khusus](#kata-kunci-khusus)
   - [Kata Kunci Alternatif](#kata-kunci-alternatif)
 - [Pemrograman Berorientasi Objek (OOP)](#pemrograman-berorientasi-objek-oop)
@@ -72,7 +73,6 @@
   - [Objek Bawaan Tambahan](#objek-bawaan-tambahan)
   - [Method Promise: `.banjur` & `.nyekel`](#method-promise-banjur--nyekel)
   - [Method Array](#method-array)
-  - [Pembantu Iterator](#pembantu-iterator)
   - [Method String](#method-string)
   - [Method Bersama Array & String](#method-bersama-array--string)
 - [Referensi CLI](#referensi-cli)
@@ -191,6 +191,8 @@ jarno pesan yoiku "Sugeng sinau!"
 jarno ora_ono yoiku kosong
 ```
 
+JPL uga ndhukung format literal tambahan kanggo angka lan string.
+
 ### Pemisah Numerik (Numeric Separator)
 
 Gunakan garis bawah di dalam literal numerik supaya angka besar lebih mudah dibaca. Garis bawah diabaikan saat runtime.
@@ -209,6 +211,8 @@ Tambahkan awalan `r` pada string untuk menonaktifkan escape sequence. Backslash 
 iki iku path yoiku r"C:\windows\system32\user"
 cetakno(path)  // Output: C:\windows\system32\user (tanpa escape)
 ```
+
+JPL uga ndhukung regular expression literal kanggo pencocokan pola.
 
 ### Literal RegExp
 
@@ -870,7 +874,7 @@ cetakno(infoPengguna[1])  // Output: 28
 
 ---
 
-## Tanda Kurung Opsional (v2.2.0)
+## Tanda Kurung Opsional
 
 Demi filosofi **"berbicara kepada komputer secara langsung"**, tanda kurung `()` di sekitar argumen konstruk-konstruk berikut menjadi **opsional** pada level statement.
 
@@ -882,8 +886,8 @@ Demi filosofi **"berbicara kepada komputer secara langsung"**, tanda kurung `()`
 | `lek misale` (else if) | `lek misale (x luwihGedhe 0) terus ...` | `lek misale x luwihGedhe 0 terus ...` |
 | `selagi` (while) | `selagi (x luwihCilik 10) terus ...` | `selagi x luwihCilik 10 terus ...` |
 | `pilih` (switch) | `pilih (x) terus ... mbari` | `pilih x terus ... mbari` |
-| `cetakno` (print) | `cetakno a, b, c` | `cetakno a, b, c` |
-| `cetakno` (1 arg) | `cetakno (x)` | `cetakno x` |
+| `cetakno` (multi-arg) | `cetakno(a, b, c)` | `cetakno a, b, c` |
+| `cetakno` (1 arg) | `cetakno(x)` | `cetakno x` |
 | `nyekel` (catch) | `nyekel (e) terus ...` | `nyekel e terus ...` |
 
 ### Contoh
@@ -1367,14 +1371,6 @@ jarno intervalId yoiku setWaktuInterval(gawe () terus
 mbari, 1000)
 ```
 
-Alternatifnya, gunakan objek `Wektu`:
-
-```jawascript
-Wektu.ngenteni(() dadi cetakno("setelah 1 detik"), 1000)
-jarno id yoiku Wektu.mbaleni(() dadi cetakno("setiap 2 detik"), 2000)
-Wektu.mandek(id)  // batalkan interval/timeout
-```
-
 ### `Wektu` — Utilitas Waktu
 
 | Method | Ekuivalen JavaScript | Keterangan |
@@ -1382,6 +1378,12 @@ Wektu.mandek(id)  // batalkan interval/timeout
 | `Wektu.ngenteni(fn, ms)` | `setTimeout(fn, ms)` | Jalankan fungsi setelah penundaan |
 | `Wektu.mbaleni(fn, ms)` | `setInterval(fn, ms)` | Jalankan fungsi berulang kali |
 | `Wektu.mandek(id)` | `clearTimeout(id)` / `clearInterval(id)` | Batalkan timer |
+
+```jawascript
+Wektu.ngenteni(() dadi cetakno("setelah 1 detik"), 1000)
+jarno id yoiku Wektu.mbaleni(() dadi cetakno("setiap 2 detik"), 2000)
+Wektu.mandek(id)  // batalkan interval/timeout
+```
 
 ### Objek Bawaan Tambahan
 
@@ -1394,6 +1396,8 @@ Wektu.mandek(id)  // batalkan interval/timeout
 | `URLParamCari(params?)` | `URLSearchParams` | Bekerja dengan parameter query URL |
 
 ### Method Promise: `.banjur` & `.nyekel`
+
+Promise di JPL menggunakan `.banjur` (then) lan `.nyekel` (catch).
 
 | JPL | JavaScript | Keterangan |
 | :--- | :--- | :--- |
@@ -1430,28 +1434,26 @@ janjiku
 | `.kanggoSaben(fn)` | `.forEach(fn)` | Jalankan fungsi untuk setiap elemen |
 | `.suda(fn, initial?)` | `.reduce(fn, initial?)` | Reduksi menjadi satu nilai |
 | `.sudaTengen(fn, initial?)` | `.reduceRight(fn, initial?)` | Reduksi dari kanan ke kiri |
-| `.ana(fn)` | `.some(fn)` | Cek apakah ada elemen yang cocok |
-
-### Pembantu Iterator
-
-Alias berbahasa Jawa untuk method iterasi array.
-
-| JPL | JavaScript | Keterangan |
-| :--- | :--- | :--- |
-| `.kurangi(fn)` | `.reduce(...)` | Reduksi jadi satu nilai |
-| `.temokake(fn)` | `.find(...)` | Cari elemen pertama yang cocok |
-| `.temokakeIndeks(fn)` | `.findIndex(...)` | Cari indeks pertama yang cocok |
 | `.ratakan(depth?)` | `.flat(...)` | Ratakan array bersarang |
 | `.petakRata(fn)` | `.flatMap(...)` | Petakan lalu ratakan |
 | `.rangkep(n)` | `.fill(n)` | Isi array dengan nilai |
+| `.ana(fn)` | `.some(fn)` | Cek apakah ada elemen yang cocok |
+| `.kabeh(fn)` | `.every(fn)` | Cek apakah semua elemen cocok |
+
+Beberapa method memiliki nama alternatif yang bisa digunakan:
+
+| Alias | Nama Utama | JavaScript |
+| :--- | :--- | :--- |
+| `.kurangi(fn, initial?)` | `.suda(fn, initial?)` | `.reduce(...)` |
+| `.temokake(fn)` | `.golek(fn)` | `.find(...)` |
+| `.temokakeIndeks(fn)` | `.golekIndeks(fn)` | `.findIndex(...)` |
 
 ```jawascript
 iki iku nums yoiku [1, 2, 3, 4, 5]
 cetakno(nums.kurangi((a, b) dadi a tambah b, 0))  // Output: 15
-cetakno(nums.temokake(x dadi x luwihGedhe 3))          // Output: 4
+cetakno(nums.temokake(x dadi x luwihGedhe 3))     // Output: 4
+cetakno(nums.ratakan())                            // Ratakan array bersarang
 ```
-
-| `.kabeh(fn)` | `.every(fn)` | Cek apakah semua elemen cocok |
 
 ### Method String
 

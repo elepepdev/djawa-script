@@ -52,6 +52,7 @@
 - [Unique Features](#unique-features)
   - [Null/Undefined Checks: `iku ono` & `iku ilang`](#nullundefined-checks-iku-ono--iku-ilang)
   - [Tuple (Immutable Data)](#tuple-immutable-data)
+- [Optional Parentheses](#optional-parentheses)
 - [Special Keywords](#special-keywords)
   - [Alternative Keywords](#alternative-keywords)
 - [Object-Oriented Programming (OOP)](#object-oriented-programming-oop)
@@ -72,7 +73,6 @@
   - [Additional Built-in Objects](#additional-built-in-objects)
   - [Promise Methods: `.banjur` & `.nyekel`](#promise-methods-banjur--nyekel)
   - [Array Methods](#array-methods)
-  - [Iterator Helpers](#iterator-helpers)
   - [String Methods](#string-methods)
   - [Shared Array & String Methods](#shared-array--string-methods)
 - [CLI Reference](#cli-reference)
@@ -192,6 +192,8 @@ jarno message yoiku "Sugeng sinau!"
 jarno nothing yoiku kosong
 ```
 
+JPL also supports additional literal formats for numeric and string values.
+
 ### Numeric Separator
 
 Use underscores inside numeric literals to make large numbers readable. The underscores are ignored at runtime.
@@ -210,6 +212,8 @@ Prefix a string with `r` to disable escape sequences. Backslashes are kept as li
 iki iku path yoiku r"C:\windows\system32\user"
 cetakno(path)  // Output: C:\windows\system32\user (no escaping needed)
 ```
+
+JPL also supports regular expression literals for pattern matching.
 
 ### RegExp Literal
 
@@ -872,7 +876,7 @@ cetakno(userInfo[1])  // Output: 28
 
 ---
 
-## Optional Parentheses (v2.2.0)
+## Optional Parentheses
 
 Following the philosophy of **"speaking to the computer directly"**, parentheses `()` around arguments in the following constructs become **optional** at the statement level.
 
@@ -884,8 +888,8 @@ Following the philosophy of **"speaking to the computer directly"**, parentheses
 | `lek misale` (else if) | `lek misale (x luwihGedhe 0) terus ...` | `lek misale x luwihGedhe 0 terus ...` |
 | `selagi` (while) | `selagi (x luwihCilik 10) terus ...` | `selagi x luwihCilik 10 terus ...` |
 | `pilih` (switch) | `pilih (x) terus ... mbari` | `pilih x terus ... mbari` |
-| `cetakno` (print) | `cetakno a, b, c` | `cetakno a, b, c` |
-| `cetakno` (1 arg) | `cetakno (x)` | `cetakno x` |
+| `cetakno` (multi-arg) | `cetakno(a, b, c)` | `cetakno a, b, c` |
+| `cetakno` (1 arg) | `cetakno(x)` | `cetakno x` |
 | `nyekel` (catch) | `nyekel (e) terus ...` | `nyekel e terus ...` |
 
 ### Examples
@@ -1369,14 +1373,6 @@ jarno intervalId yoiku setWaktuInterval(gawe () terus
 mbari, 1000)
 ```
 
-Alternatively, use the `Wektu` (Time) object:
-
-```jawascript
-Wektu.ngenteni(() dadi cetakno("after 1s"), 1000)
-jarno id yoiku Wektu.mbaleni(() dadi cetakno("every 2s"), 2000)
-Wektu.mandek(id)  // clear interval/timeout
-```
-
 ### `Wektu` — Time Utilities
 
 | Method | JavaScript Equivalent | Description |
@@ -1384,6 +1380,12 @@ Wektu.mandek(id)  // clear interval/timeout
 | `Wektu.ngenteni(fn, ms)` | `setTimeout(fn, ms)` | Run function after a delay |
 | `Wektu.mbaleni(fn, ms)` | `setInterval(fn, ms)` | Run function repeatedly |
 | `Wektu.mandek(id)` | `clearTimeout(id)` / `clearInterval(id)` | Cancel a timer |
+
+```jawascript
+Wektu.ngenteni(() dadi cetakno("after 1s"), 1000)
+jarno id yoiku Wektu.mbaleni(() dadi cetakno("every 2s"), 2000)
+Wektu.mandek(id)  // clear interval/timeout
+```
 
 ### Additional Built-in Objects
 
@@ -1396,6 +1398,8 @@ Wektu.mandek(id)  // clear interval/timeout
 | `URLParamCari(params?)` | `URLSearchParams` | Work with URL query parameters |
 
 ### Promise Methods: `.banjur` & `.nyekel`
+
+JPL promises use `.banjur` (then) and `.nyekel` (catch) instead of the JavaScript equivalents.
 
 | JPL | JavaScript | Description |
 | :--- | :--- | :--- |
@@ -1432,26 +1436,25 @@ myPromise
 | `.kanggoSaben(fn)` | `.forEach(fn)` | Run function for each element |
 | `.suda(fn, initial?)` | `.reduce(fn, initial?)` | Reduce to a single value |
 | `.sudaTengen(fn, initial?)` | `.reduceRight(fn, initial?)` | Reduce from right to left |
-| `.ana(fn)` | `.some(fn)` | Check if any element matches |
-| `.kabeh(fn)` | `.every(fn)` | Check if all elements match |
-
-### Iterator Helpers
-
-Javanese-flavored aliases for array iteration methods.
-
-| JPL | JavaScript | Description |
-| :--- | :--- | :--- |
-| `.kurangi(fn)` | `.reduce(...)` | Reduce to a single value |
-| `.temokake(fn)` | `.find(...)` | Find first matching element |
-| `.temokakeIndeks(fn)` | `.findIndex(...)` | Find first matching index |
 | `.ratakan(depth?)` | `.flat(...)` | Flatten nested arrays |
 | `.petakRata(fn)` | `.flatMap(...)` | Map then flatten |
 | `.rangkep(n)` | `.fill(n)` | Fill with a value |
+| `.ana(fn)` | `.some(fn)` | Check if any element matches |
+| `.kabeh(fn)` | `.every(fn)` | Check if all elements match |
+
+Some methods have alternative names you can use interchangeably:
+
+| Alias | Primary | JavaScript Equivalent |
+| :--- | :--- | :--- |
+| `.kurangi(fn, initial?)` | `.suda(fn, initial?)` | `.reduce(...)` |
+| `.temokake(fn)` | `.golek(fn)` | `.find(...)` |
+| `.temokakeIndeks(fn)` | `.golekIndeks(fn)` | `.findIndex(...)` |
 
 ```jawascript
 iki iku nums yoiku [1, 2, 3, 4, 5]
 cetakno(nums.kurangi((a, b) dadi a tambah b, 0))  // Output: 15
-cetakno(nums.temokake(x dadi x luwihGedhe 3))          // Output: 4
+cetakno(nums.temokake(x dadi x luwihGedhe 3))     // Output: 4
+cetakno(nums.ratakan())                            // Flatten nested arrays
 ```
 
 ### String Methods
@@ -1505,8 +1508,7 @@ npm install -g https://github.com/elepepdev/djawa-script
 ### Commands
 
 | Command | Description |
-
-
+| :--- | :--- |
 | `djawa run <file.jawa>` | Run a `.jawa` file directly |
 | `djawa make <filename>` | Create a new `.jawa` file from template |
 | `djawa version` / `djawa -v` | Show the current JPL version |
