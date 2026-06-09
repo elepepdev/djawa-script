@@ -1,9 +1,9 @@
 // Test global built-in functions
 
-cetakno("Is NaN (123): " + ikiGudukAngka(123));
-cetakno("Is NaN ('abc'): " + ikiGudukAngka('abc'));
+cetakno("Is NaN (123): " + ikiGudukAngka(123))
+cetakno("Is NaN ('abc'): " + ikiGudukAngka('abc'))
 
-cetakno("Parse Int ('123'): " + jadiknoInt('123', 10));
-cetakno("Parse Int ('101', 2): " + jadiknoInt('101', 2));
+cetakno("Parse Int ('123'): " + jadiknoInt('123', 10))
+cetakno("Parse Int ('101', 2): " + jadiknoInt('101', 2))
 
-cetakno("Parse Float ('3.14'): " + jadiknoFloat('3.14'));
+cetakno("Parse Float ('3.14'): " + jadiknoFloat('3.14'))

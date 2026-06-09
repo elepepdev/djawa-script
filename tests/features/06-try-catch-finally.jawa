@@ -1,11 +1,11 @@
 // Test try-catch-finally for error handling
 cobak terus
-  cetakno("Mencoba operasi...");
-  // uncalen "Ada kesalahan!"; // Uncomment to test error
-  jarno hasil = 10 / 2;
-  cetakno("Hasil: " + hasil);
+  cetakno("Mencoba operasi...")
+  // uncalen "Ada kesalahan!" // Uncomment to test error
+  jarno hasil yoiku 10 / 2
+  cetakno("Hasil: " + hasil)
 mbari nyekel (error) terus
-  cetakno("Terjadi error: " + error);
+  cetakno("Terjadi error: " + error)
 mbari pungkasan terus
-  cetakno("Operasi selesai.");
+  cetakno("Operasi selesai.")
 mbari

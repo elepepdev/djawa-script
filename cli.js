@@ -6,22 +6,27 @@ import readline from 'readline';
 import { Lexer } from './src/lexer.js';
 import { Parser } from './src/parser.js';
 import { Interpreter } from './src/interpreter.js';
+import { Formatter } from './src/formatter.js';
 import { fileURLToPath } from 'url';
 
 function showHelp() {
   console.log(`
 === JPL (Javanese Programming Language) ===
 
-Usage: djawa <command> [file]
+Usage: djawa <command> [file] [options]
 
 Commands:
   run <file>         Run a .jawa file using the Javanese Independent Engine.
+  fmt <file>         Format a .jawa file (in-place).
+  fmt --check <file> Check formatting without modifying.
+  fmt --stdout <file> Print formatted output to stdout.
   repl               Start the interactive Javanese shell.
   version, -v        Show the version of DjawaScript.
   help, -h           Show this help message.
 
 Example:
   djawa run test.jawa
+  djawa fmt test.jawa
 
 // I'm a new soul, I came to this strange world ~
   `);
@@ -124,16 +129,81 @@ async function runFile(fileName) {
   }
 }
 
+function formatFile(fileName, opts = {}) {
+  const absolutePath = path.resolve(fileName);
+  if (!fs.existsSync(absolutePath)) {
+    console.error(`Error: File ora ono ing '${absolutePath}'`);
+    process.exit(1);
+  }
+
+  const code = fs.readFileSync(absolutePath, 'utf8');
+  try {
+    const lexer = new Lexer(code);
+    const tokens = lexer.scanTokens();
+    const parser = new Parser(tokens);
+    const statements = parser.parse();
+
+    const formatter = new Formatter();
+    const formatted = formatter.format(statements);
+
+    if (opts.check) {
+      if (code !== formatted) {
+        console.error(`${fileName}: Format ora cocok.`);
+        process.exit(1);
+      }
+      console.log(`${fileName}: Format wis rapi.`);
+    } else if (opts.stdout) {
+      console.log(formatted);
+    } else {
+      fs.writeFileSync(absolutePath, formatted, 'utf8');
+      console.log(`Formatted: ${fileName}`);
+    }
+  } catch (error) {
+    console.error('Error nalika format:');
+    console.error(error.message);
+  }
+}
+
 const args = process.argv.slice(2);
 const command = args[0];
-const fileName = args[1];
+
+function extractOpts(validFlags) {
+  const opts = {};
+  const rest = [];
+  for (const arg of args.slice(1)) {
+    if (arg.startsWith('--')) {
+      const key = arg.slice(2);
+      if (validFlags.includes(key)) opts[key] = true;
+    } else {
+      rest.push(arg);
+    }
+  }
+  opts._ = rest;
+  return opts;
+}
 
 switch (command) {
   case 'run':
-    if (!fileName) {
-      console.error('Error: Monggo lebokake jeneng file .jawa');
-    } else {
-      runFile(fileName);
+    {
+      const opts = extractOpts([]);
+      const fileName = opts._[0];
+      if (!fileName) {
+        console.error('Error: Monggo lebokake jeneng file .jawa');
+      } else {
+        runFile(fileName);
+      }
+    }
+    break;
+
+  case 'fmt':
+    {
+      const opts = extractOpts(['check', 'stdout']);
+      const fileName = opts._[0];
+      if (!fileName) {
+        console.error('Error: Monggo lebokake jeneng file .jawa');
+      } else {
+        formatFile(fileName, { check: opts.check, stdout: opts.stdout });
+      }
     }
     break;
 

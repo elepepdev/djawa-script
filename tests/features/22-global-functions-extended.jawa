@@ -1,18 +1,18 @@
 // Test for extended Global Functions
 
 // ikiTerbatas (isFinite)
-cetakno("ikiTerbatas(10): " tambah ikiTerbatas(10)); // Output: tenan
-cetakno("ikiTerbatas(10 / 0): " tambah ikiTerbatas(10 / 0)); // Output: gak
-cetakno("ikiTerbatas(ikiGudukAngka('a')): " tambah ikiTerbatas(ikiGudukAngka('a'))); // Output: gak
+cetakno("ikiTerbatas(10): " tambah ikiTerbatas(10)) // Output: tenan
+cetakno("ikiTerbatas(10 / 0): " tambah ikiTerbatas(10 / 0)) // Output: gak
+cetakno("ikiTerbatas(ikiGudukAngka('a')): " tambah ikiTerbatas(ikiGudukAngka('a'))) // Output: gak
 
 // URI Encoding/Decoding
-jarno uriAsli yoiku "https://example.com/path dengan spasi & simbol?query=nilai";
-cetakno("URI Asli: " tambah uriAsli);
+jarno uriAsli yoiku "https://example.com/path dengan spasi & simbol?query=nilai"
+cetakno("URI Asli: " tambah uriAsli)
 
-jarno encodedURI yoiku enkodeURI(uriAsli);
-cetakno("enkodeURI: " tambah encodedURI);
-cetakno("uraiURI: " tambah uraiURI(encodedURI));
+jarno encodedURI yoiku enkodeURI(uriAsli)
+cetakno("enkodeURI: " tambah encodedURI)
+cetakno("uraiURI: " tambah uraiURI(encodedURI))
 
-jarno encodedURIComponent yoiku enkodeBagianURI(uriAsli);
-cetakno("enkodeBagianURI: " tambah encodedURIComponent);
-cetakno("uraiBagianURI: " tambah uraiBagianURI(encodedURIComponent));
+jarno encodedURIComponent yoiku enkodeBagianURI(uriAsli)
+cetakno("enkodeBagianURI: " tambah encodedURIComponent)
+cetakno("uraiBagianURI: " tambah uraiBagianURI(encodedURIComponent))

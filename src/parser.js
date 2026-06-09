@@ -479,17 +479,17 @@ export class Parser {
 
     this.consume(TokenType.LEFT_PAREN, "Kudune '(' sakwise 'kanggo'.");
     let initializer;
-    if (this.match(TokenType.SEMICOLON)) initializer = null;
+    if (this.match(TokenType.BANJUR)) initializer = null;
     else if (this.match(TokenType.JARNO)) {
       initializer = this.varDeclaration(false);
-      this.consume(TokenType.SEMICOLON, "Kudune ';' sakwise initializer.");
+      this.consume(TokenType.BANJUR, "Kudune 'banjur' sakwise initializer.");
     } else {
       initializer = this.expressionStatement();
-      this.consume(TokenType.SEMICOLON, "Kudune ';' sakwise initializer.");
+      this.consume(TokenType.BANJUR, "Kudune 'banjur' sakwise initializer.");
     }
     let condition = null;
-    if (!this.check(TokenType.SEMICOLON)) condition = this.expression();
-    this.consume(TokenType.SEMICOLON, "Kudune ';' sakwise kondisi loop.");
+    if (!this.check(TokenType.BANJUR)) condition = this.expression();
+    this.consume(TokenType.BANJUR, "Kudune 'banjur' sakwise kondisi loop.");
     let increment = null;
     if (!this.check(TokenType.RIGHT_PAREN)) increment = this.expression();
     this.consume(TokenType.RIGHT_PAREN, "Kudune ')' sakwise kanggo clause.");

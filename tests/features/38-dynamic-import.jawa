@@ -1,11 +1,11 @@
-cetakno('--- Tes Dynamic Import ---');
+cetakno('--- Tes Dynamic Import ---')
 
 // Simulasi modul yang akan diimpor secara dinamis
 // modul_dinamis.jawa
-// metokno iki iku pesan yoiku 'Halo dari modul dinamis!';
+// metokno iki iku pesan yoiku 'Halo dari modul dinamis!'
 
 jupukno('./modul_dinamis.js')
   .then(modul lakoni cetakno('Pesan dari modul dinamis:', modul.pesan))
-  .catch(error lakoni cetakno('Error saat mengimpor modul:', error));
+  .catch(error lakoni cetakno('Kesalahan saat mengimpor modul:', error))
 
-cetakno('Ini akan dieksekusi sebelum modul dinamis selesai diimpor.');
+cetakno('Ini akan dieksekusi sebelum modul dinamis selesai diimpor.')

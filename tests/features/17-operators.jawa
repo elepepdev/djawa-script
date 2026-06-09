@@ -1,50 +1,50 @@
-// Test for new operators
+// Test for anyar operators
 
-jarno a yoiku 10;
-jarno b yoiku 5;
+jarno a yoiku 10
+jarno b yoiku 5
 
 // Arithmetic
-cetakno(a tambah b); // 15
-cetakno(a kurang b); // 5
-cetakno(a ping b);   // 50
-cetakno(a bagi b);   // 2
-cetakno(a siso 3);   // 1
+cetakno(a tambah b) // 15
+cetakno(a kurang b) // 5
+cetakno(a ping b)   // 50
+cetakno(a bagi b)   // 2
+cetakno(a siso 3)   // 1
 
 // Comparators
-lek (a luwihGedhe b) {
-  cetakno("a luwih gedhe");
-}
+lek (a luwihGedhe b) terus
+  cetakno("a luwih gedhe")
+mbari
 
-lek (b luwihCilik a) {
-  cetakno("b luwih cilik");
-}
+lek (b luwihCilik a) terus
+  cetakno("b luwih cilik")
+mbari
 
-lek (a tambah b podo 15) {
-  cetakno("podo bener");
-}
+lek (a tambah b podo 15) terus
+  cetakno("podo bener")
+mbari
 
-lek (15 plek 15) {
-  cetakno("plek bener");
-}
+lek (15 plek 15) terus
+  cetakno("plek bener")
+mbari
 
-lek (a gakPodo b) {
-  cetakno("gak podo bener");
-}
+lek (a gakPodo b) terus
+  cetakno("gak podo bener")
+mbari
 
-lek ("15" gakPlek 15) {
-  cetakno("gak plek bener");
-}
+lek ("15" gakPlek 15) terus
+  cetakno("gak plek bener")
+mbari
 
-jarno c yoiku 10;
-lek (a luwihGedhePodo c) {
-  cetakno("a luwih gedhe podo c");
-}
+jarno c yoiku 10
+lek (a luwihGedhePodo c) terus
+  cetakno("a luwih gedhe podo c")
+mbari
 
-lek (b luwihCilikPodo c) {
-  cetakno("b luwih cilik podo c");
-}
+lek (b luwihCilikPodo c) terus
+  cetakno("b luwih cilik podo c")
+mbari
 
-// Test for new assignment and exponentiation operators
+// Test for anyar assignment and exponentiation operators
 cetakno(2 pangkat 3) // 8
 
 jarno x yoiku 10

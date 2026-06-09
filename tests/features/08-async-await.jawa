@@ -1,14 +1,14 @@
 // Test Async/Await
 
 gawe tenangan ambilData() terus
-  cetakno("Mulai ambil data...");
-  jarno data = enteni new Promise(resolve lakoni setTimeout(() lakoni resolve("Data dari server"), 100));
-  balekno data;
+  cetakno("Mulai ambil data...")
+  jarno data yoiku enteni anyar Janji(resolve lakoni Wektu.ngenteni(() lakoni resolve("Data dari server"), 100))
+  balekno data
 mbari
 
 gawe tenangan utama() terus
-  jarno hasil = enteni ambilData();
-  cetakno("Data diterima: " + hasil);
+  jarno hasil yoiku enteni ambilData()
+  cetakno("Data diterima: " + hasil)
 mbari
 
-utama();
+utama()

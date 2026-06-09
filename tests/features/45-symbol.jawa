@@ -1,36 +1,36 @@
 
 // Tes untuk tipe data Symbol
 
-cetakno('--- Tes Tipe Data Simbol ---');
+cetakno('--- Tes Tipe Data Simbol ---')
 
 // Membuat simbol dasar
-iki iku sim1 yoiku Simbol();
-iki iku sim2 yoiku Simbol('deskripsi');
+iki iku sim1 yoiku Simbol()
+iki iku sim2 yoiku Simbol('deskripsi')
 
-cetakno(tipene sim1);
+cetakno(tipene sim1)
 
 // Mengecek deskripsi (properti .description adalah fitur ES2019)
 // Mungkin tidak bisa langsung dites di semua environment Node.js lama
 // tapi kita coba saja
-cetakno(sim2.toString()); // Akan menghasilkan 'Symbol(deskripsi)'
+cetakno(sim2.toString()) // Akan menghasilkan 'Symbol(deskripsi)'
 
 // Simbol itu unik
-iki iku sim3 yoiku Simbol('id');
-iki iku sim4 yoiku Simbol('id');
-cetakno(sim3 plek sim4); // kudune false
+iki iku sim3 yoiku Simbol('id')
+iki iku sim4 yoiku Simbol('id')
+cetakno(sim3 plek sim4) // kudune false
 
 // Menggunakan simbol sebagai kunci properti objek
-iki iku idUnik yoiku Simbol('id_unik');
-iki iku obyek yoiku {};
-obyek[idUnik] yoiku 'Nilai Rahasia';
+iki iku idUnik yoiku Simbol('id_unik')
+iki iku obyek yoiku terusmbari
+obyek[idUnik] yoiku 'Nilai Rahasia'
 
-cetakno(obyek[idUnik]);
+cetakno(obyek[idUnik])
 
 // Simbol tidak muncul di for...in atau Object.keys
 kanggo (iki iku kunci ing obyek) terus
-  cetakno('Kunci ditemukan di for...in: ' tambah kunci); // Seharusnya tidak jalan
+  cetakno('Kunci ditemukan di for...in: ' tambah kunci) // Seharusnya tidak jalan
 mbari
 
-cetakno(Obyek.kunci(obyek).dawane); // kudune 0
+cetakno(Obyek.kunci(obyek).dawane) // kudune 0
 
-cetakno('--- Rampung Tes Simbol ---');
+cetakno('--- Rampung Tes Simbol ---')

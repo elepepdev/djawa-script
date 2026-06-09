@@ -33,17 +33,27 @@ export class Lexer {
     switch (c) {
       case '(': this.addToken(TokenType.LEFT_PAREN); break;
       case ')': this.addToken(TokenType.RIGHT_PAREN); break;
-      case '{': this.addToken(TokenType.TERUS); break;
-      case '}': this.addToken(TokenType.MBARI); break;
+      case '{': throw new Error(`[line ${this.line}] Error: Gunakake 'terus' tinimbang '{' kanggo miwiti blok`);
+      case '}': throw new Error(`[line ${this.line}] Error: Gunakake 'mbari' tinimbang '}' kanggo mungkasi blok`);
       case '[': this.addToken(TokenType.LEFT_BRACKET); break;
       case ']': this.addToken(TokenType.RIGHT_BRACKET); break;
       case ',': this.addToken(TokenType.COMMA); break;
-      case ';': this.addToken(TokenType.SEMICOLON); break;
+      case ';': throw new Error(`[line ${this.line}] Error: JPL ora migunakake titik koma (;). Mbusak wae.`);
       case ':': this.addToken(TokenType.COLON); break;
       case '.': this.addToken(this.match('.') ? TokenType.DOT_DOT : TokenType.DOT); break;
-      case '-': this.addToken(this.match('=') ? TokenType.KURANG_KARO : TokenType.KURANG); break;
-      case '+': this.addToken(this.match('=') ? TokenType.TAMBAH_KARO : TokenType.TAMBAH); break;
-      case '*': this.addToken(this.match('=') ? TokenType.PING_KARO : TokenType.PING); break;
+      case '-':
+        if (this.match('-')) {
+          throw new Error(`[line ${this.line}] Error: Gunakake 'kurang 1' tinimbang '--'`);
+        }
+        this.addToken(TokenType.KURANG);
+        break;
+      case '+':
+        if (this.match('+')) {
+          throw new Error(`[line ${this.line}] Error: Gunakake 'tambah 1' tinimbang '++'`);
+        }
+        this.addToken(TokenType.TAMBAH);
+        break;
+      case '*': this.addToken(TokenType.PING); break;
       case '/':
         if (this.match('/')) {
           while (this.peek() !== '\n' && !this.isAtEnd()) this.advance();
@@ -74,38 +84,32 @@ export class Lexer {
             if (this.regexAllowed) {
               this.regex();
             } else {
-              this.addToken(this.match('=') ? TokenType.BAGI_KARO : TokenType.BAGI);
+              this.addToken(TokenType.BAGI);
             }
           }
         } else if (this.regexAllowed) {
           this.regex();
         } else {
-          this.addToken(this.match('=') ? TokenType.BAGI_KARO : TokenType.BAGI);
+          this.addToken(TokenType.BAGI);
         }
         break;
-      case '=':
-        if (this.match('=')) {
-          this.addToken(this.match('=') ? TokenType.PLEK : TokenType.PODO);
-        } else {
-          this.addToken(TokenType.YOIKU);
-        }
-        break;
+      case '=': throw new Error(`[line ${this.line}] Error: Gunakake 'yoiku' tinimbang '=' kanggo assignment`);
       case '<': this.addToken(this.match('=') ? TokenType.LUWIH_CILIK_PODO : TokenType.LUWIH_CILIK); break;
       case '>': this.addToken(this.match('=') ? TokenType.LUWIH_GEDHE_PODO : TokenType.LUWIH_GEDHE); break;
       case '!':
         if (this.match('=')) {
-          this.addToken(this.match('=') ? TokenType.GAK_PLEK : TokenType.GAK_PODO);
-        } else {
-          this.addToken(TokenType.ORA);
+          throw new Error(`[line ${this.line}] Error: Gunakake 'gakPodo' / 'gakPlek' tinimbang '!=' / '!=='`);
         }
+        this.addToken(TokenType.ORA);
         break;
       case '?':
         if (this.match('?')) {
           this.addToken(TokenType.UTOWO_YEN_KOSONG);
         } else {
-          this.addToken(TokenType.TA);
+          throw new Error(`[line ${this.line}] Error: Gunakake 'ta' tinimbang '?' kanggo ternary`);
         }
         break;
+      case '%': this.addToken(TokenType.SISO); break;
       case ' ':
       case '\r':
       case '\t':
@@ -124,7 +128,7 @@ export class Lexer {
         } else if (this.isAlpha(c)) {
           this.identifier();
         } else {
-          throw new Error(`[line ${this.line}] Error: Unexpected character '${c}'`);
+          throw new Error(`[line ${this.line}] Error: Karakter '${c}' ora dingerteni`);
         }
         break;
     }

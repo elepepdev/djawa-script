@@ -1,52 +1,52 @@
 
 // Tes untuk Proxy (Perantara) dan Reflect (Pantulan)
 
-cetakno('--- Tes Proxy (Perantara) & Reflect (Pantulan) ---');
+cetakno('--- Tes Proxy (Perantara) & Reflect (Pantulan) ---')
 
 // 1. Obyek target
-iki iku target yoiku {
+iki iku target yoiku terus
   pesen: 'Halo Dunia',
   nilai: 100
-};
+mbari
 
 // 2. Handler (penangan) untuk proxy
-iki iku penangan yoiku {
+iki iku penangan yoiku terus
   // Trap untuk mengambil properti
   jupuk: gawe(obj, prop) terus
-    cetakno(`Nyoba jupuk properti "${prop}"`);
+    cetakno(`Nyoba jupuk properti "$teruspropmbari"`)
     // Gunakno Pantulan.jupuk kanggo perilaku default
-    balekno Pantulan.jupuk(obj, prop);
+    balekno Pantulan.jupuk(obj, prop)
   mbari,
 
   // Trap untuk mengatur properti
   pasang: gawe(obj, prop, value) terus
-    cetakno(`Nyoba masang properti "${prop}" dadi "${value}"`);
+    cetakno(`Nyoba masang properti "$teruspropmbari" dadi "$terusvaluembari"`)
     lek (prop plek 'nilai' lan tipene value ora plek 'Angka') terus
-      uncalen anyar Kesalahan('Nilai kudu angka!');
+      uncalen anyar Kesalahan('Nilai kudu angka!')
     mbari
     // Gunakno Pantulan.pasang kanggo perilaku default
-    balekno Pantulan.pasang(obj, prop, value);
+    balekno Pantulan.pasang(obj, prop, value)
   mbari
-};
+mbari
 
 // 3. Gawe obyek Perantara (Proxy)
-iki iku p yoiku anyar Perantara(target, penangan);
+iki iku p yoiku anyar Perantara(target, penangan)
 
 // 4. Tes trap 'jupuk'
-cetakno('Moco pesen: ' tambah p.pesen);
-cetakno('Moco nilai: ' tambah p.nilai);
+cetakno('Moco pesen: ' tambah p.pesen)
+cetakno('Moco nilai: ' tambah p.nilai)
 
 // 5. Tes trap 'pasang' (sukses)
-p.nilai yoiku 200;
-cetakno('Nilai anyar: ' tambah p.nilai);
+p.nilai yoiku 200
+cetakno('Nilai anyar: ' tambah p.nilai)
 
 // 6. Tes trap 'pasang' (gagal)
 cobak terus
-  p.nilai yoiku 'dudu angka';
+  p.nilai yoiku 'dudu angka'
 mbari nyekel (e) terus
-  cetakno('Error ketangkep: ' tambah e.message);
+  cetakno('Kesalahan ketangkep: ' tambah e.message)
 mbari
 
-cetakno('Nilai akhir: ' tambah target.nilai); // Kudune isih 200
+cetakno('Nilai akhir: ' tambah target.nilai) // Kudune isih 200
 
-cetakno('--- Rampung Tes Proxy & Reflect ---');
+cetakno('--- Rampung Tes Proxy & Reflect ---')

@@ -33,8 +33,8 @@ describe('Parser', () => {
       expect(stmt).toBeInstanceOf(AST.Var);
       expect(stmt.initializer).toBeNull();
     });
-    test('multiple vars with semicolon', () => {
-      const stmts = parse('jarno x yoiku 1; jarno y yoiku 2');
+    test('multiple vars without semicolon', () => {
+      const stmts = parse('jarno x yoiku 1 jarno y yoiku 2');
       expect(stmts).toHaveLength(2);
     });
   });
@@ -94,7 +94,7 @@ describe('Parser', () => {
       expect(stmt).toBeInstanceOf(AST.Selagi);
     });
     test('kanggo (for)', () => {
-      const stmt = first('kanggo (jarno i yoiku 0; i < 10; i yoiku i + 1) terus cetakno(i) mbari');
+      const stmt = first('kanggo (jarno i yoiku 0 banjur i luwihCilik 10 banjur i yoiku i tambah 1) terus cetakno(i) mbari');
       expect(stmt).toBeInstanceOf(AST.Kanggo);
     });
     test('kanggo soko (for-of with range)', () => {
@@ -214,7 +214,7 @@ describe('Parser', () => {
       expect(expr.expression).toBeInstanceOf(AST.ArrayLiteral);
     });
     test('object literal', () => {
-      const stmt = first('jarno x yoiku {jeneng: "Joko"}');
+      const stmt = first('jarno x yoiku terus jeneng: "Joko" mbari');
       expect(stmt.initializer).toBeInstanceOf(AST.ObjectLiteral);
     });
     test('tuple', () => {
@@ -287,7 +287,7 @@ describe('Parser', () => {
 
   describe('destructuring', () => {
     test('object destructuring', () => {
-      const stmt = first('jarno {x, y} yoiku point');
+      const stmt = first('jarno terus x, y mbari yoiku point');
       expect(stmt).toBeInstanceOf(AST.Var);
       expect(stmt.name.lexeme).toBe('{destructuring}');
     });
@@ -320,21 +320,21 @@ describe('Parser', () => {
       expect(stmt.stmt).toBeInstanceOf(AST.Selagi);
     });
     test('labeled break', () => {
-      const stmt = first('kanggo (jarno i yoiku 0; i < 10; i yoiku i + 1) terus'
+      const stmt = first('kanggo (jarno i yoiku 0 banjur i luwihCilik 10 banjur i yoiku i tambah 1) terus'
           + ' mandek luar mbari');
       const body = stmt.body.statements;
       expect(body[0]).toBeInstanceOf(AST.Mandek);
       expect(body[0].label.lexeme).toBe('luar');
     });
     test('labeled continue', () => {
-      const stmt = first('kanggo (jarno i yoiku 0; i < 10; i yoiku i + 1) terus'
+      const stmt = first('kanggo (jarno i yoiku 0 banjur i luwihCilik 10 banjur i yoiku i tambah 1) terus'
           + ' lanjutno luar mbari');
       const body = stmt.body.statements;
       expect(body[0]).toBeInstanceOf(AST.Lanjutno);
       expect(body[0].label.lexeme).toBe('luar');
     });
     test('unlabeled break', () => {
-      const stmt = first('kanggo (jarno i yoiku 0; i < 10; i yoiku i + 1) terus'
+      const stmt = first('kanggo (jarno i yoiku 0 banjur i luwihCilik 10 banjur i yoiku i tambah 1) terus'
           + ' mandek mbari');
       const body = stmt.body.statements;
       expect(body[0]).toBeInstanceOf(AST.Mandek);

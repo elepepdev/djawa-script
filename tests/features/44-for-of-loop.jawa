@@ -1,18 +1,18 @@
 
 // Tes untuk fitur loop for...of (kanggo...soko...)
 
-cetakno('--- Tes Loop Kanggo...Soko (for...of) ---');
+cetakno('--- Tes Loop Kanggo...Soko (for...of) ---')
 
-cetakno('Iterasi liwat Daftar:');
-iki iku daftarAngka yoiku [10, 20, 30, 40];
+cetakno('Iterasi liwat Daftar:')
+iki iku daftarAngka yoiku [10, 20, 30, 40]
 kanggo (iki iku angka soko daftarAngka) terus
-  cetakno(angka);
+  cetakno(angka)
 mbari
 
-cetakno('Iterasi liwat Teks:');
-iki iku jeneng = 'Slamet';
+cetakno('Iterasi liwat Teks:')
+iki iku jeneng yoiku 'Slamet'
 kanggo (iki iku huruf soko jeneng) terus
-  cetakno(huruf);
+  cetakno(huruf)
 mbari
 
-cetakno('--- Rampung Tes Loop Kanggo...Soko ---');
+cetakno('--- Rampung Tes Loop Kanggo...Soko ---')

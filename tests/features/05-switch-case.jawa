@@ -1,17 +1,17 @@
 // Test switch-case statements
-jarno nilai = "B";
+jarno nilai yoiku "B"
 
 pilih (nilai) terus
   kalo "A":
-    cetakno("Sangat Baik");
-    mandek;
+    cetakno("Sangat Baik")
+    mandek
   kalo "B":
-    cetakno("Baik");
-    mandek;
+    cetakno("Baik")
+    mandek
   kalo "C":
-    cetakno("Cukup");
-    mandek;
+    cetakno("Cukup")
+    mandek
   yowes:
-    cetakno("Kurang");
-    mandek;
+    cetakno("Kurang")
+    mandek
 mbari

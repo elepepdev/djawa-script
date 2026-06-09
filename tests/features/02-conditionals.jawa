@@ -1,9 +1,9 @@
 // Test conditional statements
-jarno umur = 20;
+jarno umur yoiku 20
 lek (umur > 17) terus
-  cetakno("Dewasa");
+  cetakno("Dewasa")
 mbari lek misale (umur > 12) terus
-  cetakno("Remaja");
+  cetakno("Remaja")
 mbari liyane terus
-  cetakno("Anak-anak");
+  cetakno("Anak-anak")
 mbari

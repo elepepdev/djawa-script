@@ -1,12 +1,12 @@
 // Test functions with 'gawe' and 'balekno'
 
 gawe tambah(a, b) terus
-  balekno a + b;
+  balekno a + b
 mbari
 
 gawe sapa(jeneng) terus
-  cetakno("Halo, " + jeneng + "!");
+  cetakno("Halo, " + jeneng + "!")
 mbari
 
-cetakno("Hasil tambah: " + tambah(10, 5));
-sapa("Dunia");
+cetakno("Hasil tambah: " + tambah(10, 5))
+sapa("Dunia")

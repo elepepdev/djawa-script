@@ -1,33 +1,33 @@
 // Test Tuple literal assignment
-variabel koordinat: Tuple = tuple(10, 20);
-cetak(koordinat[0]); // Should be 10
-cetak(koordinat[1]); // Should be 20
+jarno koordinat yoiku tuple(10, 20)
+cetakno(koordinat[0]) // Should be 10
+cetakno(koordinat[1]) // Should be 20
 
 // Test immutability (this should ideally throw an error if Jawascript had runtime type checking,
 // but in JS it will just fail silently or throw if in strict mode)
 // We expect the transpiled JS to use Object.freeze, so direct modification should fail.
-coba {
-  koordinat[0] = 5; // This line should not change the tuple
-} tangkap (e) {
-  cetak("Error saat mengubah tuple:", e.pesan);
-}
-cetak(koordinat[0]); // Should still be 10
+cobak terus
+  koordinat[0] yoiku 5 // This line should not change the tuple
+mbari nyekel e terus
+  cetakno("Error nalika ngowahi tuple: " tambah e.message)
+mbari
+cetakno(koordinat[0]) // Should still be 10
 
 // Test tuple in function argument
-fungsi tampilkanTitik(titik: Tuple) {
-  cetak("Titik X:", titik[0]);
-  cetak("Titik Y:", titik[1]);
-}
+gawe tampilkanTitik(titik) terus
+  cetakno("Titik X: " tambah titik[0])
+  cetakno("Titik Y: " tambah titik[1])
+mbari
 
-tampilkanTitik(tuple(100, 200));
+tampilkanTitik(tuple(100, 200))
 
 // Test tuple with different types
-variabel info: Tuple = tuple("nama", 25, benar);
-cetak(info[0]); // "nama"
-cetak(info[1]); // 25
-cetak(info[2]); // true
+jarno info yoiku tuple("nama", 25, tenan)
+cetakno(info[0]) // "nama"
+cetakno(info[1]) // 25
+cetakno(info[2]) // true
 
 // Test tuple with expressions
-variabel hitungan: Tuple = tuple(1 + 2, 3 * 4);
-cetak(hitungan[0]); // 3
-cetak(hitungan[1]); // 12
+jarno hitungan yoiku tuple(1 tambah 2, 3 ping 4)
+cetakno(hitungan[0]) // 3
+cetakno(hitungan[1]) // 12

@@ -1,30 +1,30 @@
 // Test for asilno (yield) in generator functions
 
 gawe tenangan idGenerator() terus
-  jarno id yoiku 0;
+  jarno id yoiku 0
   selagi (tenan) terus
-    asilno id;
-    id tambahKaro 1;
+    asilno id
+    id tambahKaro 1
   mbari
 mbari
 
 jarno generator yoiku idGenerator anyar()
-cetakno("Generator 1:");
-cetakno(generator.next().value); // Output: 0
-cetakno(generator.next().value); // Output: 1
-cetakno(generator.next().value); // Output: 2
+cetakno("Generator 1:")
+cetakno(generator.next().value) // Output: 0
+cetakno(generator.next().value) // Output: 1
+cetakno(generator.next().value) // Output: 2
 
 gawe tenangan rangeGenerator(mulai, akhir) terus
-  jarno i yoiku mulai;
+  jarno i yoiku mulai
   selagi (i luwihCilikPodo akhir) terus
-    asilno i;
-    i tambahKaro 1;
+    asilno i
+    i tambahKaro 1
   mbari
 mbari
 
-jarno gen2 yoiku rangeGenerator anyar(5, 7);
-cetakno("Generator 2:");
-cetakno(gen2.next().value); // Output: 5
-cetakno(gen2.next().value); // Output: 6
-cetakno(gen2.next().value); // Output: 7
-cetakno(gen2.next().done);  // Output: tenan (true)
+jarno gen2 yoiku rangeGenerator anyar(5, 7)
+cetakno("Generator 2:")
+cetakno(gen2.next().value) // Output: 5
+cetakno(gen2.next().value) // Output: 6
+cetakno(gen2.next().value) // Output: 7
+cetakno(gen2.next().done)  // Output: tenan (true)

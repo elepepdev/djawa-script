@@ -1,10 +1,10 @@
-cetakno('--- Tes Zero-fill Right Shift Operator (geserTengenNol) ---');
+cetakno('--- Tes Zero-fill Right Shift Operator (geserTengenNol) ---')
 
-iki iku a yoiku -1; // Binary: 11111111111111111111111111111111 (32-bit)
-iki iku b yoiku 1; // Binary: 00000000000000000000000000000001
+iki iku a yoiku -1 // Binary: 11111111111111111111111111111111 (32-bit)
+iki iku b yoiku 1 // Binary: 00000000000000000000000000000001
 
-cetakno('-1 geserTengenNol 1:', a geserTengenNol 1); // Output: 2147483647
-cetakno('1 geserTengenNol 1:', b geserTengenNol 1); // Output: 0
+cetakno('-1 geserTengenNol 1:', a geserTengenNol 1) // Output: 2147483647
+cetakno('1 geserTengenNol 1:', b geserTengenNol 1) // Output: 0
 
-iki iku c yoiku 4294967295; // Binary: 11111111111111111111111111111111 (max unsigned 32-bit int)
-cetakno('4294967295 geserTengenNol 1:', c geserTengenNol 1); // Output: 2147483647
+iki iku c yoiku 4294967295 // Binary: 11111111111111111111111111111111 (max unsigned 32-bit int)
+cetakno('4294967295 geserTengenNol 1:', c geserTengenNol 1) // Output: 2147483647

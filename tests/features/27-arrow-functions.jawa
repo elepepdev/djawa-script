@@ -1,21 +1,21 @@
-cetakno('--- Tes Arrow Function ---');
+cetakno('--- Tes Arrow Function ---')
 
 // Satu baris, satu parameter
-iki iku kuadrat yoiku x lakoni x ping x;
-cetakno('Kuadrat dari 5:', kuadrat(5));
+iki iku kuadrat yoiku x lakoni x ping x
+cetakno('Kuadrat dari 5:', kuadrat(5))
 
 // Satu baris, banyak parameter
-iki iku tambah yoiku (a, b) lakoni a tambah b;
-cetakno('Hasil 10 + 5:', tambah(10, 5));
+iki iku tambah yoiku (a, b) lakoni a tambah b
+cetakno('Hasil 10 + 5:', tambah(10, 5))
 
 // Sebagai callback di array method
-iki iku angka yoiku [1, 2, 3, 4];
-iki iku angkaPodoDikaliLoro yoiku angka.petakake(n lakoni n ping 2);
-cetakno('Array dipetakake x2:', angkaPodoDikaliLoro);
+iki iku angka yoiku [1, 2, 3, 4]
+iki iku angkaPodoDikaliLoro yoiku angka.petakake(n lakoni n ping 2)
+cetakno('Array dipetakake x2:', angkaPodoDikaliLoro)
 
 // Versi blok kode
 iki iku sapaLengkap yoiku (jeneng) lakoni terus
-  iki iku sapaan yoiku 'Sugeng rawuh, ' tambah jeneng;
-  balekno sapaan;
-mbari;
-cetakno(sapaLengkap('Budi'));
+  iki iku sapaan yoiku 'Sugeng rawuh, ' tambah jeneng
+  balekno sapaan
+mbari
+cetakno(sapaLengkap('Budi'))

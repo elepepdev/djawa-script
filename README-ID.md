@@ -106,7 +106,7 @@ djawa run halo.jawa
 
 ### Blok Kode: `terus` & `mbari`
 
-JPL adalah bahasa **berbasis blok**. Setiap blok kode — baik untuk fungsi, perulangan, maupun kondisional — harus dibuka dengan `terus` dan ditutup dengan `mbari`. Anggap saja mereka seperti `{` dan `}` di JPL.
+JPL adalah bahasa **berbasis blok**. Setiap blok kode — baik untuk fungsi, perulangan, maupun kondisional — harus dibuka dengan `terus` dan ditutup dengan `mbari`. Anggap saja mereka seperti `terus` dan `mbari` di JPL.
 
 ```jawascript
 lek (tenan) terus
@@ -143,12 +143,12 @@ umur yoiku umur tambah 1  // umur sekarang 26
 
 ### Destructuring
 
-Bongkar nilai dari objek atau array ke dalam variabel menggunakan sintaks `{ }` dan `[ ]`.
+Bongkar nilai dari objek atau array ke dalam variabel menggunakan sintaks `terus mbari` dan `[ ]`.
 
 **Destructuring objek:**
 ```jawascript
-jarno pengguna yoiku { jeneng: "Budi", umur: 30 }
-jarno { jeneng, umur } yoiku pengguna
+jarno pengguna yoiku terus jeneng: "Budi", umur: 30 mbari
+jarno terus jeneng, umur mbari yoiku pengguna
 cetakno(jeneng)  // Output: Budi
 cetakno(umur)    // Output: 30
 ```
@@ -163,7 +163,7 @@ cetakno(b)  // Output: 2
 
 **Destructuring dengan nilai default dan penggantian nama:**
 ```jawascript
-jarno { jeneng, kota dadi kutha } yoiku { jeneng: "Budi" }
+jarno terus jeneng, kota dadi kutha mbari yoiku terus jeneng: "Budi" mbari
 jarno [x, y yoiku 5] yoiku [1]
 cetakno(y)  // Output: 5
 ```
@@ -241,9 +241,9 @@ JPL mendukung **sistem tipe statis opsional** yang mirip dengan TypeScript. Mena
 
 ```jawascript
 // Deklarasi variabel dengan tipe
-jarno umur: Angka = 30
-iki iku jeneng: Teks = "Budi"
-jarno isAktif: Logika = tenan
+jarno umur yoiku  30
+iki iku jeneng yoiku  "Budi"
+jarno isAktif yoiku  tenan
 
 // Parameter dan tipe kembalian fungsi
 gawe sapa(jeneng: Teks): Teks terus
@@ -307,7 +307,7 @@ cetakno(status)  // Output: Dewasa
 **Perulangan `for` — `kanggo`**
 
 ```jawascript
-kanggo (jarno i yoiku 0; i luwihCilik 5; i++) terus
+kanggo (jarno i yoiku 0 banjur i luwihCilik 5 banjur i yoiku i tambah 1) terus
   cetakno(i)
 mbari
 // Output: 0 1 2 3 4
@@ -319,7 +319,7 @@ mbari
 jarno hitung yoiku 0
 selagi (hitung luwihCilik 3) terus
   cetakno(hitung)
-  hitung++
+  hitung tambah 1
 mbari
 ```
 
@@ -331,7 +331,7 @@ Blok dijalankan minimal satu kali, meskipun kondisi langsung salah dari awal.
 jarno hitung yoiku 0
 lakoni terus
   cetakno("Hitungan: " tambah hitung)
-  hitung++
+  hitung tambah 1
 mbari selagi (hitung luwihCilik 3)
 ```
 
@@ -340,7 +340,7 @@ mbari selagi (hitung luwihCilik 3)
 Melakukan iterasi atas **kunci** (nama properti) dari sebuah objek.
 
 ```jawascript
-iki iku pengguna yoiku { jeneng: 'Sastro', umur: 30, kota: 'Jogja' }
+iki iku pengguna yoiku terus jeneng: 'Sastro', umur: 30, kota: 'Jogja' mbari
 
 kanggo (iki iku kunci ing pengguna) terus
   cetakno(kunci tambah ": " tambah pengguna[kunci])
@@ -427,7 +427,7 @@ Sintaks fungsi yang lebih pendek, setara dengan arrow function `=>` di JavaScrip
 
 ```jawascript
 // Satu baris (return implisit)
-// JS: const kalikan = (a, b) => a * b;
+// JS: const kalikan = (a, b) => a * b
 iki iku kalikan yoiku (a, b) lakoni a ping b
 cetakno(kalikan(7, 8))  // Output: 56
 
@@ -451,7 +451,7 @@ Gunakan `...` untuk mengumpulkan argumen sisa (rest) atau memperluas iterable (s
 **Parameter rest:**
 ```jawascript
 gawe jumlah(...angka) terus
-  balekno angka.kurangi((a, b) dadi a + b, 0)
+  balekno angka.kurangi((a, b) dadi a tambah b, 0)
 mbari
 cetakno(jumlah(1, 2, 3))  // Output: 6
 ```
@@ -473,7 +473,7 @@ Gunakan `tenangan` untuk mendeklarasikan generator dan `asilno` (`yield`) untuk 
 gawe tenangan idGenerator() terus
   jarno id yoiku 0
   selagi (tenan) terus
-    asilno id++
+    asilno id tambah 1
   mbari
 mbari
 
@@ -581,8 +581,8 @@ mbari
 iki iku a yoiku 10
 iki iku b yoiku 4
 
-jarno hasil yoiku a tambah b  // -> 14
-cetakno(2 pangkat 3)           // -> 8
+jarno hasil yoiku a tambah b  // > 14
+cetakno(2 pangkat 3)           // > 8
 
 lek (hasil luwihGedhe 10 lan ora (a podo 0)) terus
   cetakno("Hasilnya lebih besar dari 10 dan a bukan 0")
@@ -590,7 +590,7 @@ mbari
 
 jarno skorku yoiku 100
 skorku kurangKaro 10
-cetakno(skorku)  // -> 90
+cetakno(skorku)  // > 90
 ```
 
 ### Operator Khusus
@@ -617,12 +617,12 @@ cetakno(mobilku ikuJinise Mobil)  // Output: tenan
 cetakno(tipene "halo")  // Output: string
 
 // hapusen (delete)
-jarno obj yoiku { a: 1, b: 2 }
+jarno obj yoiku terus a: 1, b: 2 mbari
 hapusen obj.a
 cetakno(obj.a)  // Output: oraDidefinisikan
 
 // ing (in)
-jarno orang yoiku { jeneng: "Budi", umur: 30 }
+jarno orang yoiku terus jeneng: "Budi", umur: 30 mbari
 cetakno("jeneng" ing orang)   // Output: tenan
 cetakno("alamat" ing orang)   // Output: gak
 ```
@@ -632,7 +632,7 @@ cetakno("alamat" ing orang)   // Output: gak
 Akses properti yang bersarang dalam dengan aman tanpa menyebabkan error, meskipun salah satu bagian dari rantai adalah `null` atau `undefined`. Setara dengan operator `?.` di JavaScript.
 
 ```jawascript
-iki iku pengguna yoiku { jeneng: 'Sastro', alamat: { jalan: 'Jl. Kenangan' } }
+iki iku pengguna yoiku terus jeneng: 'Sastro', alamat: terus jalan: 'Jl. Kenangan' mbari mbari
 iki iku penggunaKosong yoiku kosong
 
 // Akses aman — berhasil
@@ -692,7 +692,7 @@ cetakno(a geserTengen 1)  // Output: 2  (0010)
 
 ### Pengecekan Null/Undefined: `iku ono` & `iku ilang`
 
-JPL menyediakan kata kunci yang mudah dibaca untuk mengecek apakah sebuah variabel ada atau tidak — tanpa perlu menulis `=== null || === undefined`.
+JPL menyediakan kata kunci yang mudah dibaca untuk mengecek apakah sebuah variabel ada atau tidak — tanpa perlu menulis `plek null || plek undefined`.
 
 | Ekspresi | Artinya |
 | :--- | :--- |
@@ -791,8 +791,8 @@ Alias berbahasa Jawa untuk method iterasi array.
 
 ```jawascript
 iki iku nums yoiku [1, 2, 3, 4, 5]
-cetakno(nums.kurangi((a, b) dadi a + b, 0))  // Output: 15
-cetakno(nums.temokake(x dadi x > 3))          // Output: 4
+cetakno(nums.kurangi((a, b) dadi a tambah b, 0))  // Output: 15
+cetakno(nums.temokake(x dadi x luwihGedhe 3))          // Output: 4
 ```
 
 ### Literal RegExp
@@ -815,7 +815,7 @@ cacah Werna yoiku
   abang,
   ijo,
   kuning,
-  biru = 10,
+  biru yoiku 10,
   ungu
 mbari
 
@@ -834,8 +834,8 @@ Cabangkan eksekusi berdasarkan nilai dengan pola terstruktur. Mendukung literal,
 cocok data terus
   kalo 0 dadi cetakno("nol")
   kalo 1, 2, 3 dadi cetakno("siji-siji")
-  kalo [1, ...sisa] dadi cetakno("kaping siji: 1, sisa: " + sisa)
-  kalo { jeneng, umur } dadi cetakno("jeneng: " + jeneng + ", umur: " + umur)
+  kalo [1, ...sisa] dadi cetakno("kaping siji: 1, sisa: " tambah sisa)
+  kalo terus jeneng, umur mbari dadi cetakno("jeneng: " tambah jeneng tambah ", umur: " tambah umur)
   kalo _ dadi cetakno("liyane")
 mbari
 ```
@@ -847,8 +847,8 @@ Wildcard `_` cocok dengan apa pun tanpa binding.
 Verifikasi kondisi dan nilai secara inline. Asersi yang gagal akan melempar error dengan pesan berbahasa Jawa.
 
 ```jawascript
-pasten(1 + 1 plek 2)                                    // lolos tanpa output
-pasten(1 + 1 plek 3, "matematika dasar")               // melempar "pasten gagal: matematika dasar"
+pasten(1 tambah 1 plek 2)                                    // lolos tanpa output
+pasten(1 tambah 1 plek 3, "matematika dasar")               // melempar "pasten gagal: matematika dasar"
 pastenPodo([1, 2, 3], [1, 2, 3])                        // cek kesamaan mendalam
 pastenPodo(aktual, dikarepake, "login kudu balikake token")
 ```
@@ -865,9 +865,9 @@ Demi filosofi **"berbicara kepada komputer secara langsung"**, tanda kurung `()`
 
 | Konstruksi | Bentuk dengan kurung | Bentuk tanpa kurung |
 | :--- | :--- | :--- |
-| `lek` (if) | `lek (x > 0) terus ...` | `lek x > 0 terus ...` |
-| `lek misale` (else if) | `lek misale (x > 0) terus ...` | `lek misale x > 0 terus ...` |
-| `selagi` (while) | `selagi (x < 10) terus ...` | `selagi x < 10 terus ...` |
+| `lek` (if) | `lek (x luwihGedhe 0) terus ...` | `lek x luwihGedhe 0 terus ...` |
+| `lek misale` (else if) | `lek misale (x luwihGedhe 0) terus ...` | `lek misale x luwihGedhe 0 terus ...` |
+| `selagi` (while) | `selagi (x luwihCilik 10) terus ...` | `selagi x luwihCilik 10 terus ...` |
 | `pilih` (switch) | `pilih (x) terus ... mbari` | `pilih x terus ... mbari` |
 | `cetakno` (print) | `cetakno a, b, c` | `cetakno a, b, c` |
 | `cetakno` (1 arg) | `cetakno (x)` | `cetakno x` |
@@ -877,7 +877,7 @@ Demi filosofi **"berbicara kepada komputer secara langsung"**, tanda kurung `()`
 
 ```jawascript
 // lek tanpa kurung
-lek umur >= 17 terus
+lek umur luwihGedhePodo 17 terus
   cetakno("Dewasa")
 mbari
 
@@ -888,14 +888,14 @@ cetakno "halo", "dunia", "!"
 cobak terus
   uncalen "ada kesalahan"
 mbari nyekel e terus
-  cetakno "error: " + e
+  cetakno "error: " tambah e
 mbari
 
 // Bentuk campuran tetap valid dalam file yang sama
-jarno skor = 85
-lek (skor >= 90) terus
+jarno skor yoiku 85
+lek (skor luwihGedhePodo 90) terus
   cetakno("A")
-mbari lek misale skor >= 80 terus
+mbari lek misale skor luwihGedhePodo 80 terus
   cetakno("B")
 mbari
 ```
@@ -906,9 +906,9 @@ Untuk menjaga parser tetap sederhana dan tidak ambigu, tanda kurung tetap **waji
 
 - Deklarasi fungsi: `gawe nama (a, b) terus ... mbari` (multi-param, destructuring)
 - Arrow function: `(x, y) lakoni ...`
-- C-style `for`: `kanggo (i = 0; i < 10; i = i + 1) terus ...`
+- C-style `for`: `kanggo (i yoiku 0 banjur i luwihCilik 10 banjur i yoiku i tambah 1) terus ...`
 - Function call ekspresi: `f (a, b)`, `tuple (a, b)`, `takon (msg)`, `new Foo (a, b)`
-- Grouping ekspresi: `(a + b)`
+- Grouping ekspresi: `(a tambah b)`
 
 ---
 
@@ -939,7 +939,7 @@ mbari
 
 kelas Bunder turunan soko Bentuk terus
   gawe area() terus
-    balekno Mtk.PI * iki.r * iki.r
+    balekno Mtk.PI ping iki.r ping iki.r
   mbari
 mbari
 
@@ -957,7 +957,7 @@ wangun Shape terus
 mbari
 
 kelas Circle nurut Shape terus
-  gawe area() terus balekno Mtk.PI * iki.r * iki.r mbari
+  gawe area() terus balekno Mtk.PI ping iki.r ping iki.r mbari
 mbari
 
 jarno c yoiku anyar Circle(5)
@@ -982,8 +982,8 @@ cetakno(p.x)  // Output: 3
 Tempelkan label pada sebuah pernyataan untuk digunakan dengan `mandek` (break) atau `lanjutno` (continue) pada perulangan bersarang.
 
 ```jawascript
-luar: kanggo (jarno i yoiku 0; i < 3; i++) terus
-  jero: kanggo (jarno j yoiku 0; j < 3; j++) terus
+luar: kanggo (jarno i yoiku 0 banjur i luwihCilik 3 banjur i yoiku i tambah 1) terus
+  jero: kanggo (jarno j yoiku 0 banjur j luwihCilik 3 banjur j tambah 1) terus
     lek (i plek 1 lan j plek 1) terus
       mandek luar  // keluar dari kedua perulangan
     mbari
@@ -1015,14 +1015,14 @@ Tag sebuah template literal dengan fungsi untuk memproses bagian-bagian template
 ```jawascript
 gawe upper(strings, ...values) terus
   jarno result yoiku ""
-  kanggo (jarno i yoiku 0; i < values.length; i++) terus
-    result += strings[i] + String(values[i]).gedekno()
+  kanggo (jarno i yoiku 0 banjur i luwihCilik values.length banjur i yoiku i tambah 1) terus
+    result tambahKaro strings[i] tambah Teks(values[i]).gedekno()
   mbari
-  balekno result + strings[strings.length - 1]
+  balekno result tambah strings[strings.length kurang 1]
 mbari
 
 iki iku name yoiku "Java"
-cetakno(upper`Hello ${name}!`)  // Output: Hello JAVA!
+cetakno(upper`Hello $terusnamembari!`)  // Output: Hello JAVA!
 ```
 
 ---
@@ -1142,7 +1142,7 @@ JPL mendukung sistem modul gaya ES untuk mengorganisasi kode ke beberapa file.
 
 | Kata Kunci | Ekuivalen JavaScript | Keterangan |
 | :--- | :--- | :--- |
-| `metokno { nama }` | `export { nama }` | Ekspor nilai bernama |
+| `metokno terus nama mbari` | `export terus nama mbari` | Ekspor nilai bernama |
 | `metokno biasane nilai` | `export default nilai` | Ekspor nilai default |
 | `jupukno ... soko '...'` | `import ... from '...'` | Impor dari sebuah file |
 | `biasane` | `default` | Digunakan untuk impor/ekspor default |
@@ -1156,13 +1156,13 @@ mbari
 
 iki iku VERSI yoiku "1.0"
 
-metokno { salam }         // Ekspor bernama
+metokno terus salam mbari         // Ekspor bernama
 metokno biasane VERSI     // Ekspor default
 ```
 
 **`app.jawa`**
 ```jawascript
-jupukno biasane versiAplikasi, { salam dadi ngucapnoSalam } soko './util.js'
+jupukno biasane versiAplikasi, terus salam dadi ngucapnoSalam mbari soko './util.js'
 
 cetakno("Versi:", versiAplikasi)   // Output: Versi: 1.0
 cetakno(ngucapnoSalam("Doni"))     // Output: Sugeng rawuh, Doni
@@ -1205,34 +1205,34 @@ Metaprogramming tingkat lanjut didukung melalui `Perantara` (Proxy) dan `Pantula
 | `Pantulan.bangun` | `Reflect.construct` | Bangun objek baru |
 
 ```jawascript
-iki iku target yoiku { pesan: 'Hello World', nilai: 100 }
+iki iku target yoiku terus pesan: 'Hello World', nilai: 100 mbari
 
-iki iku handler yoiku {
+iki iku handler yoiku terus
   // Cegat pembacaan properti
   jupuk: gawe(obj, prop) terus
-    cetakno(`Mengambil: "${prop}"`)
+    cetakno(`Mengambil: "$teruspropmbari"`)
     balekno Pantulan.jupuk(obj, prop)
   mbari,
 
   // Cegat penulisan properti
   pasang: gawe(obj, prop, value) terus
-    cetakno(`Mengatur "${prop}" menjadi "${value}"`)
+    cetakno(`Mengatur "$teruspropmbari" menjadi "$terusvaluembari"`)
     lek (prop plek 'nilai' lan tipene value ora plek 'number') terus
       uncalen anyar Kesalahan('Nilai harus berupa angka!')
     mbari
     balekno Pantulan.pasang(obj, prop, value)
   mbari
-}
+mbari
 
 iki iku p yoiku anyar Perantara(target, handler)
 
-cetakno(p.pesan)  // -> Mengambil: "pesan" -> Hello World
-p.nilai yoiku 200  // -> Mengatur "nilai" menjadi "200"
+cetakno(p.pesan)  // > Mengambil: "pesan" > Hello World
+p.nilai yoiku 200  // > Mengatur "nilai" menjadi "200"
 
 cobak terus
   p.nilai yoiku 'bukan angka'
 mbari nyekel (e) terus
-  cetakno('Error: ' tambah e.message)  // -> Error: Nilai harus berupa angka!
+  cetakno('Error: ' tambah e.message)  // > Error: Nilai harus berupa angka!
 mbari
 ```
 
@@ -1285,15 +1285,15 @@ Instance baru bisa dibuat dengan sintaks `NamaKelas anyar()` atau `anyar NamaKel
 jarno daftar yoiku Daftar anyar()
 cetakno(daftar)  // Output: []
 
-iki iku obj1 yoiku { a: 1 }
-iki iku obj2 yoiku { b: 2 }
-iki iku gabungan yoiku Obyek.wenehno({}, obj1, obj2)
-cetakno(JSON.tulisan(gabungan))  // Output: {"a":1,"b":2}
+iki iku obj1 yoiku terus a: 1 mbari
+iki iku obj2 yoiku terus b: 2 mbari
+iki iku gabungan yoiku Obyek.wenehno(terusmbari, obj1, obj2)
+cetakno(JSON.tulisan(gabungan))  // Output: terus"a":1,"b":2mbari
 cetakno(Obyek.kunci(gabungan))         // Output: ['a', 'b']
 
 // Simbol — membuat kunci unik yang tidak bertabrakan dengan properti lain
 iki iku uid yoiku Simbol('id')
-iki iku pengguna yoiku { jeneng: 'Slamet' }
+iki iku pengguna yoiku terus jeneng: 'Slamet' mbari
 pengguna[uid] yoiku '987-xyz'
 cetakno(Obyek.kunci(pengguna))  // Output: ['jeneng'] (kunci Simbol tersembunyi)
 cetakno(pengguna[uid])          // Output: 987-xyz

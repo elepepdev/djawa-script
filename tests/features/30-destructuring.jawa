@@ -1,28 +1,28 @@
-cetakno('--- Tes Destructuring ---');
+cetakno('--- Tes Destructuring ---')
 
 // 1. Object Destructuring
-iki iku pengguna yoiku { jeneng: "Sastro", umur: 30, kota: "Jogja" };
-iki iku { jeneng, umur } yoiku pengguna;
-cetakno("Jeneng:", jeneng);
-cetakno("Umur:", umur);
+iki iku pengguna yoiku terus jeneng: "Sastro", umur: 30, kota: "Jogja" mbari
+iki iku terus jeneng, umur mbari yoiku pengguna
+cetakno("Jeneng:", jeneng)
+cetakno("Umur:", umur)
 
 // 2. Array Destructuring
-jarno angka yoiku [10, 20, 30];
-jarno [a, b] yoiku angka;
-cetakno("Nilai a:", a);
-cetakno("Nilai b:", b);
+jarno angka yoiku [10, 20, 30]
+jarno [a, b] yoiku angka
+cetakno("Nilai a:", a)
+cetakno("Nilai b:", b)
 
 // 3. Object Destructuring dengan Ganti Nama (dadi)
-iki iku { kota dadi kutho } yoiku pengguna;
-cetakno("Kutho:", kutho);
+iki iku terus kota dadi kutho mbari yoiku pengguna
+cetakno("Kutho:", kutho)
 
 // 4. Object Destructuring dengan Nilai Default
-iki iku { status yoiku "Aktif" } yoiku pengguna;
-cetakno("Status:", status);
+iki iku terus status yoiku "Aktif" mbari yoiku pengguna
+cetakno("Status:", status)
 
 // 5. Destructuring di parameter fungsi
-gawe cetakInfo({ jeneng dadi jenengLengkap, umur dadi umurSaiki }) terus
-  cetakno(`Jeneng lengkap: ${jenengLengkap}, Umur saiki: ${umurSaiki}`);
+gawe cetakInfo(terus jeneng dadi jenengLengkap, umur dadi umurSaiki mbari) terus
+  cetakno(`Jeneng lengkap: $terusjenengLengkapmbari, Umur saiki: $terusumurSaikimbari`)
 mbari
 
-cetakInfo(pengguna);
+cetakInfo(pengguna)

@@ -1,10 +1,10 @@
-cetakno('--- Tes BigInt Literals ---');
+cetakno('--- Tes BigInt Literals ---')
 
-iki iku angkaGedhe yoiku 123456789012345678901234567890 gedhe;
-iki iku angkaLain yoiku 98765432109876543210 gedhe;
+iki iku angkaGedhe yoiku 123456789012345678901234567890 gedhe
+iki iku angkaLain yoiku 98765432109876543210 gedhe
 
-cetakno('Angka Gedhe:', angkaGedhe);
-cetakno('Tipe Angka Gedhe:', tipene angkaGedhe);
+cetakno('Angka Gedhe:', angkaGedhe)
+cetakno('Tipe Angka Gedhe:', tipene angkaGedhe)
 
-cetakno('Penjumlahan BigInt:', angkaGedhe tambah angkaLain);
-cetakno('Perkalian BigInt:', angkaGedhe ping 2 gedhe);
+cetakno('Penjumlahan BigInt:', angkaGedhe tambah angkaLain)
+cetakno('Perkalian BigInt:', angkaGedhe ping 2 gedhe)

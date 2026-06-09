@@ -1,14 +1,14 @@
 // Test: RegExp literal (/.../flags)
-cetakno("--- RegExp Literal ---");
+cetakno("--- RegExp Literal ---")
 
-iki iku polaAngka yoiku /\d+/g;
-cetakno("cocok:");
-cetakno("abc123".cocok(polaAngka));
+iki iku polaAngka yoiku /\d+/g
+cetakno("cocok:")
+cetakno("abc123".cocok(polaAngka))
 
-iki iku polaEmail yoiku /^[a-z]+@[a-z]+\.[a-z]+$/;
-cetakno("tes email valid:");
-cetakno(polaEmail.tes("user@host.com"));
-cetakno("tes email invalid:");
-cetakno(polaEmail.tes("bukan-email"));
+iki iku polaEmail yoiku /^[a-z]+@[a-z]+\.[a-z]+$/
+cetakno("tes email valid:")
+cetakno(polaEmail.tes("user@host.com"))
+cetakno("tes email invalid:")
+cetakno(polaEmail.tes("bukan-email"))
 
-cetakno("--- Rampung ---");
+cetakno("--- Rampung ---")

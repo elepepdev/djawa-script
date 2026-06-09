@@ -1,20 +1,20 @@
-cetakno('--- Tes Optional Chaining ---');
+cetakno('--- Tes Optional Chaining ---')
 
-iki iku pengguna yoiku { jeneng: 'Sastro', alamat: { jalan: 'Jl. Kenangan', nomor: 10 } };
-iki iku penggunaKosong yoiku kosong;
+iki iku pengguna yoiku terus jeneng: 'Sastro', alamat: terus jalan: 'Jl. Kenangan', nomor: 10 mbari mbari
+iki iku penggunaKosong yoiku kosong
 
 // Mengakses properti yang ada
-iki iku namaJalan yoiku pengguna.alamat.mungkin.jalan;
-cetakno('Nama Jalan:', namaJalan); // Output: Jl. Kenangan
+iki iku namaJalan yoiku pengguna.alamat.mungkin.jalan
+cetakno('Nama Jalan:', namaJalan) // Output: Jl. Kenangan
 
 // Mengakses properti yang mungkin tidak ada
-iki iku kodePos yoiku pengguna.alamat.mungkin.kodePos;
-cetakno('Kode Pos (tidak ada):', kodePos); // Output: undefined
+iki iku kodePos yoiku pengguna.alamat.mungkin.kodePos
+cetakno('Kode Pos (tidak ada):', kodePos) // Output: undefined
 
 // Mengakses properti dari objek yang mungkin kosong
-iki iku namaJalanKosong yoiku penggunaKosong.mungkin.alamat.mungkin.jalan;
-cetakno('Nama Jalan dari objek kosong:', namaJalanKosong); // Output: undefined
+iki iku namaJalanKosong yoiku penggunaKosong.mungkin.alamat.mungkin.jalan
+cetakno('Nama Jalan dari objek kosong:', namaJalanKosong) // Output: undefined
 
 // Memanggil method yang mungkin tidak ada
-iki iku methodKosong yoiku penggunaKosong.mungkin.sapa.mungkin();
-cetakno('Hasil panggil method kosong:', methodKosong); // Output: undefined
+iki iku methodKosong yoiku penggunaKosong.mungkin.sapa.mungkin()
+cetakno('Hasil panggil method kosong:', methodKosong) // Output: undefined

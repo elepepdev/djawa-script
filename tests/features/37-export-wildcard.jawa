@@ -1,11 +1,11 @@
-cetakno('--- Tes Export Wildcard ---');
+cetakno('--- Tes Export Wildcard ---')
 
 // util_export.jawa (simulasi file lain)
-// metokno iki iku a yoiku 10;
-// metokno iki iku b yoiku 20;
+// metokno iki iku a yoiku 10
+// metokno iki iku b yoiku 20
 
 // Export semua dari util_export.js sebagai namespace util
-metokno kabeh dadi util soko './util_export.js';
+metokno kabeh dadi util soko './util_export.js'
 
 // Contoh penggunaan (ini tidak akan dieksekusi, hanya untuk tes transpiler)
-// cetakno(util.a);
+// cetakno(util.a)

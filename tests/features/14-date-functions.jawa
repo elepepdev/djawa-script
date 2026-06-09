@@ -1,7 +1,7 @@
 // Test Date built-in functions
 
-cetakno("Current timestamp: " + Tanggalan.saiki());
-jarno tanggalSaiki = Tanggalan anyar();
-cetakno("New Date object: " + tanggalSaiki);
-jarno tanggalSpesifik = Tanggalan anyar("2025-12-25T10:00:00Z");
-cetakno("Specific Date object: " + tanggalSpesifik);
+cetakno("Current timestamp: " + Tanggalan.saiki())
+jarno tanggalSaiki yoiku Tanggalan anyar()
+cetakno("New Date object: " + tanggalSaiki)
+jarno tanggalSpesifik yoiku Tanggalan anyar("2025-12-25T10:00:00Z")
+cetakno("Specific Date object: " + tanggalSpesifik)

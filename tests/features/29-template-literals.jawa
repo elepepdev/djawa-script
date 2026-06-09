@@ -1,22 +1,22 @@
-cetakno('--- Tes Template Literals ---');
+cetakno('--- Tes Template Literals ---')
 
-iki iku jeneng yoiku "Sastro";
-iki iku umur yoiku 32;
+iki iku jeneng yoiku "Sastro"
+iki iku umur yoiku 32
 
 // Tes dengan variabel
-iki iku sapaan yoiku `Halo, jenengku ${jeneng} lan umurku ${umur} taun.`;
-cetakno(sapaan);
+iki iku sapaan yoiku `Halo, jenengku $terusjenengmbari lan umurku $terusumurmbari taun.`
+cetakno(sapaan)
 
 // Tes dengan ekspresi
-iki iku angkaku yoiku 7;
-iki iku itungan yoiku `Hasil seko ${angkaku} ping 5 yoiku ${angkaku ping 5}`;
-cetakno(itungan);
+iki iku angkaku yoiku 7
+iki iku itungan yoiku `Hasil seko $terusangkakumbari ping 5 yoiku $terusangkaku ping 5mbari`
+cetakno(itungan)
 
 // Tes multiline dan keyword Jawascript di dalam string
 iki iku kode yoiku `
   Contoh kode Jawascript:
   lek (x iku ono) terus
-    cetakno("x ono");
+    cetakno("x ono")
   mbari
-`;
-cetakno(kode);
+`
+cetakno(kode)

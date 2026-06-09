@@ -1,19 +1,19 @@
 // Test logical operators and continue statement
 
-jarno a = tenan;
-jarno b = gak;
+jarno a yoiku tenan
+jarno b yoiku gak
 
 lek (a lan ora b) terus
-  cetakno("A true dan B false");
+  cetakno("A true dan B false")
 mbari
 
 lek (a utawa b) terus
-  cetakno("A true atau B true");
+  cetakno("A true atau B true")
 mbari
 
-kanggo (jarno i = 0; i < 5; i = i + 1) terus
-  lek (i === 2) terus
-    lanjutno;
+kanggo (jarno i yoiku 0 i < 5 i yoiku i + 1) terus
+  lek (i podoyoiku 2) terus
+    lanjutno
   mbari
-  cetakno("Loop ke: " + i);
+  cetakno("Loop ke: " + i)
 mbari

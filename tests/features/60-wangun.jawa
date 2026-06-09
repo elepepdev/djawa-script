@@ -1,5 +1,5 @@
 // Test: Wangun (Interface)
-cetakno("--- Wangun ---");
+cetakno("--- Wangun ---")
 
 // Test 1: Define interface with methods
 wangun Kendaraan terus

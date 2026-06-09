@@ -3,7 +3,7 @@
 // for the philosophy of "berbicara kepada komputer secara langsung".
 
 cetakno("--- lek tanpa kurung ---")
-jarno umur = 20
+jarno umur yoiku 20
 lek umur > 17 terus
   cetakno("Dewasa")
 mbari
@@ -18,20 +18,20 @@ mbari liyane terus
 mbari
 
 cetakno("--- lek dengan operator kompleks ---")
-jarno x = 5
+jarno x yoiku 5
 lek x * 2 > 8 terus
   cetakno("x * 2 luwih saka 8")
 mbari
 
 cetakno("--- selagi tanpa kurung ---")
-jarno i = 0
+jarno i yoiku 0
 selagi i < 3 terus
-  cetakno("i = " + i)
-  i = i + 1
+  cetakno("i yoiku " + i)
+  i yoiku i + 1
 mbari
 
 cetakno("--- pilih tanpa kurung ---")
-jarno hari = 3
+jarno hari yoiku 3
 pilih hari terus
   kalo 1: cetakno("Senin")
   kalo 2: cetakno("Selasa")
@@ -50,8 +50,8 @@ cetakno("--- cetakno tanpa kurung: 3 argumen ---")
 cetakno "siji", "loro", "telu"
 
 cetakno("--- cetakno tanpa kurung: ekspresi ---")
-jarno a = 10
-jarno b = 20
+jarno a yoiku 10
+jarno b yoiku 20
 cetakno a + b
 
 cetakno("--- nyekel tanpa kurung ---")
@@ -63,17 +63,17 @@ mbari
 
 cetakno("--- BENTUK CAMPURAN: paren + tanpa paren ---")
 // Beberapa dengan kurung, beberapa tanpa, dalam file yang sama
-jarno skor = 85
-lek (skor >= 90) terus
+jarno skor yoiku 85
+lek (skor luwihGedhePodo 90) terus
   cetakno("A")
-mbari lek misale skor >= 80 terus
+mbari lek misale skor luwihGedhePodo 80 terus
   cetakno("B")
 mbari liyane terus
   cetakno("C")
 mbari
 
 cetakno("--- lek plek tanpa kurung ---")
-jarno a = 5
+jarno a yoiku 5
 lek a plek 5 terus
   cetakno "a podo karo 5"
 mbari

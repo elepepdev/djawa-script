@@ -1,21 +1,21 @@
-cetakno('--- Tes Promise Methods (.banjur, .nyekel) ---');
+cetakno('--- Tes Janji Methods (.banjur, .nyekel) ---')
 
-// Simulasi Promise yang berhasil
+// Simulasi Janji yang berhasil
 iki iku janjiSukses yoiku Janji anyar((resolve, reject) lakoni terus
-  setWaktuTunda(() lakoni resolve('Data berhasil!'), 100);
-mbari);
+  setWaktuTunda(() lakoni resolve('Data berhasil!'), 100)
+mbari)
 
 janjiSukses
   .banjur(pesan lakoni cetakno('Sukses:', pesan))
-  .nyekel(error lakoni cetakno('Error (tidak seharusnya terjadi):', error));
+  .nyekel(error lakoni cetakno('Kesalahan (tidak seharusnya terjadi):', error))
 
-// Simulasi Promise yang gagal
+// Simulasi Janji yang gagal
 iki iku janjiGagal yoiku Janji anyar((resolve, reject) lakoni terus
-  setWaktuTunda(() lakoni reject('Ada masalah!'), 50);
-mbari);
+  setWaktuTunda(() lakoni reject('Ada masalah!'), 50)
+mbari)
 
 janjiGagal
   .banjur(pesan lakoni cetakno('Sukses (tidak seharusnya terjadi):', pesan))
-  .nyekel(error lakoni cetakno('Error:', error));
+  .nyekel(error lakoni cetakno('Kesalahan:', error))
 
-cetakno('Promise sedang diproses...');
+cetakno('Janji sedang diproses...')

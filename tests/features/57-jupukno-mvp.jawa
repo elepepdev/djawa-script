@@ -5,6 +5,6 @@ jupukno
   tambahake
 mbari soko "./test-module.jawa"
 
-cetakno("pi = " + pi);
-cetakno("sapa = " + sapa("Jawa"));
-cetakno("tambahake(3, 4) = " + tambahake(3, 4));
+cetakno("pi yoiku " + pi)
+cetakno("sapa yoiku " + sapa("Jawa"))
+cetakno("tambahake(3, 4) yoiku " + tambahake(3, 4))

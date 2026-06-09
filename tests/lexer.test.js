@@ -23,15 +23,17 @@ describe('Lexer', () => {
     test('parentheses', () => {
       expect(types('()')).toEqual([TokenType.LEFT_PAREN, TokenType.RIGHT_PAREN, TokenType.EOF]);
     });
-    test('braces', () => {
-      expect(types('{}')).toEqual([TokenType.TERUS, TokenType.MBARI, TokenType.EOF]);
+    test('braces via keywords', () => {
+      const t = lex('terus mbari');
+      expect(t[0].type).toBe(TokenType.TERUS);
+      expect(t[1].type).toBe(TokenType.MBARI);
     });
     test('brackets', () => {
       expect(types('[]')).toEqual([TokenType.LEFT_BRACKET, TokenType.RIGHT_BRACKET, TokenType.EOF]);
     });
     test('punctuation', () => {
-      expect(types(',;:.')).toEqual([
-        TokenType.COMMA, TokenType.SEMICOLON, TokenType.COLON, TokenType.DOT, TokenType.EOF
+      expect(types(',:.')).toEqual([
+        TokenType.COMMA, TokenType.COLON, TokenType.DOT, TokenType.EOF
       ]);
     });
   });
@@ -50,11 +52,14 @@ describe('Lexer', () => {
       expect(t[1].type).toBe(TokenType.PANGKAT);
       expect(t[2].type).toBe(TokenType.NUMBER);
     });
-    test('assignment', () => {
-      expect(types('=')).toEqual([TokenType.YOIKU, TokenType.EOF]);
+    test('assignment via keyword', () => {
+      expect(types('yoiku')).toEqual([TokenType.YOIKU, TokenType.EOF]);
     });
-    test('compound assignment', () => {
-      const t = lex('+= -= *= /=');
+    test('assignment symbol error', () => {
+      expect(error('=')).toMatch(/Gunakake 'yoiku'/);
+    });
+    test('compound assignment via keywords', () => {
+      const t = lex('tambahKaro kurangKaro pingKaro bagiKaro');
       expect(t[0].type).toBe(TokenType.TAMBAH_KARO);
       expect(t[1].type).toBe(TokenType.KURANG_KARO);
       expect(t[2].type).toBe(TokenType.PING_KARO);
@@ -66,11 +71,14 @@ describe('Lexer', () => {
       expect(t[1].type).toBe(TokenType.SISO);
       expect(t[2].type).toBe(TokenType.NUMBER);
     });
-    test('comparison', () => {
-      const t = lex('=== = == != !== > < >=');
+    test('comparison via keywords', () => {
+      const t = lex('plek podo gakPlek gakPodo luwihGedhe luwihCilik');
       expect(t[0].type).toBe(TokenType.PLEK);
-      expect(t[2].type).toBe(TokenType.PODO);
+      expect(t[1].type).toBe(TokenType.PODO);
+      expect(t[2].type).toBe(TokenType.GAK_PLEK);
       expect(t[3].type).toBe(TokenType.GAK_PODO);
+      expect(t[4].type).toBe(TokenType.LUWIH_GEDHE);
+      expect(t[5].type).toBe(TokenType.LUWIH_CILIK);
     });
     test('logical via keywords', () => {
       const t = lex('lan utawa ora');
@@ -92,8 +100,11 @@ describe('Lexer', () => {
       const t = lex('??');
       expect(t[0].type).toBe(TokenType.UTOWO_YEN_KOSONG);
     });
-    test('ternary', () => {
-      expect(types('?')).toEqual([TokenType.TA, TokenType.EOF]);
+    test('ternary via keyword', () => {
+      expect(types('ta')).toEqual([TokenType.TA, TokenType.EOF]);
+    });
+    test('ternary symbol error', () => {
+      expect(error('?')).toMatch(/Gunakake 'ta'/);
     });
     test('dot dot', () => {
       expect(types('..')).toEqual([TokenType.DOT_DOT, TokenType.EOF]);
@@ -286,7 +297,7 @@ describe('Lexer', () => {
 
   describe('errors', () => {
     test('unexpected character', () => {
-      expect(error('@')).toMatch(/Unexpected character/);
+      expect(error('@')).toMatch(/ora dingerteni/);
     });
   });
 });

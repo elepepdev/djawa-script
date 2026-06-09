@@ -1,7 +1,7 @@
 // Test Module Imports and Exports
 
 // Export named
-metokno { fungsiA, variabelB }
+metokno terus fungsiA, variabelB mbari
 
 // Export default
 metokno biasane kelas MyClass terus
@@ -9,7 +9,7 @@ metokno biasane kelas MyClass terus
 mbari
 
 // Import named
-jupukno { fungsiA, variabelB dadi aliasB } soko './module.js'
+jupukno terus fungsiA, variabelB dadi aliasB mbari soko './module.js'
 
 // Import default
 jupukno biasane DefaultExport soko './anotherModule.js'

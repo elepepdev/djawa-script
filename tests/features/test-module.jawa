@@ -1,6 +1,6 @@
 // Test module for jupukno MVP
 
-iki iku pi yoiku 3.14159;
+iki iku pi yoiku 3.14159
 
 gawe sapa(nama) terus
   balekno "Sugeng rawuh, " + nama

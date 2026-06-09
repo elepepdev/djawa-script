@@ -1,3 +1,3 @@
 // Test prompt function
-jarno nama = takon("Siapa namamu?");
-cetakno("Halo, " + nama + "!");
+jarno nama yoiku takon("Siapa namamu?")
+cetakno("Halo, " + nama + "!")

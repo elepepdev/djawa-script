@@ -119,7 +119,8 @@ export const TokenType = {
   DOT: 'DOT',                 // .
   DOT_DOT: 'DOT_DOT',         // ..
   COLON: 'COLON',             // :
-  SEMICOLON: 'SEMICOLON',     // ;
+  SEMICOLON: 'SEMICOLON',     // (unused — kept for compatibility)
+  BANJUR: 'BANJUR',           // for-loop clause separator
   MUNGKIN: 'MUNGKIN',         // .mungkin.
   TEMPLATE: 'TEMPLATE',       // `template`
 
@@ -230,6 +231,7 @@ export const Keywords = {
   'ilang': TokenType.ILANG,
   'lek misale': TokenType.LEK_MISALE,
   'lek gak': TokenType.LEK_GAK,
+  'banjur': TokenType.BANJUR,
   
   // Additional keywords
   'carane': TokenType.GAWE,

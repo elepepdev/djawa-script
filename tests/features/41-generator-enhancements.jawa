@@ -1,29 +1,29 @@
-cetakno('--- Tes Generator Enhancements ---');
+cetakno('--- Tes Generator Enhancements ---')
 
 // 1. `asilno kabeh` (yield*)
 gawe generatorSiji() terus
-  asilno 1;
-  asilno 2;
+  asilno 1
+  asilno 2
 mbari
 
 gawe generatorLoro() terus
-  asilno kabeh generatorSiji(); // yield* generatorSiji()
-  asilno 3;
+  asilno kabeh generatorSiji() // yield* generatorSiji()
+  asilno 3
 mbari
 
-jarno genLoro yoiku generatorLoro();
-cetakno('Gen Loro next:', genLoro.next().value); // Output: 1
-cetakno('Gen Loro next:', genLoro.next().value); // Output: 2
-cetakno('Gen Loro next:', genLoro.next().value); // Output: 3
+jarno genLoro yoiku generatorLoro()
+cetakno('Gen Loro next:', genLoro.next().value) // Output: 1
+cetakno('Gen Loro next:', genLoro.next().value) // Output: 2
+cetakno('Gen Loro next:', genLoro.next().value) // Output: 3
 
 // 2. `tenangan gawe*` (async function*)
 tenangan gawe* asyncGenerator() terus
-  asilno enteni Janji anyar(resolve lakoni resolve(4));
-  asilno enteni Janji anyar(resolve lakoni resolve(5));
+  asilno enteni Janji anyar(resolve lakoni resolve(4))
+  asilno enteni Janji anyar(resolve lakoni resolve(5))
 mbari
 
 (tenangan gawe () terus
-  jarno asyncGen yoiku asyncGenerator();
-  cetakno('Async Gen next:', (enteni asyncGen.next()).value);
-  cetakno('Async Gen next:', (enteni asyncGen.next()).value);
-mbari)();
+  jarno asyncGen yoiku asyncGenerator()
+  cetakno('Async Gen next:', (enteni asyncGen.next()).value)
+  cetakno('Async Gen next:', (enteni asyncGen.next()).value)
+mbari)()

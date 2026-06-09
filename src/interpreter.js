@@ -303,17 +303,6 @@ export class Interpreter {
         toString: () => "<native Himpunan>"
     });
 
-    this.globals.define("Array", Array);
-    this.globals.define("Map", Map);
-    this.globals.define("Set", Set);
-    this.globals.define("WeakMap", WeakMap);
-    this.globals.define("WeakSet", WeakSet);
-    this.globals.define("Date", Date);
-    this.globals.define("RegExp", RegExp);
-    this.globals.define("Error", Error);
-    this.globals.define("TypeError", TypeError);
-    this.globals.define("RangeError", RangeError);
-
     this.globals.define("pasten", (condition, message) => {
         if (!this.isTruthy(condition)) {
             throw new Error(`Assertion failed: ${message !== undefined ? this.stringify(message) : 'kondisi palsu'}`);
@@ -348,14 +337,6 @@ export class Interpreter {
         toString: () => "<native Wektu>"
     });
 
-    // Aliases
-    this.globals.define("Promise", this.globals.values.get("Janji"));
-    this.globals.define("Math", this.globals.values.get("Mtk"));
-    this.globals.define("JSON", this.globals.values.get("JSON"));
-    this.globals.define("setTimeout", (fn, ms) => setTimeout(fn, ms));
-    this.globals.define("setInterval", (fn, ms) => setInterval(fn, ms));
-    this.globals.define("clearTimeout", (id) => clearTimeout(id));
-    this.globals.define("clearInterval", (id) => clearInterval(id));
   }
 
   async interpret(statements) {

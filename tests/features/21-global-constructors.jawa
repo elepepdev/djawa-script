@@ -1,52 +1,52 @@
-// Test for new Global Constructors
+// Test for anyar Global Constructors
 
 // Daftar (Array)
-jarno daftarKosong yoiku Daftar anyar();
-cetakno("Daftar Kosong: " + daftarKosong);
+jarno daftarKosong yoiku Daftar anyar()
+cetakno("Daftar Kosong: " + daftarKosong)
 
-jarno daftarAngka yoiku Daftar anyar(1, 2, 3);
-cetakno("Daftar Angka: " + daftarAngka);
+jarno daftarAngka yoiku Daftar anyar(1, 2, 3)
+cetakno("Daftar Angka: " + daftarAngka)
 
 // Obyek (Object)
-jarno obyekKosong yoiku Obyek anyar();
-cetakno("Obyek Kosong: " + obyekKosong);
+jarno obyekKosong yoiku Obyek anyar()
+cetakno("Obyek Kosong: " + obyekKosong)
 
 // Teks (String)
-iki iku teks yoiku Teks anyar("halo");
-cetakno("Teks Halo: " + teks);
-cetakno("Panjang Teks Halo: " + teks.length);
+iki iku teks yoiku Teks anyar("halo")
+cetakno("Teks Halo: " + teks)
+cetakno("Panjang Teks Halo: " + teks.length)
 
 // Angka (Number)
-iki iku angka yoiku Angka anyar(123);
-cetakno("Angka: " + angka);
+iki iku angka yoiku Angka anyar(123)
+cetakno("Angka: " + angka)
 
 // Logika (Boolean)
-iki iku logika yoiku Logika anyar(tenan);
-cetakno("Logika: " + logika);
+iki iku logika yoiku Logika anyar(tenan)
+cetakno("Logika: " + logika)
 
 // Simbol (Symbol)
-iki iku simbol yoiku Simbol anyar("simbol");
-cetakno("Simbol: " + simbol.toString());
+iki iku simbol yoiku Simbol anyar("simbol")
+cetakno("Simbol: " + simbol.toString())
 
 // Peta (Map)
-iki iku peta yoiku Peta anyar();
-peta.set("kunci1", "nilai1");
-cetakno("Peta: " + peta.get("kunci1"));
+iki iku peta yoiku Peta anyar()
+peta.set("kunci1", "nilai1")
+cetakno("Peta: " + peta.get("kunci1"))
 
 // Kumpulan (Set)
-iki iku kumpulan yoiku Kumpulan anyar();
-kumpulan.add(1);
-kumpulan.add(2);
-cetakno("Kumpulan punya 1: " + kumpulan.has(1));
+iki iku kumpulan yoiku Kumpulan anyar()
+kumpulan.add(1)
+kumpulan.add(2)
+cetakno("Kumpulan punya 1: " + kumpulan.has(1))
 
-// Janji (Promise)
-iki iku janji yoiku Janji anyar(gawe (resolve, reject) terus resolve(1) mbari);
-janji.then(gawe (pesan) terus cetakno("Janji: " + pesan) mbari);
+// Janji (Janji)
+iki iku janji yoiku Janji anyar(gawe (resolve, reject) terus resolve(1) mbari)
+janji.then(gawe (pesan) terus cetakno("Janji: " + pesan) mbari)
 
-// Kesalahan (Error)
-iki iku kesalahan yoiku Kesalahan anyar("error");
-cetakno("Error: " + kesalahan.message);
+// Kesalahan (Kesalahan)
+iki iku kesalahan yoiku Kesalahan anyar("error")
+cetakno("Kesalahan: " + kesalahan.message)
 
 // PolaTeks (RegExp)
-jarno polaAngka yoiku PolaTeks anyar("\\d+");
-cetakno("Pola Angka cocok dengan \"123\": " + polaAngka.test("123"));
+jarno polaAngka yoiku PolaTeks anyar("\\d+")
+cetakno("Pola Angka cocok dengan \"123\": " + polaAngka.test("123"))

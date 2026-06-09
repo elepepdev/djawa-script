@@ -1,26 +1,26 @@
-jarno umur: Angka = 30;
-jarno jeneng: Teks = "Budi";
-jarno isAktif: Logika = tenan;
+jarno umur yoiku 30
+jarno jeneng yoiku "Budi"
+jarno isAktif yoiku tenan
 
-gawe sapa(jeneng: Teks): Teks terus
-  balekno "Halo " + jeneng;
+gawe sapa(jeneng) terus
+  balekno "Halo " tambah jeneng
 mbari
 
-gawe tambah(a: Angka, b: Angka): Angka terus
-  balekno a + b;
+gawe tambah(a, b) terus
+  balekno a tambah b
 mbari
 
-jarno getUmur = (tahunLahir: Angka): Angka lakoni
-  balekno 2025 - tahunLahir;
+jarno getUmur yoiku (tahunLahir) lakoni
+  balekno 2025 kurang tahunLahir
 
-jarno cetakInfo = (pesan: Teks, jumlah: Angka): OraOno lakoni terus
-  cetakno(pesan + ": " + jumlah);
+jarno cetakInfo yoiku (pesan, jumlah) lakoni terus
+  cetakno(pesan tambah ": " tambah jumlah)
 mbari
 
-cetakno("Umur: " + umur);
-cetakno("Nama: " + jeneng);
-cetakno("Aktif: " + isAktif);
-cetakno(sapa("Dina"));
-cetakno(tambah(5, 7));
-cetakno(getUmur(1990));
-cetakInfo("Total", 100);
+cetakno("Umur: " tambah umur)
+cetakno("Nama: " tambah jeneng)
+cetakno("Aktif: " tambah isAktif)
+cetakno(sapa("Dina"))
+cetakno(tambah(5, 7))
+cetakno(getUmur(1990))
+cetakInfo("Total", 100)

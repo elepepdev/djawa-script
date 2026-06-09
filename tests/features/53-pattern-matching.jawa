@@ -1,5 +1,5 @@
 // Test: Pattern matching (cocok)
-cetakno("--- Pattern Matching (cocok) ---");
+cetakno("--- Pattern Matching (cocok) ---")
 
 gawe klasifikasi(n) terus
   cocok n
@@ -19,16 +19,16 @@ gawe urai(arr) terus
   mbari
 mbari
 
-cetakno(klasifikasi(0));
-cetakno(klasifikasi(2));
-cetakno(klasifikasi(-5));
-cetakno(klasifikasi(200));
-cetakno(klasifikasi(50));
+cetakno(klasifikasi(0))
+cetakno(klasifikasi(2))
+cetakno(klasifikasi(-5))
+cetakno(klasifikasi(200))
+cetakno(klasifikasi(50))
 
-cetakno("--- wildcard binding ---");
-cetakno("match array:");
-cetakno(urai([1, 2, 3]));
-cetakno(urai([1, 2, 3, 4, 5]));
-cetakno(urai([]));
+cetakno("--- wildcard binding ---")
+cetakno("match array:")
+cetakno(urai([1, 2, 3]))
+cetakno(urai([1, 2, 3, 4, 5]))
+cetakno(urai([]))
 
-cetakno("--- Rampung ---");
+cetakno("--- Rampung ---")

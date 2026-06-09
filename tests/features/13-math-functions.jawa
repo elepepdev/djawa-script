@@ -1,11 +1,11 @@
-// Test Math built-in functions
+// Test Mtk built-in functions
 
-cetakno("Random: " + Mtk.acak());
-cetakno("Round 3.7: " + Mtk.bunder(3.7));
-cetakno("Floor 3.7: " + Mtk.ngisor(3.7));
-cetakno("Ceil 3.2: " + Mtk.nduwur(3.2));
-cetakno("Abs -5: " + Mtk.mutlak(-5));
-cetakno("Pow 2,3: " + Mtk.pangkat(2, 3));
-cetakno("Sqrt 9: " + Mtk.oyot(9));
-cetakno("Max 1,5,2: " + Mtk.palingDhuwur(1, 5, 2));
-cetakno("Min 1,5,2: " + Mtk.palingNgisor(1, 5, 2));
+cetakno("Random: " + Mtk.acak())
+cetakno("Round 3.7: " + Mtk.bunder(3.7))
+cetakno("Floor 3.7: " + Mtk.ngisor(3.7))
+cetakno("Ceil 3.2: " + Mtk.nduwur(3.2))
+cetakno("Abs -5: " + Mtk.mutlak(-5))
+cetakno("Pow 2,3: " + Mtk.pangkat(2, 3))
+cetakno("Sqrt 9: " + Mtk.oyot(9))
+cetakno("Max 1,5,2: " + Mtk.palingDhuwur(1, 5, 2))
+cetakno("Min 1,5,2: " + Mtk.palingNgisor(1, 5, 2))

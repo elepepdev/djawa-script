@@ -1,21 +1,21 @@
 // Test: Pasten inline assertion
-cetakno("--- Pasten (Assertion) ---");
+cetakno("--- Pasten (Assertion) ---")
 
-pasten(2 + 2 == 4, "matematika tetep");
-pasten("hello" + "world" == "helloworld", "string concat");
+pasten(2 + 2 podo 4, "matematika tetep")
+pasten("hello" + "world" podo "helloworld", "string concat")
 
 gawe jodohaken(a, b) terus
-  pastenPodo(a, b, "argumen kudu podo");
+  pastenPodo(a, b, "argumen kudu podo")
   balekno "cocok"
 mbari
 
-cetakno(jodohaken(1, 1));
+cetakno(jodohaken(1, 1))
 
 gawe jodahHasil(n) terus
-  pasten(n >= 0, "n kudu non-negatif");
+  pasten(n luwihGedhePodo 0, "n kudu non-negatif")
   balekno n * 2
 mbari
 
-cetakno(jodahHasil(5));
+cetakno(jodahHasil(5))
 
-cetakno("--- Rampung ---");
+cetakno("--- Rampung ---")

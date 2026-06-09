@@ -27,7 +27,7 @@ mbari
 jarno b yoiku anyar Box(42)
 cetakno("box:", b.value)
 
-// Test 4: Struct is frozen (cannot add new fields)
+// Test 4: Struct is frozen (cannot add anyar fields)
 jarno p2 yoiku anyar Titik(1, 2)
 cetakno("p2.x:", p2.x)
 cetakno("p2.y:", p2.y)

@@ -106,7 +106,7 @@ djawa run hello.jawa
 
 ### Code Blocks: `terus` & `mbari`
 
-JPL is a **block-based** language. Every code block — whether for a function, loop, or conditional — must open with `terus` and close with `mbari`. Think of them as the `{` and `}` of JPL.
+JPL is a **block-based** language. Every code block — whether for a function, loop, or conditional — must open with `terus` and close with `mbari`. Think of them as the `terus` and `mbari` of JPL.
 
 ```jawascript
 lek (tenan) terus
@@ -143,12 +143,12 @@ age yoiku age tambah 1  // age is now 26
 
 ### Destructuring
 
-Unpack values from objects or arrays into variables using the same `{ }` and `[ ]` syntax.
+Unpack values from objects or arrays into variables using the same `terus mbari` and `[ ]` syntax.
 
 **Object destructuring:**
 ```jawascript
-jarno user yoiku { name: "Budi", age: 30 }
-jarno { name, age } yoiku user
+jarno user yoiku terus name: "Budi", age: 30 mbari
+jarno terus name, age mbari yoiku user
 cetakno(name)  // Output: Budi
 cetakno(age)   // Output: 30
 ```
@@ -163,7 +163,7 @@ cetakno(b)  // Output: 2
 
 **Destructuring with default values and renaming:**
 ```jawascript
-jarno { name, city dadi kutha } yoiku { name: "Budi" }
+jarno terus name, city dadi kutha mbari yoiku terus name: "Budi" mbari
 cetakno(kutha)  // Output: undefined (no default)
 jarno [x, y yoiku 5] yoiku [1]
 cetakno(y)  // Output: 5
@@ -242,9 +242,9 @@ JPL supports an **optional static type system** similar to TypeScript. Adding ty
 
 ```jawascript
 // Variable declarations with types
-jarno age: Angka = 30
-iki iku name: Teks = "Budi"
-jarno isActive: Logika = tenan
+jarno umur yoiku 30
+iki iku jeneng yoiku "Budi"
+jarno isAktif yoiku tenan
 
 // Function parameters and return types
 gawe greet(name: Teks): Teks terus
@@ -308,7 +308,7 @@ cetakno(status)  // Output: Adult
 **`for` loop — `kanggo`**
 
 ```jawascript
-kanggo (jarno i yoiku 0; i luwihCilik 5; i++) terus
+kanggo (jarno i yoiku 0 banjur i luwihCilik 5 banjur i yoiku i tambah 1) terus
   cetakno(i)
 mbari
 // Output: 0 1 2 3 4
@@ -320,7 +320,7 @@ mbari
 jarno count yoiku 0
 selagi (count luwihCilik 3) terus
   cetakno(count)
-  count++
+  count tambah 1
 mbari
 ```
 
@@ -332,7 +332,7 @@ The block runs at least once, even if the condition is false from the start.
 jarno count yoiku 0
 lakoni terus
   cetakno("Count: " tambah count)
-  count++
+  count tambah 1
 mbari selagi (count luwihCilik 3)
 ```
 
@@ -341,7 +341,7 @@ mbari selagi (count luwihCilik 3)
 Iterates over the **keys** (property names) of an object.
 
 ```jawascript
-iki iku user yoiku { name: 'Sastro', age: 30, city: 'Jogja' }
+iki iku user yoiku terus name: 'Sastro', age: 30, city: 'Jogja' mbari
 
 kanggo (iki iku key ing user) terus
   cetakno(key tambah ": " tambah user[key])
@@ -428,7 +428,7 @@ A shorter function syntax equivalent to JavaScript's `=>` arrow functions.
 
 ```jawascript
 // Single-line (implicit return)
-// JS: const multiply = (a, b) => a * b;
+// JS: const multiply = (a, b) => a * b
 iki iku multiply yoiku (a, b) lakoni a ping b
 cetakno(multiply(7, 8))  // Output: 56
 
@@ -452,7 +452,7 @@ Use `...` to collect remaining arguments (rest) or expand iterables (spread).
 **Rest parameters:**
 ```jawascript
 gawe sum(...numbers) terus
-  balekno numbers.kurangi((a, b) dadi a + b, 0)
+  balekno numbers.kurangi((a, b) dadi a tambah b, 0)
 mbari
 cetakno(sum(1, 2, 3))  // Output: 6
 ```
@@ -474,7 +474,7 @@ Use `tenangan` to declare a generator and `asilno` (`yield`) to pause and return
 gawe tenangan idGenerator() terus
   jarno id yoiku 0
   selagi (tenan) terus
-    asilno id++
+    asilno id tambah 1
   mbari
 mbari
 
@@ -582,8 +582,8 @@ mbari
 iki iku a yoiku 10
 iki iku b yoiku 4
 
-jarno result yoiku a tambah b  // -> 14
-cetakno(2 pangkat 3)           // -> 8
+jarno result yoiku a tambah b  // > 14
+cetakno(2 pangkat 3)           // > 8
 
 lek (result luwihGedhe 10 lan ora (a podo 0)) terus
   cetakno("Result is greater than 10 and a is not 0")
@@ -591,7 +591,7 @@ mbari
 
 jarno myScore yoiku 100
 myScore kurangKaro 10
-cetakno(myScore)  // -> 90
+cetakno(myScore)  // > 90
 ```
 
 ### Special Operators
@@ -618,12 +618,12 @@ cetakno(myCar ikuJinise Car)  // Output: tenan
 cetakno(tipene "hello")  // Output: string
 
 // hapusen (delete)
-jarno obj yoiku { a: 1, b: 2 }
+jarno obj yoiku terus a: 1, b: 2 mbari
 hapusen obj.a
 cetakno(obj.a)  // Output: oraDidefinisikan
 
 // ing (in)
-jarno person yoiku { name: "Budi", age: 30 }
+jarno person yoiku terus name: "Budi", age: 30 mbari
 cetakno("name" ing person)     // Output: tenan
 cetakno("address" ing person)  // Output: gak
 ```
@@ -633,7 +633,7 @@ cetakno("address" ing person)  // Output: gak
 Safely access deeply nested properties without causing an error if any part of the chain is `null` or `undefined`. Equivalent to JavaScript's `?.` operator.
 
 ```jawascript
-iki iku user yoiku { name: 'Sastro', address: { street: 'Jl. Kenangan' } }
+iki iku user yoiku terus name: 'Sastro', address: terus street: 'Jl. Kenangan' mbari mbari
 iki iku emptyUser yoiku kosong
 
 // Safe access — works fine
@@ -693,7 +693,7 @@ cetakno(a geserTengen 1)  // Output: 2  (0010)
 
 ### Null/Undefined Checks: `iku ono` & `iku ilang`
 
-JPL provides readable keywords to check whether a variable exists or is missing — no need to write `=== null || === undefined`.
+JPL provides readable keywords to check whether a variable exists or is missing — no need to write `plek null || plek undefined`.
 
 | Expression | Meaning |
 | :--- | :--- |
@@ -792,8 +792,8 @@ Javanese-flavored aliases for array iteration methods.
 
 ```jawascript
 iki iku nums yoiku [1, 2, 3, 4, 5]
-cetakno(nums.kurangi((a, b) dadi a + b, 0))  // Output: 15
-cetakno(nums.temokake(x dadi x > 3))          // Output: 4
+cetakno(nums.kurangi((a, b) dadi a tambah b, 0))  // Output: 15
+cetakno(nums.temokake(x dadi x luwihGedhe 3))          // Output: 4
 ```
 
 ### RegExp Literal
@@ -816,7 +816,7 @@ cacah Werna yoiku
   abang,
   ijo,
   kuning,
-  biru = 10,
+  biru yoiku 10,
   ungu
 mbari
 
@@ -835,9 +835,9 @@ Branch on a value with structured patterns. Supports literal values, bindings, w
 cocok data terus
   kalo 0 dadi cetakno("nol")
   kalo 1, 2, 3 dadi cetakno("siji-siji")
-  kalo x ngendi x < 0 dadi cetakno("negatif: " + x)
-  kalo [1, ...sisa] dadi cetakno("kaping siji: 1, sisa: " + sisa)
-  kalo { jeneng, umur } dadi cetakno("jeneng: " + jeneng + ", umur: " + umur)
+  kalo x ngendi x luwihCilik 0 dadi cetakno("negatif: " tambah x)
+  kalo [1, ...sisa] dadi cetakno("kaping siji: 1, sisa: " tambah sisa)
+  kalo terus jeneng, umur mbari dadi cetakno("jeneng: " tambah jeneng tambah ", umur: " tambah umur)
   kalo _ dadi cetakno("liyane")
 mbari
 ```
@@ -849,8 +849,8 @@ The `_` wildcard matches anything without binding.
 Verify conditions and values inline. Failed assertions throw an error with a Javanese message.
 
 ```jawascript
-pasten(1 + 1 plek 2)                                    // passes silently
-pasten(1 + 1 plek 3, "matematika dasar")               // throws "pasten gagal: matematika dasar"
+pasten(1 tambah 1 plek 2)                                    // passes silently
+pasten(1 tambah 1 plek 3, "matematika dasar")               // throws "pasten gagal: matematika dasar"
 pastenPodo([1, 2, 3], [1, 2, 3])                        // deep-equality check
 pastenPodo(aktual, dikarepake, "login kudu balikake token")  // custom message
 ```
@@ -867,9 +867,9 @@ Following the philosophy of **"speaking to the computer directly"**, parentheses
 
 | Construct | With parentheses | Without parentheses |
 | :--- | :--- | :--- |
-| `lek` (if) | `lek (x > 0) terus ...` | `lek x > 0 terus ...` |
-| `lek misale` (else if) | `lek misale (x > 0) terus ...` | `lek misale x > 0 terus ...` |
-| `selagi` (while) | `selagi (x < 10) terus ...` | `selagi x < 10 terus ...` |
+| `lek` (if) | `lek (x luwihGedhe 0) terus ...` | `lek x luwihGedhe 0 terus ...` |
+| `lek misale` (else if) | `lek misale (x luwihGedhe 0) terus ...` | `lek misale x luwihGedhe 0 terus ...` |
+| `selagi` (while) | `selagi (x luwihCilik 10) terus ...` | `selagi x luwihCilik 10 terus ...` |
 | `pilih` (switch) | `pilih (x) terus ... mbari` | `pilih x terus ... mbari` |
 | `cetakno` (print) | `cetakno a, b, c` | `cetakno a, b, c` |
 | `cetakno` (1 arg) | `cetakno (x)` | `cetakno x` |
@@ -879,7 +879,7 @@ Following the philosophy of **"speaking to the computer directly"**, parentheses
 
 ```jawascript
 // lek without parentheses
-lek umur >= 17 terus
+lek umur luwihGedhePodo 17 terus
   cetakno("Dewasa")
 mbari
 
@@ -890,14 +890,14 @@ cetakno "halo", "dunia", "!"
 cobak terus
   uncalen "ada kesalahan"
 mbari nyekel e terus
-  cetakno "error: " + e
+  cetakno "error: " tambah e
 mbari
 
 // Mixed styles are valid in the same file
-jarno skor = 85
-lek (skor >= 90) terus
+jarno skor yoiku 85
+lek (skor luwihGedhePodo 90) terus
   cetakno("A")
-mbari lek misale skor >= 80 terus
+mbari lek misale skor luwihGedhePodo 80 terus
   cetakno("B")
 mbari
 ```
@@ -908,9 +908,9 @@ To keep the parser simple and unambiguous, parentheses remain **required** for:
 
 - Function declarations: `gawe nama (a, b) terus ... mbari` (multi-param, destructuring)
 - Arrow functions: `(x, y) lakoni ...`
-- C-style `for`: `kanggo (i = 0; i < 10; i = i + 1) terus ...`
+- C-style `for`: `kanggo (i yoiku 0 banjur i luwihCilik 10 banjur i yoiku i tambah 1) terus ...`
 - Function call expressions: `f (a, b)`, `tuple (a, b)`, `takon (msg)`, `new Foo (a, b)`
-- Grouping expressions: `(a + b)`
+- Grouping expressions: `(a tambah b)`
 
 ---
 
@@ -941,7 +941,7 @@ mbari
 
 kelas Bunder turunan soko Bentuk terus
   gawe area() terus
-    balekno Mtk.PI * iki.r * iki.r
+    balekno Mtk.PI ping iki.r ping iki.r
   mbari
 mbari
 
@@ -959,7 +959,7 @@ wangun Shape terus
 mbari
 
 kelas Circle nurut Shape terus
-  gawe area() terus balekno Mtk.PI * iki.r * iki.r mbari
+  gawe area() terus balekno Mtk.PI ping iki.r ping iki.r mbari
 mbari
 
 jarno c yoiku anyar Circle(5)
@@ -984,8 +984,8 @@ cetakno(p.x)  // Output: 3
 Attach a label to a statement to use with `mandek` (break) or `lanjutno` (continue) for nested loops.
 
 ```jawascript
-luar: kanggo (jarno i yoiku 0; i < 3; i++) terus
-  jero: kanggo (jarno j yoiku 0; j < 3; j++) terus
+luar: kanggo (jarno i yoiku 0 banjur i luwihCilik 3 banjur i yoiku i tambah 1) terus
+  jero: kanggo (jarno j yoiku 0 banjur j luwihCilik 3 banjur j tambah 1) terus
     lek (i plek 1 lan j plek 1) terus
       mandek luar  // breaks out of both loops
     mbari
@@ -1017,14 +1017,14 @@ Tag a template literal with a function to process the template parts.
 ```jawascript
 gawe upper(strings, ...values) terus
   jarno result yoiku ""
-  kanggo (jarno i yoiku 0; i < values.length; i++) terus
-    result += strings[i] + String(values[i]).gedekno()
+  kanggo (jarno i yoiku 0 banjur i luwihCilik values.length banjur i yoiku i tambah 1) terus
+    result tambahKaro strings[i] tambah Teks(values[i]).gedekno()
   mbari
-  balekno result + strings[strings.length - 1]
+  balekno result tambah strings[strings.length kurang 1]
 mbari
 
 iki iku name yoiku "Java"
-cetakno(upper`Hello ${name}!`)  // Output: Hello JAVA!
+cetakno(upper`Hello $terusnamembari!`)  // Output: Hello JAVA!
 ```
 
 ---
@@ -1144,7 +1144,7 @@ JPL supports ES-style modules for organizing code across multiple files.
 
 | Keyword | JavaScript Equivalent | Description |
 | :--- | :--- | :--- |
-| `metokno { name }` | `export { name }` | Export a named value |
+| `metokno terus name mbari` | `export terus name mbari` | Export a named value |
 | `metokno biasane value` | `export default value` | Export a default value |
 | `jupukno ... soko '...'` | `import ... from '...'` | Import from a file |
 | `biasane` | `default` | Used for default import/export |
@@ -1158,13 +1158,13 @@ mbari
 
 iki iku VERSION yoiku "1.0"
 
-metokno { greet }          // Named export
+metokno terus greet mbari          // Named export
 metokno biasane VERSION    // Default export
 ```
 
 **`app.jawa`**
 ```jawascript
-jupukno biasane appVersion, { greet dadi sayHello } soko './util.js'
+jupukno biasane appVersion, terus greet dadi sayHello mbari soko './util.js'
 
 cetakno("Version:", appVersion)   // Output: Version: 1.0
 cetakno(sayHello("Doni"))         // Output: Welcome, Doni
@@ -1207,34 +1207,34 @@ Advanced metaprogramming is supported through `Perantara` (Proxy) and `Pantulan`
 | `Pantulan.bangun` | `Reflect.construct` | Construct a new object |
 
 ```jawascript
-iki iku target yoiku { message: 'Hello World', value: 100 }
+iki iku target yoiku terus message: 'Hello World', value: 100 mbari
 
-iki iku handler yoiku {
+iki iku handler yoiku terus
   // Intercept property reads
   jupuk: gawe(obj, prop) terus
-    cetakno(`Getting: "${prop}"`)
+    cetakno(`Getting: "$teruspropmbari"`)
     balekno Pantulan.jupuk(obj, prop)
   mbari,
 
   // Intercept property writes
   pasang: gawe(obj, prop, value) terus
-    cetakno(`Setting "${prop}" to "${value}"`)
+    cetakno(`Setting "$teruspropmbari" to "$terusvaluembari"`)
     lek (prop plek 'value' lan tipene value ora plek 'number') terus
       uncalen anyar Kesalahan('Value must be a number!')
     mbari
     balekno Pantulan.pasang(obj, prop, value)
   mbari
-}
+mbari
 
 iki iku p yoiku anyar Perantara(target, handler)
 
-cetakno(p.message)  // -> Getting: "message" -> Hello World
-p.value yoiku 200   // -> Setting "value" to "200"
+cetakno(p.message)  // > Getting: "message" > Hello World
+p.value yoiku 200   // > Setting "value" to "200"
 
 cobak terus
   p.value yoiku 'text'
 mbari nyekel (e) terus
-  cetakno('Error: ' tambah e.message)  // -> Error: Value must be a number!
+  cetakno('Error: ' tambah e.message)  // > Error: Value must be a number!
 mbari
 ```
 
@@ -1287,15 +1287,15 @@ You can create new instances using either `ClassName anyar()` or `anyar ClassNam
 jarno list yoiku Daftar anyar()
 cetakno(list)  // Output: []
 
-iki iku obj1 yoiku { a: 1 }
-iki iku obj2 yoiku { b: 2 }
-iki iku merged yoiku Obyek.wenehno({}, obj1, obj2)
-cetakno(JSON.tulisan(merged))  // Output: {"a":1,"b":2}
+iki iku obj1 yoiku terus a: 1 mbari
+iki iku obj2 yoiku terus b: 2 mbari
+iki iku merged yoiku Obyek.wenehno(terusmbari, obj1, obj2)
+cetakno(JSON.tulisan(merged))  // Output: terus"a":1,"b":2mbari
 cetakno(Obyek.kunci(merged))         // Output: ['a', 'b']
 
 // Symbol — creates a unique key that won't collide with other properties
 iki iku uid yoiku Simbol('id')
-iki iku user yoiku { name: 'Slamet' }
+iki iku user yoiku terus name: 'Slamet' mbari
 user[uid] yoiku '987-xyz'
 cetakno(Obyek.kunci(user))  // Output: ['name'] (Symbol keys are hidden)
 cetakno(user[uid])          // Output: 987-xyz

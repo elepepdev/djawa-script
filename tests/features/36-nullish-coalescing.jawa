@@ -1,15 +1,15 @@
-cetakno('--- Tes Nullish Coalescing Operator ---');
+cetakno('--- Tes Nullish Coalescing Operator ---')
 
-iki iku nilaiNol yoiku 0;
-iki iku nilaiKosong yoiku kosong;
-iki iku nilaiOraDidefinisikan yoiku oraDidefinisikan;
-iki iku nilaiTeksKosong yoiku '';
+iki iku nilaiNol yoiku 0
+iki iku nilaiKosong yoiku kosong
+iki iku nilaiOraDidefinisikan yoiku oraDidefinisikan
+iki iku nilaiTeksKosong yoiku ''
 
 // Hanya jika null atau undefined
-cetakno('Nilai Nol utowoYenKosong 10:', nilaiNol utowoYenKosong 10); // Output: 0
-cetakno('Nilai Kosong utowoYenKosong 10:', nilaiKosong utowoYenKosong 10); // Output: 10
-cetakno('Nilai OraDidefinisikan utowoYenKosong 10:', nilaiOraDidefinisikan utowoYenKosong 10); // Output: 10
-cetakno('Nilai Teks Kosong utowoYenKosong 10:', nilaiTeksKosong utowoYenKosong 10); // Output: ''
+cetakno('Nilai Nol utowoYenKosong 10:', nilaiNol utowoYenKosong 10) // Output: 0
+cetakno('Nilai Kosong utowoYenKosong 10:', nilaiKosong utowoYenKosong 10) // Output: 10
+cetakno('Nilai OraDidefinisikan utowoYenKosong 10:', nilaiOraDidefinisikan utowoYenKosong 10) // Output: 10
+cetakno('Nilai Teks Kosong utowoYenKosong 10:', nilaiTeksKosong utowoYenKosong 10) // Output: ''
 
 // Perbandingan dengan OR (utawa)
-cetakno('Nilai Nol utawa 10:', nilaiNol utawa 10); // Output: 10 (karena 0 dianggap falsy)
+cetakno('Nilai Nol utawa 10:', nilaiNol utawa 10) // Output: 10 (karena 0 dianggap falsy)

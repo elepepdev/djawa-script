@@ -1,28 +1,28 @@
-cetakno('--- Tes Rest & Spread Syntax ---');
+cetakno('--- Tes Rest & Spread Syntax ---')
 
 // 1. Rest Parameters di Fungsi
 gawe itungTotal(...angka) terus
-  balekno angka.suda((total, n) lakoni total tambah n, 0);
+  balekno angka.suda((total, n) lakoni total tambah n, 0)
 mbari
-cetakno('Hasil Rest Params (1+2+3+4):', itungTotal(1, 2, 3, 4));
+cetakno('Hasil Rest Params (1+2+3+4):', itungTotal(1, 2, 3, 4))
 
 // 2. Spread Syntax di Array
-iki iku arr1 yoiku [1, 2];
-iki iku arr2 yoiku [...arr1, 3, 4];
-cetakno('Hasil Spread Array:', arr2);
+iki iku arr1 yoiku [1, 2]
+iki iku arr2 yoiku [...arr1, 3, 4]
+cetakno('Hasil Spread Array:', arr2)
 
 // 3. Spread Syntax di Objek
-iki iku obj1 yoiku { a: 1, b: 2 };
-iki iku obj2 yoiku { ...obj1, c: 3 };
-cetakno('Hasil Spread Objek (c):', obj2.c);
+iki iku obj1 yoiku terus a: 1, b: 2 mbari
+iki iku obj2 yoiku terus ...obj1, c: 3 mbari
+cetakno('Hasil Spread Objek (c):', obj2.c)
 
 // 4. Rest di Array Destructuring
-iki iku [siji, loro, ...sisane] yoiku [10, 20, 30, 40, 50];
-cetakno('Rest di Array (siji):', siji);
-cetakno('Rest di Array (sisane):', sisane);
+iki iku [siji, loro, ...sisane] yoiku [10, 20, 30, 40, 50]
+cetakno('Rest di Array (siji):', siji)
+cetakno('Rest di Array (sisane):', sisane)
 
 // 5. Rest di Object Destructuring
-iki iku pengguna yoiku { jeneng: 'Sastro', umur: 30, kota: 'Jogja' };
-iki iku { jeneng, ...infoLiyane } yoiku pengguna;
-cetakno('Rest di Objek (jeneng):', jeneng);
-cetakno('Rest di Objek (infoLiyane.kota):', infoLiyane.kota);
+iki iku pengguna yoiku terus jeneng: 'Sastro', umur: 30, kota: 'Jogja' mbari
+iki iku terus jeneng, ...infoLiyane mbari yoiku pengguna
+cetakno('Rest di Objek (jeneng):', jeneng)
+cetakno('Rest di Objek (infoLiyane.kota):', infoLiyane.kota)

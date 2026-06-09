@@ -1,18 +1,18 @@
 // Test: Async Iterator (kanggo tenangan ... soko ...)
-cetakno("--- Async Iterator ---");
+cetakno("--- Async Iterator ---")
 
 // Build an async iterable
-jarno asyncRange yoiku {}
+jarno asyncRange yoiku terusmbari
 jarno i yoiku 0
 jarno nextFn yoiku () lakoni terus
   i yoiku i + 1
-  lek i <= 3 terus
-    balekno { value: i * 10, done: gak }
+  lek i <yoiku 3 terus
+    balekno terus value: i * 10, done: gak mbari
   mbari
-  balekno { done: tenan }
+  balekno terus done: tenan mbari
 mbari
-jarno iterObj yoiku { next: nextFn }
-asyncRange[Simbol.asyncIterator] = () lakoni terus
+jarno iterObj yoiku terus next: nextFn mbari
+asyncRange[Simbol.asyncIterator] yoiku () lakoni terus
   balekno iterObj
 mbari
 
@@ -28,14 +28,14 @@ cetakno("--- after async for-of ---")
 jarno step yoiku 0
 jarno nextFn2 yoiku () lakoni terus
   step yoiku step + 1
-  lek step <= 2 terus
-    balekno { value: "data-" + step, done: gak }
+  lek step <yoiku 2 terus
+    balekno terus value: "data-" + step, done: gak mbari
   mbari
-  balekno { done: tenan }
+  balekno terus done: tenan mbari
 mbari
-jarno stringIter yoiku {}
-jarno iterObj2 yoiku { next: nextFn2 }
-stringIter[Simbol.asyncIterator] = () lakoni terus
+jarno stringIter yoiku terusmbari
+jarno iterObj2 yoiku terus next: nextFn2 mbari
+stringIter[Simbol.asyncIterator] yoiku () lakoni terus
   balekno iterObj2
 mbari
 

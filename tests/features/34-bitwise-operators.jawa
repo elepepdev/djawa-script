@@ -1,12 +1,12 @@
-cetakno('--- Tes Bitwise Operators ---');
+cetakno('--- Tes Bitwise Operators ---')
 
-iki iku a yoiku 5; // Binary: 0101
-iki iku b yoiku 3; // Binary: 0011
+iki iku a yoiku 5 // Binary: 0101
+iki iku b yoiku 3 // Binary: 0011
 
-cetakno('a lanbit b:', a lanbit b); // 1 (0001)
-cetakno('a utawabit b:', a utawabit b); // 7 (0111)
-cetakno('a xor b:', a xor b); // 6 (0110)
-cetakno('walik a:', walik a); // -6 (Binary: 11111111111111111111111111111010)
+cetakno('a lanbit b:', a lanbit b) // 1 (0001)
+cetakno('a utawabit b:', a utawabit b) // 7 (0111)
+cetakno('a xor b:', a xor b) // 6 (0110)
+cetakno('walik a:', walik a) // -6 (Binary: 11111111111111111111111111111010)
 
-cetakno('a geserKiwo 1:', a geserKiwo 1); // 10 (1010)
-cetakno('a geserTengen 1:', a geserTengen 1); // 2 (0010)
+cetakno('a geserKiwo 1:', a geserKiwo 1) // 10 (1010)
+cetakno('a geserTengen 1:', a geserTengen 1) // 2 (0010)

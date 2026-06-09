@@ -1,21 +1,21 @@
 // Test for lakoni (do...while) loop
 
-jarno hitung yoiku 0;
+jarno hitung yoiku 0
 
-cetakno("Mulai do...while loop:");
+cetakno("Mulai do...while loop:")
 lakoni terus
-  cetakno("Hitungan: " tambah hitung);
-  hitung tambahKaro 1;
-mbari selagi (hitung luwihCilik 3);
+  cetakno("Hitungan: " tambah hitung)
+  hitung tambahKaro 1
+mbari selagi (hitung luwihCilik 3)
 
-cetakno("Selesai do...while loop.");
+cetakno("Selesai do...while loop.")
 
 // Test do...while with condition that is initially false (should run once)
-jarno x yoiku 5;
-cetakno("Mulai do...while loop (kondisi salah):");
+jarno x yoiku 5
+cetakno("Mulai do...while loop (kondisi salah):")
 lakoni terus
-  cetakno("Nilai x: " tambah x);
-  x tambahKaro 1;
-mbari selagi (x luwihCilik 5);
+  cetakno("Nilai x: " tambah x)
+  x tambahKaro 1
+mbari selagi (x luwihCilik 5)
 
-cetakno("Selesai do...while loop (kondisi salah).");
+cetakno("Selesai do...while loop (kondisi salah).")

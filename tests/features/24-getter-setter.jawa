@@ -1,22 +1,22 @@
 // Test for getters and setters
 
-kelas Box {
-  wujudno(width, height) {
-    iki._width = width;
-    iki._height = height;
-  }
+kelas Box terus
+  wujudno(width, height) terus
+    iki._width yoiku width
+    iki._height yoiku height
+  mbari
 
-  entuk area {
-    balekno iki._width ping iki._height;
-  }
+  entuk area terus
+    balekno iki._width ping iki._height
+  mbari
 
-  pasang size(value) {
-    iki._width = value;
-    iki._height = value;
-  }
-}
+  pasang size(value) terus
+    iki._width yoiku value
+    iki._height yoiku value
+  mbari
+mbari
 
-jarno myBox = Box anyar(5, 10);
-cetakno("Area: " + myBox.area); // Should use getter
-myBox.size = 7; // Should use setter
-cetakno("New Area: " + myBox.area); // Should use getter
+jarno myBox yoiku Box anyar(5, 10)
+cetakno("Area: " + myBox.area) // Should use getter
+myBox.size yoiku 7 // Should use setter
+cetakno("New Area: " + myBox.area) // Should use getter

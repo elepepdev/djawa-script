@@ -1,19 +1,19 @@
-cetakno('--- Tes Fitur Khas `ono` & `ilang` ---');
+cetakno('--- Tes Fitur Khas `ono` & `ilang` ---')
 
-jarno variabelKosong yoiku kosong;
-jarno variabelOraDidefinisikan yoiku oraDidefinisikan;
-jarno variabelAngkaNol yoiku 0;
-jarno variabelTeksKosong yoiku '';
-jarno variabelFalse yoiku gak;
-jarno variabelOno yoiku "Isine ono";
+jarno variabelKosong yoiku kosong
+jarno variabelOraDidefinisikan yoiku oraDidefinisikan
+jarno variabelAngkaNol yoiku 0
+jarno variabelTeksKosong yoiku ''
+jarno variabelFalse yoiku gak
+jarno variabelOno yoiku "Isine ono"
 
-cetakno('\n-- Tes `iku ilang` --');
-lek (variabelKosong iku ilang) terus cetakno('variabelKosong beneran ilang'); mbari
-lek (variabelOraDidefinisikan iku ilang) terus cetakno('variabelOraDidefinisikan beneran ilang'); mbari
-lek (variabelAngkaNol iku ilang) terus cetakno('variabelAngkaNol dianggep ilang'); mbari liyane terus cetakno('variabelAngkaNol dianggep ONO'); mbari
+cetakno('\n-- Tes `iku ilang` --')
+lek (variabelKosong iku ilang) terus cetakno('variabelKosong beneran ilang') mbari
+lek (variabelOraDidefinisikan iku ilang) terus cetakno('variabelOraDidefinisikan beneran ilang') mbari
+lek (variabelAngkaNol iku ilang) terus cetakno('variabelAngkaNol dianggep ilang') mbari liyane terus cetakno('variabelAngkaNol dianggep ONO') mbari
 
-cetakno('\n-- Tes `iku ono` --');
-lek (variabelOno iku ono) terus cetakno('variabelOno beneran ono'); mbari
-lek (variabelTeksKosong iku ono) terus cetakno('variabelTeksKosong beneran ono'); mbari
-lek (variabelFalse iku ono) terus cetakno('variabelFalse beneran ono'); mbari
-lek (variabelKosong iku ono) terus cetakno('variabelKosong dianggep ono'); mbari liyane terus cetakno('variabelKosong dianggep ILANG'); mbari
+cetakno('\n-- Tes `iku ono` --')
+lek (variabelOno iku ono) terus cetakno('variabelOno beneran ono') mbari
+lek (variabelTeksKosong iku ono) terus cetakno('variabelTeksKosong beneran ono') mbari
+lek (variabelFalse iku ono) terus cetakno('variabelFalse beneran ono') mbari
+lek (variabelKosong iku ono) terus cetakno('variabelKosong dianggep ono') mbari liyane terus cetakno('variabelKosong dianggep ILANG') mbari

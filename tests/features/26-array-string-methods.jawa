@@ -1,55 +1,55 @@
-cetakno('--- Tes Array Methods ---');
-iki iku daftarAngka = [5, 1, 4, 2, 8];
-cetakno('Daftar asli:', daftarAngka);
-cetakno('Dawane:', daftarAngka.dawane);
+cetakno('--- Tes Array Methods ---')
+iki iku daftarAngka yoiku [5, 1, 4, 2, 8]
+cetakno('Daftar asli:', daftarAngka)
+cetakno('Dawane:', daftarAngka.dawane)
 
-cetakno('Ngemot angka 4?', daftarAngka.ngemot(4));
-cetakno('Indeks saka angka 4:', daftarAngka.indeksSaka(4));
+cetakno('Ngemot angka 4?', daftarAngka.ngemot(4))
+cetakno('Indeks saka angka 4:', daftarAngka.indeksSaka(4))
 
-daftarAngka.dorong(10); // push
-cetakno('Sakwise didorong 10:', daftarAngka);
+daftarAngka.dorong(10) // push
+cetakno('Sakwise didorong 10:', daftarAngka)
 
-cetakno('Sing dijupuk pungkasan:', daftarAngka.jupukPungkasan()); // pop
-cetakno('Daftar saiki:', daftarAngka);
+cetakno('Sing dijupuk pungkasan:', daftarAngka.jupukPungkasan()) // pop
+cetakno('Daftar saiki:', daftarAngka)
 
-iki iku daftarKanggoUrut = daftarAngka.iris(); // slice to copy
-cetakno('Daftar urut:', daftarKanggoUrut.urutake((a, b) lakoni a kurang b));
+iki iku daftarKanggoUrut yoiku daftarAngka.iris() // slice to copy
+cetakno('Daftar urut:', daftarKanggoUrut.urutake((a, b) lakoni a kurang b))
 
-iki iku daftarKanggoWalik = daftarAngka.iris(); // slice to copy
-cetakno('Daftar diwalik:', daftarKanggoWalik.walik());
+iki iku daftarKanggoWalik yoiku daftarAngka.iris() // slice to copy
+cetakno('Daftar diwalik:', daftarKanggoWalik.walik())
 
-cetakno('Disambungake dadi teks:', daftarAngka.sambungake(' - '));
+cetakno('Disambungake dadi teks:', daftarAngka.sambungake(' - '))
 
-cetakno('Disaring (luwih gedhe teko 4):', daftarAngka.saring(x lakoni x luwihGedhe 4));
+cetakno('Disaring (luwih gedhe teko 4):', daftarAngka.saring(x lakoni x luwihGedhe 4))
 
-cetakno('Dipetakake (ping 2):', daftarAngka.petakake(x lakoni x ping 2));
+cetakno('Dipetakake (ping 2):', daftarAngka.petakake(x lakoni x ping 2))
 
-cetakno('Ana sing luwih gedhe teko 5?', daftarAngka.ana(x lakoni x luwihGedhe 5));
-cetakno('Kabeh luwih cilik teko 10?', daftarAngka.kabeh(x lakoni x luwihCilik 10));
+cetakno('Ana sing luwih gedhe teko 5?', daftarAngka.ana(x lakoni x luwihGedhe 5))
+cetakno('Kabeh luwih cilik teko 10?', daftarAngka.kabeh(x lakoni x luwihCilik 10))
 
 
-cetakno('\n--- Tes String Methods ---');
-iki iku teksAsli = '   Jawascript iku Keren!   ';
-cetakno('Teks asli:', teksAsli);
-cetakno('Dawane:', teksAsli.dawane);
+cetakno('\n--- Tes String Methods ---')
+iki iku teksAsli yoiku '   Jawascript iku Keren!   '
+cetakno('Teks asli:', teksAsli)
+cetakno('Dawane:', teksAsli.dawane)
 
-iki iku teksRapik = teksAsli.rapikno();
-cetakno('Teks dirapikno:', teksRapik);
-cetakno('Dawane sakwise rapi:', teksRapik.dawane);
+iki iku teksRapik yoiku teksAsli.rapikno()
+cetakno('Teks dirapikno:', teksRapik)
+cetakno('Dawane sakwise rapi:', teksRapik.dawane)
 
-cetakno('Digedekno:', teksRapik.gedekno());
-cetakno('Dicilikno:', teksRapik.cilikno());
+cetakno('Digedekno:', teksRapik.gedekno())
+cetakno('Dicilikno:', teksRapik.cilikno())
 
-cetakno('Dimulai karo "Jawa"?', teksRapik.dimulaiKaro('Jawa'));
-cetakno('Diakhiri karo "Keren!"?', teksRapik.diakhiriKaro('Keren!'));
-cetakno('Ngemot "iku"?', teksRapik.ngemot('iku'));
+cetakno('Dimulai karo "Jawa"?', teksRapik.dimulaiKaro('Jawa'))
+cetakno('Diakhiri karo "Keren!"?', teksRapik.diakhiriKaro('Keren!'))
+cetakno('Ngemot "iku"?', teksRapik.ngemot('iku'))
 
-iki iku teksAnyar = teksRapik.gantien('Keren', 'Mantep');
-cetakno('Sakwise diganti:', teksAnyar);
+iki iku teksAnyar yoiku teksRapik.gantien('Keren', 'Mantep')
+cetakno('Sakwise diganti:', teksAnyar)
 
-iki iku teksIrisan = teksAnyar.iris(0, 10);
-cetakno('Irisan (0, 10):', teksIrisan);
+iki iku teksIrisan yoiku teksAnyar.iris(0, 10)
+cetakno('Irisan (0, 10):', teksIrisan)
 
-iki iku daftarTembung = teksAnyar.pecahen(' ');
-cetakno('Dipeceh dadi daftar:', daftarTembung);
-cetakno('Tembung keloro:', daftarTembung[1]);
+iki iku daftarTembung yoiku teksAnyar.pecahen(' ')
+cetakno('Dipeceh dadi daftar:', daftarTembung)
+cetakno('Tembung keloro:', daftarTembung[1])
