@@ -19,20 +19,29 @@
   - [Variabel](#variabel)
   - [Destructuring](#destructuring)
   - [Tipe Data](#tipe-data)
+  - [Pemisah Numerik (Numeric Separator)](#pemisah-numerik-numeric-separator)
+  - [String Mentah (Raw String)](#string-mentah-raw-string)
+  - [Literal RegExp](#literal-regexp)
   - [Konsol & Input Pengguna](#konsol--input-pengguna)
 - [Sistem Tipe (Opsional)](#sistem-tipe-opsional)
 - [Alur Kontrol](#alur-kontrol)
   - [Kondisional: `lek`, `lek misale`, `liyane`](#kondisional-lek-lek-misale-liyane)
   - [Operator Ternary: `ta` & `lek gak`](#operator-ternary-ta--lek-gak)
   - [Perulangan](#perulangan)
+    - [Iterator Rentang](#iterator-rentang)
+    - [Label pada Pernyataan](#label-pada-pernyataan)
+    - [Async Iterator](#async-iterator-kanggo-tenangan--soko-)
   - [Pernyataan Switch: `pilih`](#pernyataan-switch-pilih)
+  - [Pencocokan Pola](#pencocokan-pola-cocok)
 - [Fungsi](#fungsi)
   - [Fungsi Biasa: `gawe`](#fungsi-biasa-gawe)
   - [Arrow Function: `lakoni`](#arrow-function-lakoni)
   - [Rest & Spread](#rest--spread)
   - [Fungsi Generator](#fungsi-generator)
   - [Fungsi Asinkron: `tenangan` & `enteni`](#fungsi-asinkron-tenangan--enteni)
+  - [Tagged Template Literal](#tagged-template-literal)
 - [Penanganan Error](#penanganan-error)
+  - [Asersi Inline](#asersi-inline-pasten)
 - [Operator & Pembanding](#operator--pembanding)
   - [Operator Aritmatika & Penugasan](#operator-aritmatika--penugasan)
   - [Operator Perbandingan & Logika](#operator-perbandingan--logika)
@@ -43,17 +52,14 @@
 - [Fitur Unik](#fitur-unik)
   - [Pengecekan Null/Undefined: `iku ono` & `iku ilang`](#pengecekan-nullundefined-iku-ono--iku-ilang)
   - [Tuple (Data Immutable)](#tuple-data-immutable)
-- [Fitur Baru (v2.3.0)](#fitur-baru-v230)
+- [Kata Kunci Khusus](#kata-kunci-khusus)
+  - [Kata Kunci Alternatif](#kata-kunci-alternatif)
+- [Pemrograman Berorientasi Objek (OOP)](#pemrograman-berorientasi-objek-oop)
+  - [Enum (`cacah`)](#enum-cacah)
   - [Kelas Katutup (Sealed Class)](#kelas-katutup-sealed-class)
   - [Kelas Abstrak (Abstract Class)](#kelas-abstrak-abstract-class)
   - [Antarmuka (`wangun`)](#antarmuka-wangun)
   - [Struktur (`struktur`)](#struktur-struktur)
-  - [Label pada Pernyataan](#label-pada-pernyataan)
-  - [Async Iterator](#async-iterator-kanggo-tenangan--soko-)
-  - [Tagged Template Literal](#tagged-template-literal)
-- [Kata Kunci Khusus](#kata-kunci-khusus)
-  - [Kata Kunci Alternatif](#kata-kunci-alternatif)
-- [Pemrograman Berorientasi Objek (OOP)](#pemrograman-berorientasi-objek-oop)
 - [Sistem Modul](#sistem-modul)
 - [Metaprogramming: `Perantara` & `Pantulan`](#metaprogramming-perantara--pantulan)
 - [Pustaka Bawaan](#pustaka-bawaan)
@@ -66,6 +72,7 @@
   - [Objek Bawaan Tambahan](#objek-bawaan-tambahan)
   - [Method Promise: `.banjur` & `.nyekel`](#method-promise-banjur--nyekel)
   - [Method Array](#method-array)
+  - [Pembantu Iterator](#pembantu-iterator)
   - [Method String](#method-string)
   - [Method Bersama Array & String](#method-bersama-array--string)
 - [Referensi CLI](#referensi-cli)
@@ -182,6 +189,36 @@ jarno lagi_sinau yoiku tenan
 jarno nilai yoiku 100
 jarno pesan yoiku "Sugeng sinau!"
 jarno ora_ono yoiku kosong
+```
+
+### Pemisah Numerik (Numeric Separator)
+
+Gunakan garis bawah di dalam literal numerik supaya angka besar lebih mudah dibaca. Garis bawah diabaikan saat runtime.
+
+```jawascript
+iki iku juta yoiku 1_000_000
+iki iku heks yoiku 0xFF_FF
+cetakno(juta)  // Output: 1000000
+```
+
+### String Mentah (Raw String)
+
+Tambahkan awalan `r` pada string untuk menonaktifkan escape sequence. Backslash diperlakukan sebagai karakter literal.
+
+```jawascript
+iki iku path yoiku r"C:\windows\system32\user"
+cetakno(path)  // Output: C:\windows\system32\user (tanpa escape)
+```
+
+### Literal RegExp
+
+Tulis regular expression langsung dengan sintaks `/.../flags`.
+
+```jawascript
+iki iku pola yoiku /[0-9]+/g
+iki iku polaEmail yoiku /^[^\s@]+@[^\s@]+$/
+cetakno(polaEmail.tes("user@jawir.id"))  // Output: tenan (true)
+cetakno(polaEmail.tes("ora-valid"))      // Output: salah (false)
 ```
 
 ### Konsol & Input Pengguna
@@ -373,6 +410,51 @@ mbari
 | :--- | :--- | :--- |
 | `mandek` | `break` | Keluar dari perulangan seketika |
 | `lanjutno` | `continue` | Lompat ke iterasi berikutnya |
+### Iterator Rentang
+
+Buat rentang numerik dengan operator `..`. Rentang bisa diiterasi di loop `kanggo...soko`.
+
+```jawascript
+kanggo i soko 1..4 terus
+  cetakno(i)  // Output: 1, 2, 3, 4
+mbari
+
+// Atau gunakan kata kunci `rentang`
+kanggo i soko rentang 3 terus
+  cetakno(i)  // Output: 0, 1, 2
+mbari
+```
+
+### Label pada Pernyataan
+
+Tempelkan label pada sebuah pernyataan untuk digunakan dengan `mandek` (break) atau `lanjutno` (continue) pada perulangan bersarang.
+
+```jawascript
+luar: kanggo (jarno i yoiku 0 banjur i luwihCilik 3 banjur i yoiku i tambah 1) terus
+  jero: kanggo (jarno j yoiku 0 banjur j luwihCilik 3 banjur j tambah 1) terus
+    lek (i plek 1 lan j plek 1) terus
+      mandek luar  // keluar dari kedua perulangan
+    mbari
+    cetakno(i, j)
+  mbari
+mbari
+```
+
+### Async Iterator (`kanggo tenangan ... soko ...`)
+
+Iterasi async iterable menggunakan `kanggo tenangan` (for await...of).
+
+```jawascript
+tenangan gawe angkaBertunda() terus
+  asilno 1
+  asilno 2
+  asilno 3
+mbari
+
+kanggo tenangan i soko angkaBertunda() terus
+  cetakno(i)  // Output: 1, 2, 3
+mbari
+```
 
 ### Pernyataan Switch: `pilih`
 
@@ -387,6 +469,22 @@ mbari
 jarno hari yoiku "Senin"
 
 pilih (hari) terus
+### Pencocokan Pola (`cocok`)
+
+Cabangkan eksekusi berdasarkan nilai dengan pola terstruktur. Mendukung literal, binding, wildcard, pola array, dan pola object.
+
+```jawascript
+cocok data terus
+  kalo 0 dadi cetakno("nol")
+  kalo 1, 2, 3 dadi cetakno("siji-siji")
+  kalo [1, ...sisa] dadi cetakno("kaping siji: 1, sisa: " tambah sisa)
+  kalo terus jeneng, umur mbari dadi cetakno("jeneng: " tambah jeneng tambah ", umur: " tambah umur)
+  kalo _ dadi cetakno("liyane")
+mbari
+```
+
+Wildcard `_` cocok dengan apa pun tanpa binding.
+
   kalo "Senin":
     cetakno("Semangat awal pekan!")
     mandek
@@ -517,6 +615,24 @@ mbari
 ```
 
 ---
+### Tagged Template Literal
+
+Tag sebuah template literal dengan fungsi untuk memproses bagian-bagian template.
+
+```jawascript
+gawe upper(strings, ...values) terus
+  jarno result yoiku ""
+  kanggo (jarno i yoiku 0 banjur i luwihCilik values.length banjur i yoiku i tambah 1) terus
+    result tambahKaro strings[i] tambah Teks(values[i]).gedekno()
+  mbari
+  balekno result tambah strings[strings.length kurang 1]
+mbari
+
+iki iku name yoiku "Java"
+cetakno(upper`Hello $terusnamembari!`)  // Output: Hello JAVA!
+```
+
+---
 
 ## Penanganan Error
 
@@ -536,6 +652,20 @@ mbari pungkasan terus
   cetakno("Ini selalu dijalankan.")
 mbari
 ```
+
+---
+### Asersi Inline (`pasten`)
+
+Verifikasi kondisi dan nilai secara inline. Asersi yang gagal akan melempar error dengan pesan berbahasa Jawa.
+
+```jawascript
+pasten(1 tambah 1 plek 2)                                    // lolos tanpa output
+pasten(1 tambah 1 plek 3, "matematika dasar")               // melempar "pasten gagal: matematika dasar"
+pastenPodo([1, 2, 3], [1, 2, 3])                        // cek kesamaan mendalam
+pastenPodo(aktual, dikarepake, "login kudu balikake token")
+```
+
+Gunakan ini di skrip uji atau sebagai penjaga runtime. `pastenPodo` adalah singkatan dari "pasten podo" (assert equals).
 
 ---
 
@@ -740,123 +870,6 @@ cetakno(infoPengguna[1])  // Output: 28
 
 ---
 
-## Fitur Baru (v2.1.0)
-
-### Pemisah Numerik (Numeric Separator)
-
-Gunakan garis bawah di dalam literal numerik supaya angka besar lebih mudah dibaca. Garis bawah diabaikan saat runtime.
-
-```jawascript
-iki iku juta yoiku 1_000_000
-iki iku heks yoiku 0xFF_FF
-cetakno(juta)  // Output: 1000000
-```
-
-### String Mentah (Raw String)
-
-Tambahkan awalan `r` pada string untuk menonaktifkan escape sequence. Backslash diperlakukan sebagai karakter literal.
-
-```jawascript
-iki iku path yoiku r"C:\windows\system32\user"
-cetakno(path)  // Output: C:\windows\system32\user (tanpa escape)
-```
-
-### Iterator Rentang
-
-Buat rentang numerik dengan operator `..`. Rentang bisa diiterasi di loop `kanggo...soko`.
-
-```jawascript
-kanggo i soko 1..4 terus
-  cetakno(i)  // Output: 1, 2, 3, 4
-mbari
-
-// Atau gunakan kata kunci `rentang`
-kanggo i soko rentang 3 terus
-  cetakno(i)  // Output: 0, 1, 2
-mbari
-```
-
-### Pembantu Iterator
-
-Alias berbahasa Jawa untuk method iterasi array.
-
-| JPL | JavaScript | Keterangan |
-| :--- | :--- | :--- |
-| `.kurangi(fn)` | `.reduce(...)` | Reduksi jadi satu nilai |
-| `.temokake(fn)` | `.find(...)` | Cari elemen pertama yang cocok |
-| `.temokakeIndeks(fn)` | `.findIndex(...)` | Cari indeks pertama yang cocok |
-| `.ratakan(depth?)` | `.flat(...)` | Ratakan array bersarang |
-| `.petakRata(fn)` | `.flatMap(...)` | Petakan lalu ratakan |
-| `.rangkep(n)` | `.fill(n)` | Isi array dengan nilai |
-
-```jawascript
-iki iku nums yoiku [1, 2, 3, 4, 5]
-cetakno(nums.kurangi((a, b) dadi a tambah b, 0))  // Output: 15
-cetakno(nums.temokake(x dadi x luwihGedhe 3))          // Output: 4
-```
-
-### Literal RegExp
-
-Tulis regular expression langsung dengan sintaks `/.../flags`.
-
-```jawascript
-iki iku pola yoiku /[0-9]+/g
-iki iku polaEmail yoiku /^[^\s@]+@[^\s@]+$/
-cetakno(polaEmail.tes("user@jawir.id"))  // Output: tenan (true)
-cetakno(polaEmail.tes("ora-valid"))      // Output: salah (false)
-```
-
-### Enum (`cacah`)
-
-Deklarasikan himpunan konstanta bernama. Tiap anggota punya nilai numerik (auto-increment, atau ditetapkan eksplisit).
-
-```jawascript
-cacah Werna yoiku
-  abang,
-  ijo,
-  kuning,
-  biru yoiku 10,
-  ungu
-mbari
-
-cetakno(Werna.kuning)        // Output: 2
-cetakno(Werna.biru)          // Output: 10
-cetakno(Werna.ikuEnum(ijo))  // Output: tenan (true)
-cetakno(Werna.jenenge(10))   // Output: "biru"
-cetakno(Werna.kabeh)         // Output: ["abang","ijo","kuning","biru","ungu"]
-```
-
-### Pencocokan Pola (`cocok`)
-
-Cabangkan eksekusi berdasarkan nilai dengan pola terstruktur. Mendukung literal, binding, wildcard, pola array, dan pola object.
-
-```jawascript
-cocok data terus
-  kalo 0 dadi cetakno("nol")
-  kalo 1, 2, 3 dadi cetakno("siji-siji")
-  kalo [1, ...sisa] dadi cetakno("kaping siji: 1, sisa: " tambah sisa)
-  kalo terus jeneng, umur mbari dadi cetakno("jeneng: " tambah jeneng tambah ", umur: " tambah umur)
-  kalo _ dadi cetakno("liyane")
-mbari
-```
-
-Wildcard `_` cocok dengan apa pun tanpa binding.
-
-### Asersi Inline (`pasten`)
-
-Verifikasi kondisi dan nilai secara inline. Asersi yang gagal akan melempar error dengan pesan berbahasa Jawa.
-
-```jawascript
-pasten(1 tambah 1 plek 2)                                    // lolos tanpa output
-pasten(1 tambah 1 plek 3, "matematika dasar")               // melempar "pasten gagal: matematika dasar"
-pastenPodo([1, 2, 3], [1, 2, 3])                        // cek kesamaan mendalam
-pastenPodo(aktual, dikarepake, "login kudu balikake token")
-```
-
-Gunakan ini di skrip uji atau sebagai penjaga runtime. `pastenPodo` adalah singkatan dari "pasten podo" (assert equals).
-
----
-
 ## Tanda Kurung Opsional (v2.2.0)
 
 Demi filosofi **"berbicara kepada komputer secara langsung"**, tanda kurung `()` di sekitar argumen konstruk-konstruk berikut menjadi **opsional** pada level statement.
@@ -909,121 +922,6 @@ Untuk menjaga parser tetap sederhana dan tidak ambigu, tanda kurung tetap **waji
 - C-style `for`: `kanggo (i yoiku 0 banjur i luwihCilik 10 banjur i yoiku i tambah 1) terus ...`
 - Function call ekspresi: `f (a, b)`, `tuple (a, b)`, `takon (msg)`, `new Foo (a, b)`
 - Grouping ekspresi: `(a tambah b)`
-
----
-
-## Fitur Baru (v2.3.0)
-
-### Kelas Katutup (Sealed Class)
-
-Cegah sebuah kelas agar tidak bisa diturunkan dengan menambahkan `katutup` (sealed) di depannya. Percobaan memperluas kelas katutup akan menghasilkan error runtime.
-
-```jawascript
-katutup kelas Bentuk terus
-  gawe info() terus
-    balekno "Bentuk"
-  mbari
-mbari
-
-// kelas Bunder turunan soko Bentuk terus  // Error: ora iso ngextend kelas katutup
-```
-
-### Kelas Abstrak (Abstract Class)
-
-Buat kelas yang tidak bisa diinstansiasi langsung. Gunakan `abstrak gawe` untuk method yang harus diimplementasikan oleh kelas turunan.
-
-```jawascript
-abstrak kelas Bentuk terus
-  abstrak gawe area()
-mbari
-
-kelas Bunder turunan soko Bentuk terus
-  gawe area() terus
-    balekno Mtk.PI ping iki.r ping iki.r
-  mbari
-mbari
-
-// jarno b yoiku Bentuk anyar()  // Error: Ora iso instantiate kelas abstrak
-jarno b yoiku Bunder anyar(5)    // OK
-```
-
-### Antarmuka (`wangun`)
-
-Tentukan kontrak dengan tanda tangan method menggunakan `wangun`. Kelas mengimplementasikan antarmuka dengan `nurut` (implements).
-
-```jawascript
-wangun Shape terus
-  gawe area() terus balekno Nomer mbari
-mbari
-
-kelas Circle nurut Shape terus
-  gawe area() terus balekno Mtk.PI ping iki.r ping iki.r mbari
-mbari
-
-jarno c yoiku anyar Circle(5)
-cetakno(c.area())
-```
-
-Beberapa antarmuka dapat diimplementasikan dengan memisahnya menggunakan koma: `kelas Foo nurut A, B, C terus`.
-
-### Struktur (`struktur`)
-
-Tipe nilai ringan dengan instance yang tidak bisa diubah (immutable). Field didefinisikan sebagai daftar yang dipisah koma.
-
-```jawascript
-struktur Titik terus x, y mbari
-jarno p yoiku anyar Titik(3, 4)
-cetakno(p.x)  // Output: 3
-// p.x yoiku 5  // Error: nilai struktur dibekukan (immutable)
-```
-
-### Label pada Pernyataan
-
-Tempelkan label pada sebuah pernyataan untuk digunakan dengan `mandek` (break) atau `lanjutno` (continue) pada perulangan bersarang.
-
-```jawascript
-luar: kanggo (jarno i yoiku 0 banjur i luwihCilik 3 banjur i yoiku i tambah 1) terus
-  jero: kanggo (jarno j yoiku 0 banjur j luwihCilik 3 banjur j tambah 1) terus
-    lek (i plek 1 lan j plek 1) terus
-      mandek luar  // keluar dari kedua perulangan
-    mbari
-    cetakno(i, j)
-  mbari
-mbari
-```
-
-### Async Iterator (`kanggo tenangan ... soko ...`)
-
-Iterasi async iterable menggunakan `kanggo tenangan` (for await...of).
-
-```jawascript
-tenangan gawe angkaBertunda() terus
-  asilno 1
-  asilno 2
-  asilno 3
-mbari
-
-kanggo tenangan i soko angkaBertunda() terus
-  cetakno(i)  // Output: 1, 2, 3
-mbari
-```
-
-### Tagged Template Literal
-
-Tag sebuah template literal dengan fungsi untuk memproses bagian-bagian template.
-
-```jawascript
-gawe upper(strings, ...values) terus
-  jarno result yoiku ""
-  kanggo (jarno i yoiku 0 banjur i luwihCilik values.length banjur i yoiku i tambah 1) terus
-    result tambahKaro strings[i] tambah Teks(values[i]).gedekno()
-  mbari
-  balekno result tambah strings[strings.length kurang 1]
-mbari
-
-iki iku name yoiku "Java"
-cetakno(upper`Hello $terusnamembari!`)  // Output: Hello JAVA!
-```
 
 ---
 
@@ -1135,6 +1033,88 @@ kucingku.meong()   // Output: Tom muni Meong!
 ```
 
 ---
+### Enum (`cacah`)
+
+Deklarasikan himpunan konstanta bernama. Tiap anggota punya nilai numerik (auto-increment, atau ditetapkan eksplisit).
+
+```jawascript
+cacah Werna yoiku
+  abang,
+  ijo,
+  kuning,
+  biru yoiku 10,
+  ungu
+mbari
+
+cetakno(Werna.kuning)        // Output: 2
+cetakno(Werna.biru)          // Output: 10
+cetakno(Werna.ikuEnum(ijo))  // Output: tenan (true)
+cetakno(Werna.jenenge(10))   // Output: "biru"
+cetakno(Werna.kabeh)         // Output: ["abang","ijo","kuning","biru","ungu"]
+```
+
+### Kelas Katutup (Sealed Class)
+
+Cegah sebuah kelas agar tidak bisa diturunkan dengan menambahkan `katutup` (sealed) di depannya. Percobaan memperluas kelas katutup akan menghasilkan error runtime.
+
+```jawascript
+katutup kelas Bentuk terus
+  gawe info() terus
+    balekno "Bentuk"
+  mbari
+mbari
+
+// kelas Bunder turunan soko Bentuk terus  // Error: ora iso ngextend kelas katutup
+```
+
+### Kelas Abstrak (Abstract Class)
+
+Buat kelas yang tidak bisa diinstansiasi langsung. Gunakan `abstrak gawe` untuk method yang harus diimplementasikan oleh kelas turunan.
+
+```jawascript
+abstrak kelas Bentuk terus
+  abstrak gawe area()
+mbari
+
+kelas Bunder turunan soko Bentuk terus
+  gawe area() terus
+    balekno Mtk.PI ping iki.r ping iki.r
+  mbari
+mbari
+
+// jarno b yoiku Bentuk anyar()  // Error: Ora iso instantiate kelas abstrak
+jarno b yoiku Bunder anyar(5)    // OK
+```
+
+### Antarmuka (`wangun`)
+
+Tentukan kontrak dengan tanda tangan method menggunakan `wangun`. Kelas mengimplementasikan antarmuka dengan `nurut` (implements).
+
+```jawascript
+wangun Shape terus
+  gawe area() terus balekno Nomer mbari
+mbari
+
+kelas Circle nurut Shape terus
+  gawe area() terus balekno Mtk.PI ping iki.r ping iki.r mbari
+mbari
+
+jarno c yoiku anyar Circle(5)
+cetakno(c.area())
+```
+
+Beberapa antarmuka dapat diimplementasikan dengan memisahnya menggunakan koma: `kelas Foo nurut A, B, C terus`.
+
+### Struktur (`struktur`)
+
+Tipe nilai ringan dengan instance yang tidak bisa diubah (immutable). Field didefinisikan sebagai daftar yang dipisah koma.
+
+```jawascript
+struktur Titik terus x, y mbari
+jarno p yoiku anyar Titik(3, 4)
+cetakno(p.x)  // Output: 3
+// p.x yoiku 5  // Error: nilai struktur dibekukan (immutable)
+```
 
 ## Sistem Modul
 
@@ -1451,6 +1431,26 @@ janjiku
 | `.suda(fn, initial?)` | `.reduce(fn, initial?)` | Reduksi menjadi satu nilai |
 | `.sudaTengen(fn, initial?)` | `.reduceRight(fn, initial?)` | Reduksi dari kanan ke kiri |
 | `.ana(fn)` | `.some(fn)` | Cek apakah ada elemen yang cocok |
+
+### Pembantu Iterator
+
+Alias berbahasa Jawa untuk method iterasi array.
+
+| JPL | JavaScript | Keterangan |
+| :--- | :--- | :--- |
+| `.kurangi(fn)` | `.reduce(...)` | Reduksi jadi satu nilai |
+| `.temokake(fn)` | `.find(...)` | Cari elemen pertama yang cocok |
+| `.temokakeIndeks(fn)` | `.findIndex(...)` | Cari indeks pertama yang cocok |
+| `.ratakan(depth?)` | `.flat(...)` | Ratakan array bersarang |
+| `.petakRata(fn)` | `.flatMap(...)` | Petakan lalu ratakan |
+| `.rangkep(n)` | `.fill(n)` | Isi array dengan nilai |
+
+```jawascript
+iki iku nums yoiku [1, 2, 3, 4, 5]
+cetakno(nums.kurangi((a, b) dadi a tambah b, 0))  // Output: 15
+cetakno(nums.temokake(x dadi x luwihGedhe 3))          // Output: 4
+```
+
 | `.kabeh(fn)` | `.every(fn)` | Cek apakah semua elemen cocok |
 
 ### Method String
