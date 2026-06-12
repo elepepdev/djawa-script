@@ -51,4 +51,15 @@ mbari liyane terus
   cetakno '  C'
 mbari
 cetakno '  halo', 'dunia', 'tanpa', 'kurung'
+cetakno '11. Error handling (try/catch/throw):'
+cobak terus
+  uncalen 'Ana kesalahan!'
+mbari nyekel e terus
+  cetakno '  Kejiret: ' tambah e
+mbari
+cobak terus
+  cetakno '  Ora ana masalah'
+mbari nyekel e terus
+  cetakno '  Iki ora bakal dicetak'
+mbari
 cetakno '=== Selesai ==='
