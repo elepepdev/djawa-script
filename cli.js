@@ -13,10 +13,10 @@ function showHelp() {
   console.log(`
 === JPL (Javanese Programming Language) ===
 
-Usage: djawa <command> [file] [options]
+Usage: djawa [options] [file]
 
 Commands:
-  run <file>         Run a .jawa file using the Javanese Independent Engine.
+  <file.jawa>        Run a .jawa file directly.
   fmt <file>         Format a .jawa file (in-place).
   fmt --check <file> Check formatting without modifying.
   fmt --stdout <file> Print formatted output to stdout.
@@ -24,8 +24,11 @@ Commands:
   version, -v        Show the version of DjawaScript.
   help, -h           Show this help message.
 
+Aliases:
+  run <file>         Alias for running a .jawa file (backward compatible).
+
 Example:
-  djawa run test.jawa
+  djawa hello.jawa
   djawa fmt test.jawa
 
 // I'm a new soul, I came to this strange world ~
@@ -223,7 +226,11 @@ switch (command) {
     break;
 
   default:
-    console.error(`Error: Command '${command}' ora dingerteni.`);
-    showHelp();
+    if (command && command.endsWith('.jawa')) {
+      runFile(command);
+    } else {
+      console.error(`Error: Command '${command}' ora dingerteni.`);
+      showHelp();
+    }
     break;
 }

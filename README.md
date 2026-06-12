@@ -104,7 +104,7 @@ cetakno("Halo, " tambah jeneng tambah "!")
 
 **4. Run it:**
 ```bash
-djawa run hello.jawa
+djawa hello.jawa
 ```
 
 ---
@@ -1509,7 +1509,12 @@ npm install -g https://github.com/elepepdev/djawa-script
 
 | Command | Description |
 | :--- | :--- |
-| `djawa run <file.jawa>` | Run a `.jawa` file directly |
+| `djawa <file.jawa>` | Run a `.jawa` file directly |
+| `djawa run <file.jawa>` | Alias for running a `.jawa` file |
+| `djawa fmt <file.jawa>` | Format a `.jawa` file (in-place) |
+| `djawa fmt --check <file>` | Check formatting without modifying |
+| `djawa fmt --stdout <file>` | Print formatted output to stdout |
+| `djawa repl` | Start the interactive Javanese shell |
 | `djawa make <filename>` | Create a new `.jawa` file from template |
 | `djawa version` / `djawa -v` | Show the current JPL version |
 | `djawa help` / `djawa -h` | Show help information |
