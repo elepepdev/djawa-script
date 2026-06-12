@@ -1,186 +1,189 @@
-// Search data - all documentation content
-const searchData = [
-  // Mulai Cepat
-  { title: 'Mulai Cepat', section: 'quickstart', keywords: 'install npm djawa mulai cepat hello world', id: 'quickstart' },
-  { title: 'Instalasi', section: 'quickstart', keywords: 'npm install package manager', id: 'quickstart' },
-  
-  // Konsep Dasar
-  { title: 'Blok Kode: terus & mbari', section: 'Konsep Dasar', keywords: 'blok kode block terus mbari kurung kurawal', id: 'blocks' },
-  { title: 'Komentar', section: 'Konsep Dasar', keywords: 'komentar comment single line multi line', id: 'comments' },
-  { title: 'Variabel', section: 'Konsep Dasar', keywords: 'variabel variable const let iki iku jarno', id: 'variables' },
-  { title: 'Destructuring', section: 'Konsep Dasar', keywords: 'destructuring object array unpack', id: 'destructuring' },
-  { title: 'Tipe Data', section: 'Konsep Dasar', keywords: 'tipe data type boolean true false null undefined tenan gak kosong', id: 'datatypes' },
-  { title: 'Konsol & Input', section: 'Konsep Dasar', keywords: 'konsol console print output input cetakno takon prompt', id: 'console' },
-  
-  // Kontrol Alur
-  { title: 'Kondisional: lek', section: 'Kontrol Alur', keywords: 'kondisional if else lek misale liyane', id: 'conditionals' },
-  { title: 'Operator Ternary', section: 'Kontrol Alur', keywords: 'ternary ta lek gak inline conditional', id: 'ternary' },
-  { title: 'Perulangan: kanggo, selagi', section: 'Kontrol Alur', keywords: 'perulangan loop for while do while kanggo selagi lakoni', id: 'loops' },
-  { title: 'Switch Statement: pilih', section: 'Kontrol Alur', keywords: 'switch case pilih kalo yowes', id: 'switch' },
-  { title: 'Pattern Matching: cocok', section: 'Kontrol Alur', keywords: 'pattern matching cocok kalo wildcard binding', id: 'pattern' },
-  
-  // Fungsi
-  { title: 'Fungsi: gawe', section: 'Fungsi', keywords: 'fungsi function gawe balekno return parameter', id: 'functions' },
-  { title: 'Arrow Function: lakoni', section: 'Fungsi', keywords: 'arrow function lambda lakoni callback implicit return', id: 'arrow' },
-  { title: 'Async/Await', section: 'Fungsi', keywords: 'async await tenangan enteni promise asynchronous', id: 'async' },
-  { title: 'Generator', section: 'Fungsi', keywords: 'generator yield asilno asilno kabeh iterator', id: 'generator' },
-  
-  // Error Handling
-  { title: 'Try/Catch: cobak', section: 'Error Handling', keywords: 'try catch finally throw error cobak nyekel pungkasan uncalen', id: 'error' },
-  { title: 'Asersi: pasten', section: 'Error Handling', keywords: 'assertion assert pasten pastenPodo check', id: 'assertion' },
-  
-  // Operator
-  { title: 'Operator Aritmatika', section: 'Operator', keywords: 'aritmatika arithmetic tambah kurang ping bagi siso pangkat', id: 'arithmetic' },
-  { title: 'Operator Perbandingan', section: 'Operator', keywords: 'perbandingan comparison equal greater less than plek podo luwihGedhe luwihCilik', id: 'comparison' },
-  { title: 'Operator Logika', section: 'Operator', keywords: 'logika logical and or not lan utawa ora', id: 'logical' },
-  { title: 'Operator Bitwise', section: 'Operator', keywords: 'bitwise and or xor not shift', id: 'bitwise' },
-  
-  // OOP
-  { title: 'Kelas', section: 'OOP', keywords: 'kelas class object oriented oop wujudno constructor extends turunan inheritance', id: 'classes' },
-  { title: 'Enum: cacah', section: 'OOP', keywords: 'enum cacah named constants', id: 'enum' },
-  { title: 'Abstract Class', section: 'OOP', keywords: 'abstract class abstrak kelas', id: 'abstract' },
-  { title: 'Interface: wangun', section: 'OOP', keywords: 'interface wangun implements nurut contract', id: 'interface' },
-  { title: 'Struct', section: 'OOP', keywords: 'struct struktur value type immutable', id: 'struct' },
-  
-  // Fitur Lanjutan
-  { title: 'Sistem Modul', section: 'Fitur Lanjutan', keywords: 'module import export metokno jupukno', id: 'modules' },
-  { title: 'Metaprogramming', section: 'Fitur Lanjutan', keywords: 'metaprogramming proxy reflect perantara pantulan', id: 'metaprogramming' },
-  { title: 'Tuple', section: 'Fitur Lanjutan', keywords: 'tuple immutable data array tetap', id: 'tuple' },
-  
-  // Standard Library
-  { title: 'Mtk (Math)', section: 'Standard Library', keywords: 'math mtk pi acak bunder ngisor nduwur mutlak oyot', id: 'math' },
-  { title: 'Tanggalan (Date)', section: 'Standard Library', keywords: 'date tanggalan time waktu', id: 'date' },
-  { title: 'JSON', section: 'Standard Library', keywords: 'json obyek tulisan parse stringify', id: 'json' },
-  { title: 'Method Array', section: 'Standard Library', keywords: 'array method dorong saring petakake golek suda filter map reduce', id: 'array-methods' },
-  { title: 'Method String', section: 'Standard Library', keywords: 'string method gedekno cilikno rapikno gantien replace split', id: 'string-methods' },
-  
-  // CLI
-  { title: 'Referensi CLI', section: 'CLI', keywords: 'cli command djawa run fmt repl make version help terminal', id: 'cli' },
-];
+/* ===========================
+   JPL Documentation — App JS
+   =========================== */
 
-// DOM Elements
-const searchInput = document.getElementById('search-input');
-const searchResults = document.getElementById('search-results');
-const sidebarToggle = document.getElementById('sidebar-toggle');
-const sidebar = document.getElementById('sidebar');
-const navToggle = document.querySelector('.nav-toggle');
-const navLinks = document.querySelector('.nav-links');
-const sidebarLinks = document.querySelectorAll('.sidebar-link');
+(function () {
+  'use strict';
 
-// Search functionality
-if (searchInput) {
-  searchInput.addEventListener('input', (e) => {
-    const query = e.target.value.toLowerCase().trim();
-    
-    if (query.length < 2) {
-      searchResults.classList.remove('active');
-      return;
-    }
-    
-    const matches = searchData.filter(item => 
-      item.title.toLowerCase().includes(query) ||
-      item.keywords.toLowerCase().includes(query) ||
-      item.section.toLowerCase().includes(query)
-    );
-    
-    if (matches.length > 0) {
-      searchResults.innerHTML = matches.map(item => `
-        <div class="search-result-item" data-id="${item.id}">
-          <span class="result-title">${item.title}</span>
-          <span class="result-section">${item.section}</span>
-        </div>
-      `).join('');
+  // ---- Search Data ----
+  const searchData = [
+    // Memulai
+    { id: 'quickstart', section: 'Memulai', title: 'Mulai Cepat', keywords: 'install npm djawa halo jawa program pertama terminal' },
+
+    // Konsep Dasar
+    { id: 'blocks', section: 'Konsep Dasar', title: 'Blok Kode', keywords: 'terus mbari blok kurawal code block scope' },
+    { id: 'comments', section: 'Konsep Dasar', title: 'Komentar', keywords: 'komentar comment slash bintang multi baris' },
+    { id: 'variables', section: 'Konsep Dasar', title: 'Variabel', keywords: 'iki iku jarno const let variabel variable mutable immutable' },
+    { id: 'destructuring', section: 'Konsep Dasar', title: 'Destructuring', keywords: 'destructuring array objek object unpacking pejah' },
+    { id: 'datatypes', section: 'Konsep Dasar', title: 'Tipe Data', keywords: 'tipe data type number string boolean null undefined array object' },
+    { id: 'numeric-separator', section: 'Konsep Dasar', title: 'Numeric Separator', keywords: 'numeric separator underscore ribuan angka' },
+    { id: 'raw-string', section: 'Konsep Dasar', title: 'Raw String', keywords: 'raw string backtick template literal mentah' },
+    { id: 'regexp', section: 'Konsep Dasar', title: 'RegExp Literal', keywords: 'regexp regex regular expression pola' },
+    { id: 'console', section: 'Konsep Dasar', title: 'Konsol & Input', keywords: 'cetakno console log input tampa' },
+    { id: 'typesystem', section: 'Konsep Dasar', title: 'Sistem Tipe', keywords: 'sistem tipe type system static dynamic duck typing' },
+
+    // Kontrol Alur
+    { id: 'conditionals', section: 'Kontrol Alur', title: 'Kondisional', keywords: 'lek如果不条件 if else kondisional conditional' },
+    { id: 'ternary', section: 'Kontrol Alur', title: 'Ternary', keywords: 'ternary operator kondisional singkat' },
+    { id: 'loops', section: 'Kontrol Alur', title: 'Perulangan', keywords: '循环 for ulang perulangan loop while' },
+    { id: 'range', section: 'Kontrol Alur', title: 'Range Iterator', keywords: 'range iterator .. span perulangan' },
+    { id: 'labels', section: 'Kontrol Alur', title: 'Label Statements', keywords: 'label statement break continue' },
+    { id: 'async-iterator', section: 'Kontrol Alur', title: 'Async Iterator', keywords: 'async iterator for await' },
+    { id: 'switch', section: 'Kontrol Alur', title: 'Switch', keywords: 'switch pilih case break default' },
+    { id: 'pattern', section: 'Kontrol Alur', title: 'Pattern Matching', keywords: 'pattern matching kalo cocok when dadi' },
+
+    // Fungsi
+    { id: 'functions', section: 'Fungsi', title: 'Fungsi Biasa', keywords: 'fungsi function function fungsi biasa fungsi' },
+    { id: 'arrow', section: 'Fungsi', title: 'Arrow Function', keywords: 'arrow function panah panah fungsi lambda' },
+    { id: 'rest-spread', section: 'Fungsi', title: 'Rest & Spread', keywords: 'rest spread parameter ... titik tiga' },
+    { id: 'generator', section: 'Fungsi', title: 'Generator', keywords: 'generator yield function bintang' },
+    { id: 'async', section: 'Fungsi', title: 'Async/Await', keywords: 'async await promise asynchronous' },
+    { id: 'tagged-template', section: 'Fungsi', title: 'Tagged Template', keywords: 'tagged template literal tag function' },
+
+    // Error Handling
+    { id: 'error', section: 'Error Handling', title: 'Try/Catch', keywords: 'try catch error kesalahan lempar lemparan' },
+    { id: 'assertion', section: 'Error Handling', title: 'Asersi (pasten)', keywords: 'assert asersi pasten assertion validate validasi' },
+
+    // Operator
+    { id: 'arithmetic', section: 'Operator', title: 'Aritmatika & Penugasan', keywords: 'aritmatika arithmetic tambah kurang kali bagi modulo penugasan assignment' },
+    { id: 'comparison', section: 'Operator', title: 'Perbandingan & Logika', keywords: 'perbandingan comparison logical logika == === != !== greater less and or not && || ! plek podo lan utawa ora' },
+    { id: 'special-ops', section: 'Operator', title: 'Khusus', keywords: 'operator khusus special typeof instanceof in' },
+    { id: 'optional-chaining', section: 'Operator', title: 'Optional Chaining', keywords: 'optional chaining ?. titik tanya' },
+    { id: 'nullish', section: 'Operator', title: 'Nullish Coalescing', keywords: 'nullish coalescing ?? operator' },
+    { id: 'bitwise', section: 'Operator', title: 'Bitwise', keywords: 'bitwise and or xor not shift' },
+
+    // Fitur Unik
+    { id: 'nullcheck', section: 'Fitur Unik', title: 'Pengecekan Null', keywords: 'null check kosong opsional' },
+    { id: 'tuple', section: 'Fitur Unik', title: 'Tuple', keywords: 'tuple pasangan tetap immutable' },
+
+    // Sintaks Lainnya
+    { id: 'optional-parens', section: 'Sintaks Lainnya', title: 'Tanda Kurung Opsional', keywords: 'optional parentheses kurung opsional' },
+    { id: 'special-keywords', section: 'Sintaks Lainnya', title: 'Kata Kunci Khusus', keywords: 'kata kunci khusus special keywords iki iku yoiku' },
+    { id: 'alt-keywords', section: 'Sintaks Lainnya', title: 'Kata Kunci Alternatif', keywords: 'kata kunci alternatif alternative keywords synonym' },
+
+    // OOP
+    { id: 'classes', section: 'OOP', title: 'Kelas', keywords: 'kelas class objek object method properti constructor' },
+    { id: 'enum', section: 'OOP', title: 'Enum', keywords: 'enum enumerasi enumerasi tipe data' },
+    { id: 'sealed', section: 'OOP', title: 'Sealed Class', keywords: 'sealed class tertutup final' },
+    { id: 'abstract', section: 'OOP', title: 'Abstract Class', keywords: 'abstract class abstrak dasar' },
+    { id: 'interface', section: 'OOP', title: 'Interface', keywords: 'interface antarmuka kontrak' },
+    { id: 'struct', section: 'OOP', title: 'Struct', keywords: 'struct struktur data' },
+
+    // Modul & Metaprogramming
+    { id: 'modules', section: 'Modul', title: 'Sistem Modul', keywords: 'modul module import ekspor export' },
+    { id: 'reexport', section: 'Modul', title: 'Re-export & Dynamic Import', keywords: 'reexport dynamic import muat dinamis' },
+    { id: 'metaprogramming', section: 'Modul', title: 'Metaprogramming', keywords: 'metaprogramming refleksi reflection' },
+
+    // Standard Library
+    { id: 'globals', section: 'Standard Library', title: 'Global & Konstruktor', keywords: 'global konstruktor constructor number string boolean array object' },
+    { id: 'math', section: 'Standard Library', title: 'Mtk (Math)', keywords: 'mtk math matematika pi akar absolut' },
+    { id: 'date', section: 'Standard Library', title: 'Tanggalan (Date)', keywords: 'tanggalan date tanggal waktu time' },
+    { id: 'json', section: 'Standard Library', title: 'JSON', keywords: 'json parse stringify' },
+    { id: 'global-fns', section: 'Standard Library', title: 'Fungsi Global', keywords: 'fungsi global global function parse int float' },
+    { id: 'wektu', section: 'Standard Library', title: 'Wektu (Time)', keywords: 'wektu time timer setTimeout setInterval' },
+    { id: 'builtin-objects', section: 'Standard Library', title: 'Objek Tambahan', keywords: 'objek built-in map set weakmap weakset' },
+    { id: 'promise-methods', section: 'Standard Library', title: 'Promise Methods', keywords: 'promise method all race resolve reject' },
+    { id: 'array-methods', section: 'Standard Library', title: 'Method Array', keywords: 'array method map filter reduce find sort' },
+    { id: 'string-methods', section: 'Standard Library', title: 'Method String', keywords: 'string method upper lower trim split replace' },
+    { id: 'shared-methods', section: 'Standard Library', title: 'Method Bersama', keywords: 'shared method array string length includes slice' },
+
+    // CLI
+    { id: 'cli', section: 'CLI', title: 'Referensi CLI', keywords: 'cli command perintah djawa run fmt repl make version help' },
+  ];
+
+  // ---- DOM Elements ----
+  const searchInput = document.getElementById('search-input');
+  const searchResults = document.getElementById('search-results');
+  const sidebarToggle = document.getElementById('sidebar-toggle');
+  const sidebar = document.getElementById('sidebar');
+  const sidebarLinks = document.querySelectorAll('.sidebar-link');
+  const sections = document.querySelectorAll('section[id]');
+
+  // ---- Search ----
+  if (searchInput && searchResults) {
+    searchInput.addEventListener('input', function () {
+      const q = this.value.trim().toLowerCase();
+      if (!q) {
+        searchResults.classList.remove('active');
+        searchResults.innerHTML = '';
+        return;
+      }
+
+      const matches = searchData.filter(item =>
+        item.title.toLowerCase().includes(q) ||
+        item.keywords.toLowerCase().includes(q) ||
+        item.section.toLowerCase().includes(q)
+      );
+
+      if (matches.length === 0) {
+        searchResults.innerHTML = '<div class="search-result-item"><span class="result-title">Ora ditemukake</span></div>';
+        searchResults.classList.add('active');
+        return;
+      }
+
+      searchResults.innerHTML = matches.map(m =>
+        `<a href="#${m.id}" class="search-result-item">
+          <span class="result-section">${m.section}</span>
+          <span class="result-title">${m.title}</span>
+        </a>`
+      ).join('');
       searchResults.classList.add('active');
-    } else {
-      searchResults.innerHTML = '<div class="search-result-item"><span class="result-title">Tidak ditemukan</span></div>';
-      searchResults.classList.add('active');
-    }
-  });
+    });
 
-  // Handle search result click
-  searchResults.addEventListener('click', (e) => {
-    const item = e.target.closest('.search-result-item');
-    if (item) {
-      const id = item.dataset.id;
-      const target = document.getElementById(id);
-      if (target) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    searchResults.addEventListener('click', function (e) {
+      const link = e.target.closest('a');
+      if (link) {
         searchResults.classList.remove('active');
         searchInput.value = '';
-        
-        // Update active state
-        sidebarLinks.forEach(link => link.classList.remove('active'));
-        const activeLink = document.querySelector(`.sidebar-link[href="#${id}"]`);
-        if (activeLink) activeLink.classList.add('active');
-      }
-    }
-  });
-
-  // Close search results when clicking outside
-  document.addEventListener('click', (e) => {
-    if (!e.target.closest('.search-box')) {
-      searchResults.classList.remove('active');
-    }
-  });
-}
-
-// Mobile sidebar toggle
-if (sidebarToggle && sidebar) {
-  sidebarToggle.addEventListener('click', () => {
-    sidebar.classList.toggle('active');
-  });
-}
-
-// Mobile nav toggle
-if (navToggle && navLinks) {
-  navToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-  });
-}
-
-// Active link on scroll
-if (sidebarLinks.length > 0) {
-  const sections = document.querySelectorAll('section[id]');
-  
-  const observerOptions = {
-    rootMargin: '-80px 0px -80% 0px'
-  };
-  
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.getAttribute('id');
-        sidebarLinks.forEach(link => {
-          link.classList.remove('active');
-          if (link.getAttribute('href') === `#${id}`) {
-            link.classList.add('active');
-          }
-        });
       }
     });
-  }, observerOptions);
-  
-  sections.forEach(section => observer.observe(section));
-}
 
-// Smooth scroll for sidebar links
-sidebarLinks.forEach(link => {
-  link.addEventListener('click', (e) => {
-    e.preventDefault();
-    const id = link.getAttribute('href').slice(1);
-    const target = document.getElementById(id);
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      
-      // Close mobile sidebar
-      if (sidebar) sidebar.classList.remove('active');
-    }
-  });
-});
+    document.addEventListener('click', function (e) {
+      if (!e.target.closest('.search-box')) {
+        searchResults.classList.remove('active');
+      }
+    });
+  }
 
-// Close sidebar when clicking a link on mobile
-document.querySelectorAll('.sidebar-link').forEach(link => {
-  link.addEventListener('click', () => {
-    if (sidebar) sidebar.classList.remove('active');
+  // ---- Scroll Spy ----
+  function updateActiveLink() {
+    let current = '';
+    sections.forEach(section => {
+      const top = section.offsetTop - 100;
+      if (window.scrollY >= top) {
+        current = section.getAttribute('id');
+      }
+    });
+    sidebarLinks.forEach(link => {
+      link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+    });
+  }
+
+  window.addEventListener('scroll', updateActiveLink, { passive: true });
+  updateActiveLink();
+
+  // ---- Sidebar Mobile Toggle ----
+  if (sidebarToggle && sidebar) {
+    sidebarToggle.addEventListener('click', function () {
+      sidebar.classList.toggle('open');
+    });
+
+    document.addEventListener('click', function (e) {
+      if (sidebar.classList.contains('open') &&
+          !e.target.closest('.sidebar') &&
+          !e.target.closest('.sidebar-toggle')) {
+        sidebar.classList.remove('open');
+      }
+    });
+  }
+
+  // ---- Close sidebar on link click (mobile) ----
+  sidebarLinks.forEach(link => {
+    link.addEventListener('click', function () {
+      if (window.innerWidth <= 768 && sidebar) {
+        sidebar.classList.remove('open');
+      }
+    });
   });
-});
+
+})();

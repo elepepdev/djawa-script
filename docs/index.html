@@ -3,231 +3,112 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JPL — Javanese Programming Language</title>
+  <title>Djawa Script (JPL) — Bahasa Pemrograman Berbasis Jawa</title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    .hero{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 60px}
+    .hero-badge{display:inline-block;padding:6px 16px;border-radius:999px;background:var(--accent-light);color:var(--accent);font-size:13px;font-weight:600;margin-bottom:24px}
+    .hero h1{font-size:clamp(36px,6vw,64px);font-weight:700;line-height:1.1;margin-bottom:16px}
+    .hero h1 .accent{color:var(--accent)}
+    .hero p{font-size:18px;color:var(--text-muted);max-width:560px;margin-bottom:32px}
+    .hero-actions{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+    .btn{padding:12px 28px;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;transition:all .2s;text-decoration:none;border:none;display:inline-block}
+    .btn-primary{background:var(--accent);color:#fff}
+    .btn-primary:hover{background:#b91c1c;text-decoration:none}
+    .btn-outline{background:transparent;color:var(--text);border:1px solid var(--border)}
+    .btn-outline:hover{border-color:var(--accent);color:var(--accent);text-decoration:none}
+    .features{max-width:900px;margin:0 auto;padding:0 24px 80px}
+    .features h2{text-align:center;font-size:28px;margin-bottom:40px}
+    .feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}
+    .feature-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;padding:24px}
+    .feature-card h3{font-size:16px;margin-bottom:8px}
+    .feature-card p{font-size:14px;color:var(--text-muted);margin:0}
+    .comparison{max-width:900px;margin:0 auto;padding:0 24px 80px}
+    .comparison h2{text-align:center;font-size:28px;margin-bottom:40px}
+    .comparison-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    @media(max-width:640px){.comparison-grid{grid-template-columns:1fr}}
+    .footer{text-align:center;padding:40px 24px;border-top:1px solid var(--border);font-size:13px;color:var(--text-muted)}
+  </style>
 </head>
 <body>
   <nav class="navbar">
     <div class="nav-container">
-      <a href="index.html" class="nav-logo">
-        <span class="logo-jawa">ꦗ</span> JPL
-      </a>
+      <a href="index.html" class="nav-logo"><span class="logo-jawa">ꦗ</span> JPL</a>
       <div class="nav-links">
         <a href="index.html" class="nav-link active">Beranda</a>
         <a href="docs.html" class="nav-link">Dokumentasi</a>
         <a href="https://github.com/gegesteorngoding/djawa-script" class="nav-link" target="_blank">GitHub</a>
       </div>
-      <button class="nav-toggle" aria-label="Toggle navigation">
-        <span></span><span></span><span></span>
-      </button>
+      <button class="nav-toggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
     </div>
   </nav>
 
-  <header class="hero">
-    <div class="hero-container">
-      <div class="hero-badge">v2.3.0</div>
-      <h1 class="hero-title">
-        <span class="hero-jawa">ꦉꦱꦺꦴꦤ꧀ꦧꦃꦱꦾ</span>
-        Javanese Programming Language
-      </h1>
-      <p class="hero-subtitle">
-        Berbicara kepada komputer dengan bahasa Jawa.
-        Bahasa pemrograman yang dirancang mudah dimengerti oleh penutur bahasa Jawa.
-      </p>
-      <div class="hero-buttons">
-        <a href="docs.html" class="btn btn-primary">Mulai Belajar</a>
-        <a href="https://github.com/gegesteorngoding/djawa-script" class="btn btn-outline" target="_blank">Lihat di GitHub</a>
-      </div>
-      <div class="hero-code">
-        <div class="code-header">
-          <span class="code-dot red"></span>
-          <span class="code-dot yellow"></span>
-          <span class="code-dot green"></span>
-          <span class="code-filename">halo.jawa</span>
-        </div>
-        <pre><code><span class="kw">iki iku</span> jeneng <span class="kw">yoiku</span> <span class="str">"Dunia"</span>
-<span class="fn">cetakno</span>(<span class="str">"Halo, "</span> <span class="op">tambah</span> jeneng <span class="op">tambah</span> <span class="str">"!"</span>)</code></pre>
-      </div>
-    </div>
-  </header>
-
-  <section class="philosophy">
-    <div class="section-container">
-      <h2 class="section-title">Filosofi</h2>
-      <p class="section-subtitle">Mengapa JPL dibuat?</p>
-      
-      <div class="philosophy-grid">
-        <div class="philosophy-card">
-          <div class="card-icon">ꦧꦱꦾ</div>
-          <h3>Bahasa Ibu, Bahasa Kode</h3>
-          <p>Bahasa Jawa adalah salah satu bahasa daerah dengan penutur terbanyak di dunia. JPL memungkinkan penutur bahasa Jawa untuk ngoding tanpa harus belajar bahasa Inggris terlebih dahulu.</p>
-        </div>
-        
-        <div class="philosophy-card">
-          <div class="card-icon">ꦧꦼꦢꦺꦴꦱ</div>
-          <h3>Bicara Langsung</h3>
-          <p>Filosofi utama JPL: "berbicara kepada komputer secara langsung". Tidak ada tanda kurung yang membingungkan, tidak ada simbol yang ambigu. Tulis seperti Anda berbicara.</p>
-        </div>
-        
-        <div class="philosophy-card">
-          <div class="card-icon">ꦧꦼꦤꦂ</div>
-          <h3>Mudah Dipelajari</h3>
-          <p>JPL dirancang untuk pemula. Kata kunci menggunakan kata-kata Jawa sehari-hari yang sudah dikenal. Belajar pemrograman menjadi lebih natural dan menyenangkan.</p>
-        </div>
-      </div>
+  <section class="hero">
+    <span class="hero-badge">v0.4.0-alpha</span>
+    <h1>Bahasa Pemrograman<br><span class="accent">Berbasis Jawa</span></h1>
+    <p>JPL (Jawa Programming Language) adalah bahasa pemrograman interpretatif dengan sintaks berbahasa Jawa. Tulis kode dalam bahasa ibu, hasilkan program yang powerful.</p>
+    <div class="hero-actions">
+      <a href="docs.html" class="btn btn-primary">Mulai Belajar</a>
+      <a href="https://github.com/gegesteorngoding/djawa-script" class="btn btn-outline" target="_blank">GitHub</a>
     </div>
   </section>
 
   <section class="features">
-    <div class="section-container">
-      <h2 class="section-title">Mengapa JPL?</h2>
-      
-      <div class="features-grid">
-        <div class="feature-item">
-          <div class="feature-number">01</div>
-          <h3>Sintaks Alami</h3>
-          <p>Gunakan kata-kata Jawa yang sudah Anda kenal. <code>cetakno</code> untuk mencetak, <code>gawe</code> untuk membuat fungsi, <code>lek</code> untuk kondisi.</p>
-        </div>
-        
-        <div class="feature-item">
-          <div class="feature-number">02</div>
-          <h3>Tanpa Tanda Kurung</h3>
-          <p>JPL mendukung sintaks tanpa kurung untuk manyatakan kondisi dan perulangan. Lebih pendek, lebih bersih, lebih alami.</p>
-        </div>
-        
-        <div class="feature-item">
-          <div class="feature-number">03</div>
-          <h3>OOP Lengkap</h3>
-          <p>Kelas, pewarisan, interface, enum, abstract class — semua fitur OOP modern tersedia dalam bahasa Jawa.</p>
-        </div>
-        
-        <div class="feature-item">
-          <div class="feature-number">04</div>
-          <h3>Async/Await</h3>
-          <p>Dukungan penuh untuk pemrograman asinkron dengan <code>tenangan</code> dan <code>enteni</code>.</p>
-        </div>
-        
-        <div class="feature-item">
-          <div class="feature-number">05</div>
-          <h3>Pattern Matching</h3>
-          <p>Cocokkan pola dengan <code>cocok</code> — mendukung literal, binding, wildcard, array, dan object patterns.</p>
-        </div>
-        
-        <div class="feature-item">
-          <div class="feature-number">06</div>
-          <h3>Standard Library Kaya</h3>
-          <p>Math, Date, JSON, Array methods, String methods — semua sudah tersedia siap pakai.</p>
-        </div>
+    <h2>Kenapa JPL?</h2>
+    <div class="feature-grid">
+      <div class="feature-card">
+        <h3>Sintaks Berbasis Jawa</h3>
+        <p>Kata kunci dalam bahasa Jawa ngoko. Tulis kode sehari-hari dengan bahasa yang Anda kenal.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Mudah Dipelajari</h3>
+        <p>Jika Anda familiar dengan JavaScript, JPL akan terasa natural. Konsep yang sama, bahasa yang berbeda.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Pattern Matching</h3>
+        <p>Sistem pattern matching yang kuat untuk menangani data kompleks dengan elegan.</p>
+      </div>
+      <div class="feature-card">
+        <h3>OOP Lengkap</h3>
+        <p>Kelas, interface, enum, struct, abstract class, dan sealed class — semuanya tersedia.</p>
+      </div>
+      <div class="feature-card">
+        <h3>Standard Library Kaya</h3>
+        <p>Math, Date, JSON, Array methods, String methods, dan banyak lagi — siap digunakan.</p>
+      </div>
+      <div class="feature-card">
+        <h3>CLI Powerful</h3>
+        <p>Jalankan, format, dan buat file baru langsung dari command line dengan perintah intuitif.</p>
       </div>
     </div>
   </section>
 
   <section class="comparison">
-    <div class="section-container">
-      <h2 class="section-title">Perbandingan</h2>
-      <p class="section-subtitle">JPL vs JavaScript — Lihat betapa miripnya</p>
-      
-      <div class="comparison-grid">
-        <div class="comparison-card">
-          <div class="comparison-header js">JavaScript</div>
-          <pre><code><span class="kw">const</span> name = <span class="str">"Budi"</span>;
-<span class="kw">let</span> age = <span class="num">25</span>;
-
-<span class="kw">if</span> (age >= <span class="num">18</span>) {
-  console.log(<span class="str">"Dewasa"</span>);
-} <span class="kw">else</span> {
-  console.log(<span class="str">"Anak-anak"</span>);
+    <h2>JavaScript vs JPL</h2>
+    <div class="comparison-grid">
+      <div class="code-block">
+        <div class="code-header"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span><span class="code-filename">JavaScript</span></div>
+        <pre><code><span class="kw">const</span> nama = <span class="str">"Dunia"</span>;
+<span class="kw">function</span> <span class="fn">sapa</span>(n) {
+  <span class="kw">return</span> <span class="str">"Halo, "</span> + n;
 }
-
-<span class="kw">function</span> greet(name) {
-  <span class="kw">return</span> <span class="str">"Halo, "</span> + name;
-}</code></pre>
-        </div>
-        
-        <div class="comparison-card">
-          <div class="comparison-header jpl">JPL</div>
-          <pre><code><span class="kw">iki iku</span> jeneng <span class="kw">yoiku</span> <span class="str">"Budi"</span>
-<span class="kw">jarno</span> umur <span class="kw">yoiku</span> <span class="num">25</span>
-
-<span class="kw">lek</span> umur luwihGedhePodo <span class="num">18</span> <span class="kw">terus</span>
-  <span class="fn">cetakno</span>(<span class="str">"Dewasa"</span>)
-<span class="kw">mbari liyane terus</span>
-  <span class="fn">cetakno</span>(<span class="str">"Anak-anak"</span>)
-<span class="kw">mbari</span>
-
-<span class="kw">gawe</span> sapa(jeneng) <span class="kw">terus</span>
-  <span class="kw">balekno</span> <span class="str">"Halo, "</span> tambah jeneng
-<span class="kw">mbari</span></code></pre>
-        </div>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="fn">sapa</span>(nama));</code></pre>
       </div>
-    </div>
-  </section>
-
-  <section class="quickstart">
-    <div class="section-container">
-      <h2 class="section-title">Mulai Cepat</h2>
-      
-      <div class="steps">
-        <div class="step">
-          <div class="step-number">1</div>
-          <h3>Install</h3>
-          <div class="step-code">
-            <code>npm install -g @jawirhytam/jawirscript</code>
-          </div>
-        </div>
-        
-        <div class="step">
-          <div class="step-number">2</div>
-          <h3>Buat File</h3>
-          <div class="step-code">
-            <code>djawa make halo</code>
-          </div>
-        </div>
-        
-        <div class="step">
-          <div class="step-number">3</div>
-          <h3>Tulis Kode</h3>
-          <div class="step-code">
-            <code>cetakno("Halo, Dunia!")</code>
-          </div>
-        </div>
-        
-        <div class="step">
-          <div class="step-number">4</div>
-          <h3>Jalankan</h3>
-          <div class="step-code">
-            <code>djawa halo.jawa</code>
-          </div>
-        </div>
-      </div>
-      
-      <div class="cta">
-        <a href="docs.html" class="btn btn-primary btn-large">Baca Dokumentasi Lengkap</a>
+      <div class="code-block">
+        <div class="code-header"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span><span class="code-filename">JPL</span></div>
+        <pre><code><span class="kw">iki iku</span> nama = <span class="str">"Dunia"</span>;
+<span class="kw">fungsi</span> <span class="fn">sapa</span>(n) {
+  <span class="kw">balekno</span> <span class="str">"Halo, "</span> + n;
+}
+<span class="fn">cetakno</span>(<span class="fn">sapa</span>(nama));</code></pre>
       </div>
     </div>
   </section>
 
   <footer class="footer">
-    <div class="footer-container">
-      <div class="footer-content">
-        <div class="footer-brand">
-          <span class="logo-jawa">ꦗ</span> JPL
-          <p>Bahasa pemrograman berbasis bahasa Jawa</p>
-        </div>
-        <div class="footer-links">
-          <a href="docs.html">Dokumentasi</a>
-          <a href="https://github.com/gegesteorngoding/djawa-script" target="_blank">GitHub</a>
-          <a href="https://www.npmjs.com/package/@jawirhytam/jawirscript" target="_blank">npm</a>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>Dibuat dengan ❤️ untuk komunitas Jawa</p>
-      </div>
-    </div>
+    <p>Djawa Script (JPL) &mdash; Built with pride in Java, Indonesia.</p>
   </footer>
-
-  <script src="js/app.js"></script>
 </body>
 </html>
