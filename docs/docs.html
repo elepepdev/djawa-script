@@ -15,6 +15,7 @@
       <div class="nav-links">
         <a href="index.html" class="nav-link">Beranda</a>
         <a href="docs.html" class="nav-link active">Dokumentasi</a>
+        <a href="en/docs.html" class="nav-link">English</a>
         <a href="https://github.com/gegesteorngoding/djawa-script" class="nav-link" target="_blank">GitHub</a>
       </div>
       <button class="nav-toggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
@@ -287,7 +288,7 @@ umur <span class="kw">yoiku</span> umur <span class="op">tambah</span> <span cla
 <span class="fn">cetakno</span>.<span class="fn">kesalahan</span>(<span class="str">"Iki kesalahan!"</span>)
 
 <span class="fn">cetakno</span>.<span class="fn">waktu</span>(<span class="str">"myTimer"</span>)
-<span class="comment">// ... operasi的一些 ...</span>
+<span class="comment">// ... operasi liyane ...</span>
 <span class="fn">cetakno</span>.<span class="fn">akhirWaktu</span>(<span class="str">"myTimer"</span>)</code></pre></div>
       </section>
 
@@ -511,7 +512,7 @@ umur <span class="kw">yoiku</span> umur <span class="op">tambah</span> <span cla
 
       <section id="arrow">
         <h2>Arrow Function: <code>lakoni</code></h2>
-        <p>Sintaks fungsi yang lebih pendek, ekuivalent dengan arrow function <code>=&gt;</code> di JavaScript.</p>
+        <p>Sintaks fungsi yang lebih pendek, ekuivalen dengan arrow function <code>=&gt;</code> di JavaScript.</p>
         <ul>
           <li><strong>Satu baris:</strong> Return implisit — tidak perlu <code>balekno</code>.</li>
           <li><strong>Multi-baris:</strong> Bungkus badan dalam <code>terus</code> dan <code>mbari</code>, gunakan <code>balekno</code> secara eksplisit.</li>
@@ -562,7 +563,7 @@ umur <span class="kw">yoiku</span> umur <span class="op">tambah</span> <span cla
 <span class="fn">cetakno</span>(gen.<span class="fn">next</span>().value)  <span class="comment">// Output: 1</span>
 <span class="fn">cetakno</span>(gen.<span class="fn">next</span>().value)  <span class="comment">// Output: 2</span></code></pre></div>
         <h3><code>asilno kabeh</code> — Delegate</h3>
-        <p>Gunakan <code>asilno kabeh</code> untuk mendelegasikan ke generator lain (ekuivalent dengan <code>yield*</code>):</p>
+        <p>Gunakan <code>asilno kabeh</code> untuk mendelegasikan ke generator lain (ekuivalen dengan <code>yield*</code>):</p>
         <div class="code-block"><pre><code><span class="kw">gawe tenangan</span> inner() <span class="kw">terus</span>
   <span class="kw">asilno</span> <span class="num">1</span>
   <span class="kw">asilno</span> <span class="num">2</span>
@@ -735,11 +736,11 @@ myScore <span class="op">kurangKaro</span> <span class="num">10</span>
 
       <section id="optional-chaining">
         <h2>Optional Chaining: <code>.mungkin.</code></h2>
-        <p>Akses properti yang bersarang dengan aman tanpa error jika <code>null</code>/<code>undefined</code>. Ekuivalent dengan operator <code>?.</code> di JavaScript.</p>
+        <p>Akses properti yang bersarang dengan aman tanpa error jika <code>null</code>/<code>undefined</code>. Ekuivalen dengan operator <code>?.</code> di JavaScript.</p>
         <div class="code-block"><pre><code><span class="kw">iki iku</span> pengguna <span class="kw">yoiku terus</span> jeneng: <span class="str">'Sastro'</span>, alamat: <span class="kw">terus</span> jalan: <span class="str">'Jl. Kenangan'</span> <span class="kw">mbari mbari</span>
 <span class="kw">iki iku</span> emptyUser <span class="kw">yoiku</span> kosong
 
-<span class="comment">// Akses aman — berfungsi dengan baik</span>
+<span class="comment">// Akses aman — bekerja dengan baik</span>
 <span class="kw">iki iku</span> jalan <span class="kw">yoiku</span> pengguna.alamat.<span class="op">mungkin</span>.jalan
 <span class="fn">cetakno</span>(jalan)  <span class="comment">// Output: Jl. Kenangan</span>
 

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="jv">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Djawa Script (JPL) — Bahasa Pemrograman Berbasis Jawa</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>Djawa Script (JPL) — Javanese-Based Programming Language</title>
+  <link rel="stylesheet" href="../css/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
@@ -37,9 +37,9 @@
     <div class="nav-container">
       <a href="index.html" class="nav-logo"><span class="logo-jawa">ꦗ</span> JPL</a>
       <div class="nav-links">
-        <a href="index.html" class="nav-link active">Beranda</a>
-        <a href="docs.html" class="nav-link">Dokumentasi</a>
-        <a href="en/index.html" class="nav-link">English</a>
+        <a href="index.html" class="nav-link active">Home</a>
+        <a href="docs.html" class="nav-link">Documentation</a>
+        <a href="../index.html" class="nav-link">Bahasa</a>
         <a href="https://github.com/gegesteorngoding/djawa-script" class="nav-link" target="_blank">GitHub</a>
       </div>
       <button class="nav-toggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
@@ -48,40 +48,40 @@
 
   <section class="hero">
     <span class="hero-badge">v2.3.0</span>
-    <h1>Bahasa Pemrograman<br><span class="accent">Berbasis Jawa</span></h1>
-    <p>JPL (Jawa Programming Language) adalah bahasa pemrograman interpretatif dengan sintaks berbahasa Jawa. Tulis kode dalam bahasa ibu, hasilkan program yang powerful.</p>
+    <h1>Programming Language<br><span class="accent">Based on Javanese</span></h1>
+    <p>JPL (Javanese Programming Language) is an interpretative programming language with Javanese syntax. Write code in your native tongue, build powerful programs.</p>
     <div class="hero-actions">
-      <a href="docs.html" class="btn btn-primary">Mulai Belajar</a>
+      <a href="docs.html" class="btn btn-primary">Start Learning</a>
       <a href="https://github.com/gegesteorngoding/djawa-script" class="btn btn-outline" target="_blank">GitHub</a>
     </div>
   </section>
 
   <section class="features">
-    <h2>Kenapa JPL?</h2>
+    <h2>Why JPL?</h2>
     <div class="feature-grid">
       <div class="feature-card">
-        <h3>Sintaks Berbasis Jawa</h3>
-        <p>Kata kunci dalam bahasa Jawa ngoko. Tulis kode sehari-hari dengan bahasa yang Anda kenal.</p>
+        <h3>Javanese-Based Syntax</h3>
+        <p>Keywords in Javanese Ngoko. Write code daily using the language you know.</p>
       </div>
       <div class="feature-card">
-        <h3>Mudah Dipelajari</h3>
-        <p>Jika Anda familiar dengan JavaScript, JPL akan terasa natural. Konsep yang sama, bahasa yang berbeda.</p>
+        <h3>Easy to Learn</h3>
+        <p>If you're familiar with JavaScript, JPL will feel natural. Same concepts, different language.</p>
       </div>
       <div class="feature-card">
-        <h3>Pattern Matching</h3>
-        <p>Sistem pattern matching yang kuat untuk menangani data kompleks dengan elegan.</p>
+        <h3>Powerful Pattern Matching</h3>
+        <p>A robust pattern matching system to handle complex data elegantly.</p>
       </div>
       <div class="feature-card">
-        <h3>OOP Lengkap</h3>
-        <p>Kelas, interface, enum, struct, abstract class, dan sealed class — semuanya tersedia.</p>
+        <h3>Full OOP Support</h3>
+        <p>Classes, interfaces, enums, structs, abstract classes, and sealed classes — all available.</p>
       </div>
       <div class="feature-card">
-        <h3>Standard Library Kaya</h3>
-        <p>Math, Date, JSON, Array methods, String methods, dan banyak lagi — siap digunakan.</p>
+        <h3>Rich Standard Library</h3>
+        <p>Math, Date, JSON, Array methods, String methods, and more — ready to use.</p>
       </div>
       <div class="feature-card">
-        <h3>CLI Powerful</h3>
-        <p>Jalankan, format, dan buat file baru langsung dari command line dengan perintah intuitif.</p>
+        <h3>Powerful CLI</h3>
+        <p>Run, format, and create new files directly from the command line with intuitive commands.</p>
       </div>
     </div>
   </section>
@@ -91,17 +91,17 @@
     <div class="comparison-grid">
       <div class="code-block">
         <div class="code-header"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span><span class="code-filename">JavaScript</span></div>
-        <pre><code><span class="kw">const</span> nama = <span class="str">"Dunia"</span>;
-<span class="kw">function</span> <span class="fn">sapa</span>(n) {
-  <span class="kw">return</span> <span class="str">"Halo, "</span> + n;
+        <pre><code><span class="kw">const</span> name = <span class="str">"World"</span>;
+<span class="kw">function</span> <span class="fn">greet</span>(n) {
+  <span class="kw">return</span> <span class="str">"Hello, "</span> + n;
 }
-<span class="fn">console</span>.<span class="fn">log</span>(<span class="fn">sapa</span>(nama));</code></pre>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="fn">greet</span>(name));</code></pre>
       </div>
       <div class="code-block">
         <div class="code-header"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span><span class="code-filename">JPL</span></div>
-        <pre><code><span class="kw">iki iku</span> nama <span class="kw">yoiku</span> <span class="str">"Dunia"</span>
-<span class="kw">iki iku</span> sapa <span class="kw">yoiku</span> n <span class="kw">lakoni</span> <span class="str">"Halo, "</span> <span class="op">tambah</span> n
-<span class="fn">cetakno</span> sapa nama</code></pre>
+        <pre><code><span class="kw">iki iku</span> name <span class="kw">yoiku</span> <span class="str">"World"</span>
+<span class="kw">iki iku</span> greet <span class="kw">yoiku</span> n <span class="kw">lakoni</span> <span class="str">"Hello, "</span> <span class="op">tambah</span> n
+<span class="fn">cetakno</span> greet name</code></pre>
       </div>
     </div>
   </section>
@@ -109,6 +109,6 @@
   <footer class="footer">
     <p>Djawa Script (JPL) &mdash; Built with pride in Java, Indonesia.</p>
   </footer>
-  <script src="js/app.js"></script>
+  <script src="../js/app.js"></script>
 </body>
 </html>
