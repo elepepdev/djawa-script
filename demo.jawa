@@ -24,10 +24,10 @@ cetakno '  abang = ' tambah Werna.abang
 cetakno '  jenenge(2) = ' tambah Werna.jenenge(2)
 cetakno '7. Pattern matching:'
 gawe sapaan(oralan) terus
-  cocok oralan terus
-      kalo 'sedulur' dadi 'Halo sedulur!'
-      kalo 'ndhara' dadi 'Halo ndhara!'
-      kalo _ dadi 'Halo liyane!'
+  cocok oralan
+    kalo 'sedulur' terus balekno 'Halo sedulur!' mbari
+    kalo 'ndhara' terus balekno 'Halo ndhara!' mbari
+    kalo _ terus balekno 'Halo liyane!' mbari
   mbari
 mbari
 cetakno '  ' tambah sapaan('sedulur')

@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="jv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dokumentasi — JPL</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo">
+        <span class="logo-jawa">ꦗ</span> JPL
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Beranda</a>
+        <a href="docs.html" class="nav-link active">Dokumentasi</a>
+        <a href="https://github.com/gegesteorngoding/djawa-script" class="nav-link" target="_blank">GitHub</a>
+      </div>
+      <button class="nav-toggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="docs-layout">
+    <aside class="sidebar" id="sidebar">
+      <div class="search-box">
+        <input type="text" id="search-input" placeholder="Cari dokumentasi..." autocomplete="off">
+        <div id="search-results" class="search-results"></div>
+      </div>
+      
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <h4>Memulai</h4>
+          <a href="#quickstart" class="sidebar-link">Mulai Cepat</a>
+          <a href="#installation" class="sidebar-link">Instalasi</a>
+        </div>
+        
+        <div class="nav-section">
+          <h4>Konsep Dasar</h4>
+          <a href="#blocks" class="sidebar-link">Blok Kode</a>
+          <a href="#comments" class="sidebar-link">Komentar</a>
+          <a href="#variables" class="sidebar-link">Variabel</a>
+          <a href="#destructuring" class="sidebar-link">Destructuring</a>
+          <a href="#datatypes" class="sidebar-link">Tipe Data</a>
+          <a href="#console" class="sidebar-link">Konsol & Input</a>
+        </div>
+        
+        <div class="nav-section">
+          <h4>Kontrol Alur</h4>
+          <a href="#conditionals" class="sidebar-link">Kondisional</a>
+          <a href="#ternary" class="sidebar-link">Ternary</a>
+          <a href="#loops" class="sidebar-link">Perulangan</a>
+          <a href="#switch" class="sidebar-link">Switch</a>
+          <a href="#pattern" class="sidebar-link">Pattern Matching</a>
+        </div>
+        
+        <div class="nav-section">
+          <h4>Fungsi</h4>
+          <a href="#functions" class="sidebar-link">Fungsi Biasa</a>
+          <a href="#arrow" class="sidebar-link">Arrow Function</a>
+          <a href="#async" class="sidebar-link">Async/Await</a>
+          <a href="#generator" class="sidebar-link">Generator</a>
+        </div>
+        
+        <div class="nav-section">
+          <h4>Error Handling</h4>
+          <a href="#error" class="sidebar-link">Try/Catch</a>
+          <a href="#assertion" class="sidebar-link">Asersi (pasten)</a>
+        </div>
+        
+        <div class="nav-section">
+          <h4>Operator</h4>
+          <a href="#arithmetic" class="sidebar-link">Aritmatika</a>
+          <a href="#comparison" class="sidebar-link">Perbandingan</a>
+          <a href="#logical" class="sidebar-link">Logika</a>
+          <a href="#bitwise" class="sidebar-link">Bitwise</a>
+        </div>
+        
+        <div class="nav-section">
+          <h4>OOP</h4>
+          <a href="#classes" class="sidebar-link">Kelas</a>
+          <a href="#enum" class="sidebar-link">Enum</a>
+          <a href="#abstract" class="sidebar-link">Abstract Class</a>
+          <a href="#interface" class="sidebar-link">Interface</a>
+          <a href="#struct" class="sidebar-link">Struct</a>
+        </div>
+        
+        <div class="nav-section">
+          <h4>Fitur Lanjutan</h4>
+          <a href="#modules" class="sidebar-link">Modul</a>
+          <a href="#metaprogramming" class="sidebar-link">Metaprogramming</a>
+          <a href="#tuple" class="sidebar-link">Tuple</a>
+        </div>
+        
+        <div class="nav-section">
+          <h4>Standard Library</h4>
+          <a href="#math" class="sidebar-link">Mtk (Math)</a>
+          <a href="#date" class="sidebar-link">Tanggalan (Date)</a>
+          <a href="#json" class="sidebar-link">JSON</a>
+          <a href="#array-methods" class="sidebar-link">Method Array</a>
+          <a href="#string-methods" class="sidebar-link">Method String</a>
+        </div>
+        
+        <div class="nav-section">
+          <h4>CLI</h4>
+          <a href="#cli" class="sidebar-link">Referensi CLI</a>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="main-content">
+      <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+
+      <section id="quickstart">
+        <h1>Mulai Cepat</h1>
+        <p>Install JPL dan jalankan program pertama Anda dalam hitungan menit.</p>
+        
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-dot red"></span>
+            <span class="code-dot yellow"></span>
+            <span class="code-dot green"></span>
+            <span class="code-filename">Terminal</span>
+          </div>
+          <pre><code><span class="comment"># Install via npm</span>
+npm install -g @jawirhytam/jawirscript
+
+<span class="comment"># Buat file baru</span>
+djawa make halo
+
+<span class="comment"># Jalankan</span>
+djawa halo.jawa</code></pre>
+        </div>
+
+        <h3>Program Pertama</h3>
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-dot red"></span>
+            <span class="code-dot yellow"></span>
+            <span class="code-dot green"></span>
+            <span class="code-filename">halo.jawa</span>
+          </div>
+          <pre><code><span class="kw">iki iku</span> jeneng <span class="kw">yoiku</span> <span class="str">"Dunia"</span>
+<span class="fn">cetakno</span>(<span class="str">"Halo, "</span> <span class="op">tambah</span> jeneng <span class="op">tambah</span> <span class="str">"!"</span>)</code></pre>
+        </div>
+      </section>
+
+      <section id="blocks">
+        <h2>Blok Kode: <code>terus</code> & <code>mbari</code></h2>
+        <p>JPL adalah bahasa <strong>berbasis blok</strong>. Setiap blok kode harus dibuka dengan <code>terus</code> dan ditutup dengan <code>mbari</code>.</p>
+        
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-dot red"></span>
+            <span class="code-dot yellow"></span>
+            <span class="code-dot green"></span>
+            <span class="code-filename">contoh.jawa</span>
+          </div>
+          <pre><code><span class="kw">lek</span> (tenan) <span class="kw">terus</span>
+  <span class="comment">// kode di dalam blok</span>
+<span class="kw">mbari</span></code></pre>
+        </div>
+        
+        <div class="info-box">
+          <strong>Catatan:</strong> Gunakan <code>terus</code> dan <code>mbari</code> bukan kurung kurawal <code>{}</code>. Error akan muncul jika Anda mencoba menggunakan <code>{</code> atau <code>}</code>.
+        </div>
+      </section>
+
+      <section id="variables">
+        <h2>Variabel</h2>
+        <p>JPL memiliki dua jenis variabel:</p>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>Kata Kunci</th>
+              <th>Ekuivalen JS</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>iki iku</code></td>
+              <td><code>const</code></td>
+              <td>Konstan — tidak bisa diubah</td>
+            </tr>
+            <tr>
+              <td><code>jarno</code></td>
+              <td><code>let</code></td>
+              <td>Mutable — bisa diubah</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-dot red"></span>
+            <span class="code-dot yellow"></span>
+            <span class="code-dot green"></span>
+            <span class="code-filename">contoh.jawa</span>
+          </div>
+          <pre><code><span class="comment">// Variabel konstan</span>
+<span class="kw">iki iku</span> jeneng <span class="kw">yoiku</span> <span class="str">"Budi"</span>
+
+<span class="comment">// Variabel yang bisa diubah</span>
+<span class="kw">jarno</span> umur <span class="kw">yoiku</span> <span class="num">25</span>
+umur <span class="kw">yoiku</span> umur <span class="op">tambah</span> <span class="num">1</span>  <span class="comment">// umur sekarang 26</span></code></pre>
+        </div>
+      </section>
+
+      <section id="datatypes">
+        <h2>Tipe Data</h2>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>JPL</th>
+              <th>JavaScript</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>tenan</code></td><td><code>true</code></td><td>Boolean benar</td></tr>
+            <tr><td><code>gak</code></td><td><code>false</code></td><td>Boolean salah</td></tr>
+            <tr><td><code>kosong</code></td><td><code>null</code></td><td>Nilai null</td></tr>
+            <tr><td><code>oraDidefinisikan</code></td><td><code>undefined</code></td><td>Nilai undefined</td></tr>
+          </tbody>
+        </table>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-dot red"></span>
+            <span class="code-dot yellow"></span>
+            <span class="code-dot green"></span>
+            <span class="code-filename">contoh.jawa</span>
+          </div>
+          <pre><code><span class="kw">jarno</span> lagi_sinau <span class="kw">yoiku</span> tenan
+<span class="kw">jarno</span> nilai <span class="kw">yoiku</span> <span class="num">100</span>
+<span class="kw">jarno</span> pesan <span class="kw">yoiku</span> <span class="str">"Sugeng sinau!"</span>
+<span class="kw">jarno</span> ora_ono <span class="kw">yoiku</span> kosong</code></pre>
+        </div>
+      </section>
+
+      <section id="console">
+        <h2>Konsol & Input Pengguna</h2>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>JS Equivalent</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>cetakno(...)</code></td><td><code>console.log(...)</code></td><td>Cetak output</td></tr>
+            <tr><td><code>cetakno.peringatan(...)</code></td><td><code>console.warn(...)</code></td><td>Pesan peringatan</td></tr>
+            <tr><td><code>cetakno.kesalahan(...)</code></td><td><code>console.error(...)</code></td><td>Pesan error</td></tr>
+            <tr><td><code>takon(pesan)</code></td><td><code>prompt(pesan)</code></td><td>Minta input</td></tr>
+          </tbody>
+        </table>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-dot red"></span>
+            <span class="code-dot yellow"></span>
+            <span class="code-dot green"></span>
+            <span class="code-filename">contoh.jawa</span>
+          </div>
+          <pre><code><span class="fn">cetakno</span>(<span class="str">"Halo Dunia!"</span>)
+
+<span class="kw">jarno</span> jenengmu <span class="kw">yoiku</span> <span class="fn">takon</span>(<span class="str">"Sopo jenengmu? "</span>)
+<span class="fn">cetakno</span>(<span class="str">"Sugeng rawuh, "</span> <span class="op">tambah</span> jenengmu)</code></pre>
+        </div>
+      </section>
+
+      <section id="conditionals">
+        <h2>Kondisional</h2>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>Kata Kunci</th>
+              <th>JS Equivalent</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>lek (kondisi)</code></td><td><code>if (kondisi)</code></td><td>Jalankan blok jika benar</td></tr>
+            <tr><td><code>lek misale (kondisi)</code></td><td><code>else if (kondisi)</code></td><td>Kondisi tambahan</td></tr>
+            <tr><td><code>liyane</code></td><td><code>else</code></td><td>Jika semua salah</td></tr>
+          </tbody>
+        </table>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-dot red"></span>
+            <span class="code-dot yellow"></span>
+            <span class="code-dot green"></span>
+            <span class="code-filename">contoh.jawa</span>
+          </div>
+          <pre><code><span class="kw">jarno</span> nilai <span class="kw">yoiku</span> <span class="num">85</span>
+
+<span class="kw">lek</span> (nilai luwihGedhe <span class="num">90</span>) <span class="kw">terus</span>
+  <span class="fn">cetakno</span>(<span class="str">"Istimewa"</span>)
+<span class="kw">mbari lek misale</span> (nilai luwihGedhe <span class="num">75</span>) <span class="kw">terus</span>
+  <span class="fn">cetakno</span>(<span class="str">"Baik"</span>)
+<span class="kw">mbari liyane terus</span>
+  <span class="fn">cetakno</span>(<span class="str">"Tetap semangat!"</span>)
+<span class="kw">mbari</span></code></pre>
+        </div>
+
+        <h3>Tanpa Kurung</h3>
+        <p>JPL mendukung sintaks tanpa kurung:</p>
+        <div class="code-block">
+          <pre><code><span class="kw">lek</span> nilai luwihGedhePodo <span class="num">17</span> <span class="kw">terus</span>
+  <span class="fn">cetakno</span>(<span class="str">"Dewasa"</span>)
+<span class="kw">mbari</span></code></pre>
+        </div>
+      </section>
+
+      <section id="loops">
+        <h2>Perulangan</h2>
+        
+        <h3><code>kanggo</code> — Perulangan For</h3>
+        <div class="code-block">
+          <pre><code><span class="kw">kanggo</span> (<span class="kw">jarno</span> i <span class="kw">yoiku</span> <span class="num">0</span> banjur i luwihCilik <span class="num">5</span> banjur i <span class="kw">yoiku</span> i <span class="op">tambah</span> <span class="num">1</span>) <span class="kw">terus</span>
+  <span class="fn">cetakno</span>(i)
+<span class="kw">mbari</span></code></pre>
+        </div>
+
+        <h3><code>selagi</code> — Perulangan While</h3>
+        <div class="code-block">
+          <pre><code><span class="kw">jarno</span> hitung <span class="kw">yoiku</span> <span class="num">0</span>
+<span class="kw">selagi</span> (hitung luwihCilik <span class="num">3</span>) <span class="kw">terus</span>
+  <span class="fn">cetakno</span>(hitung)
+  hitung <span class="op">tambah</span> <span class="num">1</span>
+<span class="kw">mbari</span></code></pre>
+        </div>
+
+        <h3><code>kanggo...soko</code> — Perulangan For...Of</h3>
+        <div class="code-block">
+          <pre><code><span class="kw">iki iku</span> woh_wohan <span class="kw">yoiku</span> [<span class="str">'apel'</span>, <span class="str">'jeruk'</span>, <span class="str">'mangga'</span>]
+
+<span class="kw">kanggo</span> (<span class="kw">iki iku</span> woh <span class="kw">soko</span> woh_wohan) <span class="kw">terus</span>
+  <span class="fn">cetakno</span>(woh)
+<span class="kw">mbari</span></code></pre>
+        </div>
+
+        <h3>Kontrol Perulangan</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Kata Kunci</th>
+              <th>JS Equivalent</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>mandek</code></td><td><code>break</code></td><td>Keluar dari perulangan</td></tr>
+            <tr><td><code>lanjutno</code></td><td><code>continue</code></td><td>Lompat ke iterasi berikutnya</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="functions">
+        <h2>Fungsi</h2>
+        
+        <h3>Fungsi Biasa: <code>gawe</code></h3>
+        <div class="code-block">
+          <pre><code><span class="kw">gawe</span> hitungLuas(panjang, lebar) <span class="kw">terus</span>
+  <span class="kw">balekno</span> panjang <span class="op">ping</span> lebar
+<span class="kw">mbari</span>
+
+<span class="kw">iki iku</span> luas <span class="kw">yoiku</span> hitungLuas(<span class="num">10</span>, <span class="num">5</span>)
+<span class="fn">cetakno</span>(luas)  <span class="comment">// Output: 50</span></code></pre>
+        </div>
+
+        <h3>Arrow Function: <code>lakoni</code></h3>
+        <div class="code-block">
+          <pre><code><span class="comment">// Satu baris (return implisit)</span>
+<span class="kw">iki iku</span> kalikan <span class="kw">yoiku</span> (a, b) <span class="kw">lakoni</span> a <span class="op">ping</span> b
+<span class="fn">cetakno</span>(kalikan(<span class="num">7</span>, <span class="num">8</span>))  <span class="comment">// Output: 56</span>
+
+<span class="comment">// Multi-baris (return eksplisit)</span>
+<span class="kw">iki iku</span> sapa <span class="kw">yoiku</span> (jeneng) <span class="kw">lakoni terus</span>
+  <span class="kw">iki iku</span> sapaan <span class="kw">yoiku</span> <span class="str">"Sugeng rawuh, "</span> <span class="op">tambah</span> jeneng
+  <span class="kw">balekno</span> sapaan
+<span class="kw">mbari</span></code></pre>
+        </div>
+      </section>
+
+      <section id="error">
+        <h2>Penanganan Error</h2>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>Kata Kunci</th>
+              <th>JS Equivalent</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>cobak</code></td><td><code>try</code></td><td>Blok yang mungkin error</td></tr>
+            <tr><td><code>nyekel (e)</code></td><td><code>catch (e)</code></td><td>Tangani error</td></tr>
+            <tr><td><code>pungkasan</code></td><td><code>finally</code></td><td>Selalu dijalankan</td></tr>
+            <tr><td><code>uncalen nilai</code></td><td><code>throw nilai</code></td><td>Lempar error</td></tr>
+          </tbody>
+        </table>
+
+        <div class="code-block">
+          <pre><code><span class="kw">cobak terus</span>
+  <span class="kw">uncalen</span> <span class="str">"Ada yang salah!"</span>
+<span class="kw">mbari nyekel</span> (e) <span class="kw">terus</span>
+  <span class="fn">cetakno</span>(<span class="str">"Error tertangkap: "</span> <span class="op">tambah</span> e)
+<span class="kw">mbari pungkasan terus</span>
+  <span class="fn">cetakno</span>(<span class="str">"Ini selalu dijalankan."</span>)
+<span class="kw">mbari</span></code></pre>
+        </div>
+      </section>
+
+      <section id="arithmetic">
+        <h2>Operator Aritmatika</h2>
+        
+        <div class="info-box">
+          <strong>Penting:</strong> Selalu beri spasi sebelum dan sesudah operator.<br>
+          ✅ <code>5 tambah 3</code> &nbsp;&nbsp; ❌ <code>5'tambah'3</code>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>JPL</th>
+              <th>JavaScript</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>tambah</code></td><td><code>+</code></td><td>Penjumlahan</td></tr>
+            <tr><td><code>kurang</code></td><td><code>-</code></td><td>Pengurangan</td></tr>
+            <tr><td><code>ping</code></td><td><code>*</code></td><td>Perkalian</td></tr>
+            <tr><td><code>bagi</code></td><td><code>/</code></td><td>Pembagian</td></tr>
+            <tr><td><code>siso</code></td><td><code>%</code></td><td>Modulo</td></tr>
+            <tr><td><code>pangkat</code></td><td><code>**</code></td><td>Pangkat</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="comparison">
+        <h2>Operator Perbandingan</h2>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>JPL</th>
+              <th>JavaScript</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>plek</code></td><td><code>===</code></td><td>Persamaan ketat</td></tr>
+            <tr><td><code>podo</code></td><td><code>==</code></td><td>Persamaan longgar</td></tr>
+            <tr><td><code>luwihGedhe</code></td><td><code>&gt;</code></td><td>Lebih besar dari</td></tr>
+            <tr><td><code>luwihCilik</code></td><td><code>&lt;</code></td><td>Lebih kecil dari</td></tr>
+            <tr><td><code>luwihGedhePodo</code></td><td><code>&gt;=</code></td><td>Lebih besar atau sama</td></tr>
+            <tr><td><code>luwihCilikPodo</code></td><td><code>&lt;=</code></td><td>Lebih kecil atau sama</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="logical">
+        <h2>Operator Logika</h2>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>JPL</th>
+              <th>JavaScript</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>lan</code></td><td><code>&&</code></td><td>AND</td></tr>
+            <tr><td><code>utawa</code></td><td><code>||</code></td><td>OR</td></tr>
+            <tr><td><code>ora</code></td><td><code>!</code></td><td>NOT</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="classes">
+        <h2>Pemrograman Berorientasi Objek</h2>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>Kata Kunci</th>
+              <th>JS Equivalent</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>kelas Nama</code></td><td><code>class Nama</code></td><td>Deklarasi kelas</td></tr>
+            <tr><td><code>wujudno(...)</code></td><td><code>constructor(...)</code></td><td>Konstruktor</td></tr>
+            <tr><td><code>turunan soko Induk</code></td><td><code>extends Induk</code></td><td>Pewarisan</td></tr>
+            <tr><td><code>induk(...)</code></td><td><code>super(...)</code></td><td>Panggil induk</td></tr>
+            <tr><td><code>iki</code></td><td><code>this</code></td><td>Instance saat ini</td></tr>
+          </tbody>
+        </table>
+
+        <div class="code-block">
+          <pre><code><span class="kw">kelas</span> Kewan <span class="kw">terus</span>
+  <span class="fn">wujudno</span>(jeneng) <span class="kw">terus</span>
+    <span class="kw">iki</span>.jeneng <span class="kw">yoiku</span> jeneng
+  <span class="kw">mbari</span>
+
+  <span class="fn">mangan</span>() <span class="kw">terus</span>
+    <span class="fn">cetakno</span>(<span class="kw">iki</span>.jeneng <span class="op">tambah</span> <span class="str">" lagi mangan."</span>)
+  <span class="kw">mbari</span>
+<span class="kw">mbari</span>
+
+<span class="kw">kelas</span> Kucing <span class="kw">turunan soko</span> Kewan <span class="kw">terus</span>
+  <span class="fn">meong</span>() <span class="kw">terus</span>
+    <span class="fn">cetakno</span>(<span class="kw">iki</span>.jeneng <span class="op">tambah</span> <span class="str">" muni Meong!"</span>)
+  <span class="kw">mbari</span>
+<span class="kw">mbari</span></code></pre>
+        </div>
+      </section>
+
+      <section id="enum">
+        <h2>Enum: <code>cacah</code></h2>
+        
+        <div class="code-block">
+          <pre><code><span class="kw">cacah</span> Werna <span class="kw">yoiku</span>
+  abang,
+  ijo,
+  kuning,
+  biru <span class="kw">yoiku</span> <span class="num">10</span>,
+  ungu
+<span class="kw">mbari</span>
+
+<span class="fn">cetakno</span>(Werna.kuning)  <span class="comment">// Output: 2</span>
+<span class="fn">cetakno</span>(Werna.biru)    <span class="comment">// Output: 10</span></code></pre>
+        </div>
+      </section>
+
+      <section id="modules">
+        <h2>Sistem Modul</h2>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>Kata Kunci</th>
+              <th>JS Equivalent</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>metokno terus nama mbari</code></td><td><code>export { nama }</code></td><td>Ekspor bernama</td></tr>
+            <tr><td><code>metokno biasane nilai</code></td><td><code>export default nilai</code></td><td>Ekspor default</td></tr>
+            <tr><td><code>jupukno ... soko '...'</code></td><td><code>import ... from '...'</code></td><td>Impor</td></tr>
+          </tbody>
+        </table>
+
+        <div class="code-block">
+          <div class="code-header">
+            <span class="code-dot red"></span>
+            <span class="code-dot yellow"></span>
+            <span class="code-dot green"></span>
+            <span class="code-filename">util.jawa</span>
+          </div>
+          <pre><code><span class="kw">gawe</span> salam(jeneng) <span class="kw">terus</span>
+  <span class="kw">balekno</span> <span class="str">"Sugeng rawuh, "</span> <span class="op">tambah</span> jeneng
+<span class="kw">mbari</span>
+
+<span class="kw">metokno terus</span> salam <span class="kw">mbari</span></code></pre>
+        </div>
+      </section>
+
+      <section id="math">
+        <h2>Mtk — Objek Math</h2>
+        
+        <h3>Konstanta</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Konstanta</th>
+              <th>Nilai</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>Mtk.PI</code></td><td>≈ 3.14159</td></tr>
+            <tr><td><code>Mtk.E</code></td><td>≈ 2.718</td></tr>
+            <tr><td><code>Mtk.SQRT2</code></td><td>≈ 1.414</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Fungsi</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Fungsi</th>
+              <th>JS Equivalent</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>Mtk.acak()</code></td><td><code>Math.random()</code></td><td>Angka acak 0-1</td></tr>
+            <tr><td><code>Mtk.bunder(x)</code></td><td><code>Math.round(x)</code></td><td>Bulatkan</td></tr>
+            <tr><td><code>Mtk.ngisor(x)</code></td><td><code>Math.floor(x)</code></td><td>Bulatkan ke bawah</td></tr>
+            <tr><td><code>Mtk.nduwur(x)</code></td><td><code>Math.ceil(x)</code></td><td>Bulatkan ke atas</td></tr>
+            <tr><td><code>Mtk.mutlak(x)</code></td><td><code>Math.abs(x)</code></td><td>Nilai absolut</td></tr>
+            <tr><td><code>Mtk.oyot(x)</code></td><td><code>Math.sqrt(x)</code></td><td>Akar kuadrat</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="array-methods">
+        <h2>Method Array</h2>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>JPL</th>
+              <th>JavaScript</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>.dorong(item)</code></td><td><code>.push(item)</code></td><td>Tambah ke akhir</td></tr>
+            <tr><td><code>.jupukPungkasan()</code></td><td><code>.pop()</code></td><td>Hapus item terakhir</td></tr>
+            <tr><td><code>.saring(fn)</code></td><td><code>.filter(fn)</code></td><td>Saring elemen</td></tr>
+            <tr><td><code>.petakake(fn)</code></td><td><code>.map(fn)</code></td><td>Transformasi</td></tr>
+            <tr><td><code>.golek(fn)</code></td><td><code>.find(fn)</code></td><td>Temukan elemen</td></tr>
+            <tr><td><code>.suda(fn)</code></td><td><code>.reduce(fn)</code></td><td>Reduksi</td></tr>
+            <tr><td><code>.sambungake(sep)</code></td><td><code>.join(sep)</code></td><td>Gabung ke string</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="string-methods">
+        <h2>Method String</h2>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>JPL</th>
+              <th>JavaScript</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>.gedekno()</code></td><td><code>.toUpperCase()</code></td><td>Huruf kapital</td></tr>
+            <tr><td><code>.cilikno()</code></td><td><code>.toLowerCase()</code></td><td>Huruf kecil</td></tr>
+            <tr><td><code>.rapikno()</code></td><td><code>.trim()</code></td><td>Hapus spasi</td></tr>
+            <tr><td><code>.gantien(a, b)</code></td><td><code>.replace(a, b)</code></td><td>Ganti string</td></tr>
+            <tr><td><code>.pecahen(sep)</code></td><td><code>.split(sep)</code></td><td>Pecah jadi array</td></tr>
+            <tr><td><code>.ngemot(item)</code></td><td><code>.includes(item)</code></td><td>Cek keberadaan</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="cli">
+        <h2>Referensi CLI</h2>
+        
+        <h3>Instalasi</h3>
+        <div class="code-block">
+          <pre><code>npm install -g @jawirhytam/jawirscript</code></pre>
+        </div>
+
+        <h3>Perintah</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Perintah</th>
+              <th>Keterangan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>djawa &lt;file.jawa&gt;</code></td><td>Jalankan file .jawa</td></tr>
+            <tr><td><code>djawa run &lt;file.jawa&gt;</code></td><td>Alias untuk menjalankan</td></tr>
+            <tr><td><code>djawa fmt &lt;file.jawa&gt;</code></td><td>Format file</td></tr>
+            <tr><td><code>djawa repl</code></td><td>Shell interaktif</td></tr>
+            <tr><td><code>djawa make &lt;nama&gt;</code></td><td>Buat file baru</td></tr>
+            <tr><td><code>djawa version</code></td><td>Versi JPL</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="pattern">
+        <h2>Pattern Matching: <code>cocok</code></h2>
+        
+        <div class="code-block">
+          <pre><code><span class="kw">gawe</span> klasifikasi(n) <span class="kw">terus</span>
+  <span class="kw">cocok</span> n
+    <span class="kw">kalo</span> <span class="num">0</span> <span class="kw">terus</span> <span class="kw">balekno</span> <span class="str">"nol"</span> <span class="kw">mbari</span>
+    <span class="kw">kalo</span> <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span> <span class="kw">terus</span> <span class="kw">balekno</span> <span class="str">"siji-siji"</span> <span class="kw">mbari</span>
+    <span class="kw">kalo</span> x <span class="kw">lan</span> x luwihCilik <span class="num">0</span> <span class="kw">terus</span> <span class="kw">balekno</span> <span class="str">"negatif: "</span> + x <span class="kw">mbari</span>
+    <span class="kw">kalo</span> x <span class="kw">terus</span> <span class="kw">balekno</span> <span class="str">"liyane: "</span> + x <span class="kw">mbari</span>
+  <span class="kw">mbari</span>
+<span class="kw">mbari</span></code></pre>
+        </div>
+      </section>
+
+      <section id="tuple">
+        <h2>Tuple (Data Immutable)</h2>
+        
+        <div class="code-block">
+          <pre><code><span class="comment">// Buat Tuple koordinat</span>
+<span class="kw">iki iku</span> koordinat <span class="kw">yoiku</span> <span class="fn">tuple</span>(<span class="num">10</span>, <span class="num">20</span>)
+<span class="fn">cetakno</span>(koordinat[<span class="num">0</span>])  <span class="comment">// Output: 10</span>
+<span class="fn">cetakno</span>(koordinat[<span class="num">1</span>])  <span class="comment">// Output: 20</span>
+
+<span class="comment">// Tuple bisa menampung tipe berbeda</span>
+<span class="kw">iki iku</span> info <span class="kw">yoiku</span> <span class="fn">tuple</span>(<span class="str">"Budi"</span>, <span class="num">28</span>, tenan)</code></pre>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

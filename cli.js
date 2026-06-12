@@ -54,7 +54,7 @@ async function runRepl() {
   let buffer = "";
   let blockDepth = 0;
 
-  console.log("DjawaScript REPL v2.0.1");
+  console.log("DjawaScript REPL v2.2.0");
   console.log("Ketik 'metu' utowo pencet Ctrl+C kanggo metu.");
 
   rl.setPrompt('djawa> ');
