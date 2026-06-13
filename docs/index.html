@@ -30,6 +30,31 @@
     .comparison-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
     @media(max-width:640px){.comparison-grid{grid-template-columns:1fr}}
     .footer{text-align:center;padding:40px 24px;border-top:1px solid var(--border);font-size:13px;color:var(--text-muted)}
+
+    .playground{max-width:900px;margin:0 auto;padding:0 24px 80px}
+    .playground h2{text-align:center;font-size:28px;margin-bottom:8px}
+    .playground>p{text-align:center;color:var(--text-muted);margin-bottom:24px}
+    .playground-container{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.05)}
+    .playground-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--bg);border-bottom:1px solid var(--border);gap:8px;flex-wrap:wrap}
+    .playground-tabs{display:flex;gap:4px}
+    .playground-tab{padding:6px 14px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;border:none;background:transparent;color:var(--text-muted);transition:all .15s}
+    .playground-tab.active{background:var(--accent);color:#fff}
+    .playground-tab:hover:not(.active){background:var(--accent-light);color:var(--accent)}
+    .playground-actions{display:flex;gap:8px}
+    .btn-run{padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:var(--accent);color:#fff;transition:all .2s;display:flex;align-items:center;gap:6px}
+    .btn-run:hover{background:#b91c1c}
+    .btn-reset{padding:8px 14px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--text-muted);transition:all .15s}
+    .btn-reset:hover{border-color:var(--accent);color:var(--accent)}
+    .playground-body{display:grid;grid-template-columns:1fr 1fr;min-height:320px}
+    .playground-editor{position:relative;border-right:1px solid var(--border)}
+    .playground-editor textarea{width:100%;height:100%;min-height:320px;padding:16px;border:none;background:var(--bg-code);color:#e2e8f0;font-family:var(--font-mono);font-size:13px;line-height:1.6;resize:none;outline:none;tab-size:2}
+    .playground-editor textarea::placeholder{color:#6b7280}
+    .playground-output{display:flex;flex-direction:column;background:#0c0a09}
+    .output-label{padding:8px 16px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#78716c;border-bottom:1px solid #292524}
+    .output-content{flex:1;padding:16px;font-family:var(--font-mono);font-size:13px;color:#e2e8f0;overflow-y:auto;white-space:pre-wrap;word-break:break-all}
+    .output-content.error{color:#ef4444}
+    .output-content .output-line{margin-bottom:4px}
+    @media(max-width:640px){.playground-body{grid-template-columns:1fr}.playground-editor{border-right:none;border-bottom:1px solid var(--border)}.playground-editor textarea{min-height:200px}}
   </style>
 </head>
 <body>
@@ -106,9 +131,116 @@
     </div>
   </section>
 
+  <section class="playground">
+    <h2>Coba JPL Sekarang!</h2>
+    <p>Tulis kode JPL di editor, lalu klik "Jalankan" untuk melihat hasilnya.</p>
+    <div class="playground-container">
+      <div class="playground-header">
+        <div class="playground-tabs">
+          <button class="playground-tab active" data-example="hello">Halo Dunia</button>
+          <button class="playground-tab" data-example="function">Fungsi</button>
+          <button class="playground-tab" data-example="loop">Perulangan</button>
+          <button class="playground-tab" data-example="class">Kelas</button>
+        </div>
+        <div class="playground-actions">
+          <button class="btn-reset" id="playground-reset">Reset</button>
+          <button class="btn-run" id="playground-run">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            Jalankan
+          </button>
+        </div>
+      </div>
+      <div class="playground-body">
+        <div class="playground-editor">
+          <textarea id="playground-code" spellcheck="false" placeholder="Tulis kode JPL di sini..."></textarea>
+        </div>
+        <div class="playground-output">
+          <div class="output-label">Output</div>
+          <div class="output-content" id="playground-output">Klik "Jalankan" untuk menjalankan kode...</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <footer class="footer">
     <p>Djawa Script (JPL) &mdash; Built with pride in Java, Indonesia.</p>
   </footer>
+  <script src="js/playground.js"></script>
   <script src="js/app.js"></script>
+  <script>
+    (function() {
+      const examples = {
+        hello: `iki iku pesan yoiku "Halo, Dunia!"\ncetakno(pesan)\n\n// Variabel\niki iku jeneng yoiku "JPL"\njarno umur yoiku 2025\ncetakno("Sugeng rawuh ing " tambah jeneng tambah "!")\ncetakno("Taun iki: " tambah umur)`,
+        function: `// Fungsi biasa\ngawe sapa(name) terus\n  balekno "Halo, " tambah name tambah "!"\nmbari\n\n// Arrow function\niki iku kali yoiku (a, b) lakoni a ping b\n\n// Fungsi dengan parameter\ngawe tambah(a, b) terus\n  balekno a tambah b\nmbari\n\ncetakno(sapa("Sedulur"))\ncetakno(kali(7, 8))\ncetakno(tambah(10, 20))`,
+        loop: `// Perulangan kanggo\nkanggo (jarno i yoiku 1 banjur i luwihCilik 5 banjur i yoiku i tambah 1) terus\n  cetakno("Hitungan: " tambah i)\nmbari\n\n// Perulangan selagi\njarno hitung yoiku 0\nselagi (hitung luwihCilik 3) terus\n  cetakno("Selagi: " tambah hitung)\n  hitung tambah 1\nmbari\n\n// Array dan for...of\niki iku buah yoiku ["apel", "jeruk", "mangga"]\nkanggo (iki iku woh soko buah) terus\n  cetakno("Buah: " tambah woh)\nmbari`,
+        class: `// Deklarasi kelas\nkelas Kucing terus\n  wujudno(name) terus\n    iki.name yoiku name\n  mbari\n\n  sapa() terus\n    balekno "Kucing iki jenenge " tambah iki.name\n  mbari\n\n  meong() terus\n    cetakno(iki.name tambah " muni Meong!")\n  mbari\nmbari\n\n// Buat objek\ncetakno("=== Demo Kelas ===")\njarno kucingku yoiku Kucing anyar("Tom")\ncetakno(kucingku.sapa())\nkucingku.meong()\n\n// Pattern matching\ncetakno("\\n=== Pattern Matching ===")\njarno nilai yoiku 85\ncocok nilai terus\n  kalo x ngendi x luwihGedhePodo 90 dadi cetakno("Istimewa!")\n  kalo x ngendi x luwihGedhePodo 70 dadi cetakno("Baik!")\n  kalo _ dadi cetakno("Perlu belajar lagi!")\nmbari`
+      };
+
+      const codeEditor = document.getElementById('playground-code');
+      const outputEl = document.getElementById('playground-output');
+      const runBtn = document.getElementById('playground-run');
+      const resetBtn = document.getElementById('playground-reset');
+      const tabs = document.querySelectorAll('.playground-tab');
+
+      codeEditor.value = examples.hello;
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+          tabs.forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+          const key = this.dataset.example;
+          if (examples[key]) codeEditor.value = examples[key];
+          outputEl.textContent = 'Klik "Jalankan" untuk menjalankan kode...';
+          outputEl.classList.remove('error');
+        });
+      });
+
+      runBtn.addEventListener('click', function() {
+        const code = codeEditor.value.trim();
+        if (!code) { outputEl.textContent = 'Kode kosong! Tulis kode JPL terlebih dahulu.'; outputEl.classList.add('error'); return; }
+        outputEl.textContent = '';
+        outputEl.classList.remove('error');
+        const result = JPL.run(code, function(msg) {
+          const line = document.createElement('div');
+          line.className = 'output-line';
+          line.textContent = msg;
+          outputEl.appendChild(line);
+        });
+        if (!result.success) {
+          const errLine = document.createElement('div');
+          errLine.className = 'output-line';
+          errLine.textContent = '❌ ' + result.error;
+          errLine.style.color = '#ef4444';
+          outputEl.appendChild(errLine);
+          outputEl.classList.add('error');
+        }
+        if (outputEl.children.length === 0) {
+          outputEl.textContent = '(Tidak ada output)';
+        }
+      });
+
+      resetBtn.addEventListener('click', function() {
+        tabs.forEach(t => t.classList.remove('active'));
+        tabs[0].classList.add('active');
+        codeEditor.value = examples.hello;
+        outputEl.textContent = 'Klik "Jalankan" untuk menjalankan kode...';
+        outputEl.classList.remove('error');
+      });
+
+      codeEditor.addEventListener('keydown', function(e) {
+        if (e.key === 'Tab') {
+          e.preventDefault();
+          const start = this.selectionStart;
+          const end = this.selectionEnd;
+          this.value = this.value.substring(0, start) + '  ' + this.value.substring(end);
+          this.selectionStart = this.selectionEnd = start + 2;
+        }
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+          e.preventDefault();
+          runBtn.click();
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

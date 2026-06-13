@@ -10,6 +10,13 @@
 
 ---
 
+## Documentation
+
+- **[English Documentation](https://gegesteorngoding.github.io/djawa-script/en/)**
+- **[Dokumentasi Bahasa Indonesia](https://gegesteorngoding.github.io/djawa-script/)**
+
+---
+
 ## Table of Contents
 
 - [Quick Start](#quick-start)
