@@ -12,8 +12,8 @@
 
 ## Dokumentasi
 
-- **[English Documentation](https://gegesteorngoding.github.io/djawa-script/en/)**
-- **[Dokumentasi Bahasa Indonesia](https://gegesteorngoding.github.io/djawa-script/)**
+- **[English Documentation](https://elepepdev.github.io/djawa-script/en/)**
+- **[Dokumentasi Bahasa Indonesia](https://elepepdev.github.io/djawa-script/)**
 
 ---
 
