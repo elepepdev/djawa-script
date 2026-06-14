@@ -85,6 +85,7 @@
           <h4>Unique Features</h4>
           <a href="#nullcheck" class="sidebar-link">Null Checking</a>
           <a href="#tuple" class="sidebar-link">Tuple</a>
+          <a href="#ngenteni" class="sidebar-link">Ngenteni (Sleep)</a>
         </div>
         <div class="nav-section">
           <h4>Other Syntax</h4>
@@ -828,6 +829,33 @@ myScore <span class="op">kurangKaro</span> <span class="num">10</span>
 <span class="kw">iki iku</span> userInfo <span class="kw">yoiku</span> <span class="fn">tuple</span>(<span class="str">"Budi"</span>, <span class="num">28</span>, tenan)
 <span class="fn">cetakno</span>(infoUser[<span class="num">0</span>])  <span class="comment">// Output: Budi</span>
 <span class="fn">cetakno</span>(infoUser[<span class="num">1</span>])  <span class="comment">// Output: 28</span></code></pre></div>
+      </section>
+
+      <section id="ngenteni">
+        <h2>Sleep / Wait: <code>ngenteni</code></h2>
+        <p>Pause program execution for a specified duration. Supports multiple time units for natural, conversational syntax.</p>
+        <table>
+          <thead><tr><th>Syntax</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>ngenteni(ms)</code></td><td>Wait for <code>ms</code> milliseconds</td></tr>
+            <tr><td><code>ngenteni n detik</code></td><td>Wait for <code>n</code> seconds</td></tr>
+            <tr><td><code>ngenteni n menit</code></td><td>Wait for <code>n</code> minutes</td></tr>
+            <tr><td><code>ngenteni n jam</code></td><td>Wait for <code>n</code> hours</td></tr>
+            <tr><td><code>ngenteni n dino</code></td><td>Wait for <code>n</code> days</td></tr>
+          </tbody>
+        </table>
+        <div class="code-block"><pre><code><span class="fn">cetakno</span>(<span class="str">"Starting..."</span>)
+<span class="kw">ngenteni</span>(<span class="num">1000</span>)           <span class="comment">// wait 1000 milliseconds</span>
+<span class="fn">cetakno</span>(<span class="str">"After 1 second"</span>)
+
+<span class="kw">ngenteni</span> <span class="num">3</span> detik         <span class="comment">// wait 3 seconds</span>
+<span class="fn">cetakno</span>(<span class="str">"After 3 seconds"</span>)
+
+<span class="comment">// With variables and expressions</span>
+<span class="kw">jarno</span> waktu <span class="kw">yoiku</span> <span class="num">2</span>
+<span class="kw">ngenteni</span> waktu detik
+<span class="kw">ngenteni</span> (<span class="num">1</span> <span class="op">tambah</span> <span class="num">1</span>) detik</code></pre></div>
+        <p><strong>Note:</strong> <code>ngenteni</code> is async — it returns a Promise. Use it inside <code>tenangan</code> functions with <code>enteni</code> for sequential execution, or at top-level where the interpreter handles it automatically.</p>
       </section>
 
       <!-- ==================== OTHER SYNTAX ==================== -->

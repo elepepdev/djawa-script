@@ -59,6 +59,7 @@
 - [Unique Features](#unique-features)
   - [Null/Undefined Checks: `iku ono` & `iku ilang`](#nullundefined-checks-iku-ono--iku-ilang)
   - [Tuple (Immutable Data)](#tuple-immutable-data)
+  - [Sleep / Wait: `ngenteni`](#sleep--wait-ngenteni)
 - [Optional Parentheses](#optional-parentheses)
 - [Special Keywords](#special-keywords)
   - [Alternative Keywords](#alternative-keywords)
@@ -880,6 +881,34 @@ iki iku userInfo yoiku tuple("Budi", 28, tenan)
 cetakno(userInfo[0])  // Output: Budi
 cetakno(userInfo[1])  // Output: 28
 ```
+
+### Sleep / Wait: `ngenteni`
+
+Pause program execution for a specified duration. Supports multiple time units for natural, conversational syntax.
+
+| Syntax | Description |
+| :--- | :--- |
+| `ngenteni(ms)` | Wait for `ms` milliseconds |
+| `ngenteni n detik` | Wait for `n` seconds |
+| `ngenteni n menit` | Wait for `n` minutes |
+| `ngenteni n jam` | Wait for `n` hours |
+| `ngenteni n dino` | Wait for `n` days |
+
+```jawascript
+cetakno("Miwiti...")
+ngenteni(1000)           // wait 1000 milliseconds
+cetakno("Setelah 1 detik")
+
+ngenteni 3 detik         // wait 3 seconds
+cetakno("Setelah 3 detik")
+
+// With variables and expressions
+jarno waktu yoiku 2
+ngenteni waktu detik
+ngenteno (1 tambah 1) detik
+```
+
+> **Note:** `ngenteni` is async — it returns a Promise. Use it inside `tenangan` functions with `enteni` for sequential execution, or at top-level where the interpreter handles it automatically.
 
 ---
 

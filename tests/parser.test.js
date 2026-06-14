@@ -377,4 +377,55 @@ describe('Parser', () => {
       expect(stmts[2].interfaces).toHaveLength(2);
     });
   });
+
+  describe('ngenteni (sleep)', () => {
+    test('ngenteni with parens (milliseconds)', () => {
+      const stmt = first('ngenteni(1000)');
+      expect(stmt).toBeInstanceOf(AST.Ngenteni);
+      expect(stmt.amount).toBeInstanceOf(AST.Literal);
+      expect(stmt.amount.value).toBe(1000);
+      expect(stmt.unit).toBeNull();
+    });
+    test('ngenteni without parens (milliseconds)', () => {
+      const stmt = first('ngenteni 500');
+      expect(stmt).toBeInstanceOf(AST.Ngenteni);
+      expect(stmt.amount).toBeInstanceOf(AST.Literal);
+      expect(stmt.amount.value).toBe(500);
+      expect(stmt.unit).toBeNull();
+    });
+    test('ngenteni with detik unit', () => {
+      const stmt = first('ngenteni 5 detik');
+      expect(stmt).toBeInstanceOf(AST.Ngenteni);
+      expect(stmt.amount.value).toBe(5);
+      expect(stmt.unit).not.toBeNull();
+      expect(stmt.unit.lexeme).toBe('detik');
+    });
+    test('ngenteni with menit unit', () => {
+      const stmt = first('ngenteni 2 menit');
+      expect(stmt).toBeInstanceOf(AST.Ngenteni);
+      expect(stmt.unit.lexeme).toBe('menit');
+    });
+    test('ngenteni with jam unit', () => {
+      const stmt = first('ngenteni 1 jam');
+      expect(stmt).toBeInstanceOf(AST.Ngenteni);
+      expect(stmt.unit.lexeme).toBe('jam');
+    });
+    test('ngenteni with dino unit', () => {
+      const stmt = first('ngenteni 3 dino');
+      expect(stmt).toBeInstanceOf(AST.Ngenteni);
+      expect(stmt.unit.lexeme).toBe('dino');
+    });
+    test('ngenteni with expression amount', () => {
+      const stmt = first('ngenteni (1 tambah 2) detik');
+      expect(stmt).toBeInstanceOf(AST.Ngenteni);
+      expect(stmt.amount).toBeInstanceOf(AST.Binary);
+      expect(stmt.unit.lexeme).toBe('detik');
+    });
+    test('ngenteni with variable amount', () => {
+      const stmt = first('ngenteni waktu detik');
+      expect(stmt).toBeInstanceOf(AST.Ngenteni);
+      expect(stmt.amount).toBeInstanceOf(AST.Variable);
+      expect(stmt.unit.lexeme).toBe('detik');
+    });
+  });
 });

@@ -85,6 +85,7 @@
           <h4>Fitur Unik</h4>
           <a href="#nullcheck" class="sidebar-link">Pengecekan Null</a>
           <a href="#tuple" class="sidebar-link">Tuple</a>
+          <a href="#ngenteni" class="sidebar-link">Ngenteni (Tunggu)</a>
         </div>
         <div class="nav-section">
           <h4>Sintaks Lainnya</h4>
@@ -830,6 +831,33 @@ myScore <span class="op">kurangKaro</span> <span class="num">10</span>
 <span class="kw">iki iku</span> infoUser <span class="kw">yoiku</span> <span class="fn">tuple</span>(<span class="str">"Budi"</span>, <span class="num">28</span>, tenan)
 <span class="fn">cetakno</span>(infoUser[<span class="num">0</span>])  <span class="comment">// Output: Budi</span>
 <span class="fn">cetakno</span>(infoUser[<span class="num">1</span>])  <span class="comment">// Output: 28</span></code></pre></div>
+      </section>
+
+      <section id="ngenteni">
+        <h2>Jeda / Tunggu: <code>ngenteni</code></h2>
+        <p>Menghentikan eksekusi program selama durasi tertentu. Mendukung beberapa satuan waktu untuk sintaks yang alami dan natural seperti berbicara dengan komputer.</p>
+        <table>
+          <thead><tr><th>Sintaks</th><th>Keterangan</th></tr></thead>
+          <tbody>
+            <tr><td><code>ngenteni(ms)</code></td><td>Tunggu selama <code>ms</code> milidetik</td></tr>
+            <tr><td><code>ngenteni n detik</code></td><td>Tunggu selama <code>n</code> detik</td></tr>
+            <tr><td><code>ngenteni n menit</code></td><td>Tunggu selama <code>n</code> menit</td></tr>
+            <tr><td><code>ngenteni n jam</code></td><td>Tunggu selama <code>n</code> jam</td></tr>
+            <tr><td><code>ngenteni n dino</code></td><td>Tunggu selama <code>n</code> hari</td></tr>
+          </tbody>
+        </table>
+        <div class="code-block"><pre><code><span class="fn">cetakno</span>(<span class="str">"Miwiti..."</span>)
+<span class="kw">ngenteni</span>(<span class="num">1000</span>)           <span class="comment">// tunggu 1000 milidetik</span>
+<span class="fn">cetakno</span>(<span class="str">"Setelah 1 detik"</span>)
+
+<span class="kw">ngenteni</span> <span class="num">3</span> detik         <span class="comment">// tunggu 3 detik</span>
+<span class="fn">cetakno</span>(<span class="str">"Setelah 3 detik"</span>)
+
+<span class="comment">// Dengan variabel dan ekspresi</span>
+<span class="kw">jarno</span> waktu <span class="kw">yoiku</span> <span class="num">2</span>
+<span class="kw">ngenteni</span> waktu detik
+<span class="kw">ngenteni</span> (<span class="num">1</span> <span class="op">tambah</span> <span class="num">1</span>) detik</code></pre></div>
+        <p><strong>Catatan:</strong> <code>ngenteni</code> bersifat async — mengembalikan Promise. Gunakan di dalam fungsi <code>tenangan</code> dengan <code>enteni</code> untuk eksekusi berurutan, atau di top-level di mana interpreter menanganinya secara otomatis.</p>
       </section>
 
       <!-- ==================== SINTAKS LAINNYA ==================== -->

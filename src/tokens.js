@@ -23,6 +23,11 @@ export const TokenType = {
   ANYAR: 'ANYAR',           // new
   MANDEK: 'MANDEK',         // break
   LANJUTNO: 'LANJUTNO',     // continue
+  NGENTENI: 'NGENTENI',     // sleep/wait
+  DETIK: 'DETIK',           // seconds
+  MENIT: 'MENIT',           // minutes
+  JAM: 'JAM',               // hours
+  DINO: 'DINO',             // days
   PILIH: 'PILIH',           // switch
   KALO: 'KALO',             // case
   YOWES: 'YOWES',           // default
@@ -155,6 +160,11 @@ export const Keywords = {
   'anyar': TokenType.ANYAR,
   'mandek': TokenType.MANDEK,
   'lanjutno': TokenType.LANJUTNO,
+  'ngenteni': TokenType.NGENTENI,
+  'detik': TokenType.DETIK,
+  'menit': TokenType.MENIT,
+  'jam': TokenType.JAM,
+  'dino': TokenType.DINO,
   'pilih': TokenType.PILIH,
   'kalo': TokenType.KALO,
   'cocok': TokenType.COCOK,

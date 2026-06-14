@@ -521,4 +521,13 @@ p2.y: 2
 --- Rampung ---"
 `;
 
+exports[`JawaScript Interpreter Feature Tests should correctly execute 66-ngenteni.jawa 1`] = `
+"start
+after 1ms
+after 1 detik
+after variable
+after expression
+done"
+`;
+
 exports[`JawaScript Interpreter Feature Tests should correctly execute test-module.jawa 1`] = `""`;

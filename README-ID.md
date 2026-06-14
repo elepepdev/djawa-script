@@ -59,6 +59,7 @@
 - [Fitur Unik](#fitur-unik)
   - [Pengecekan Null/Undefined: `iku ono` & `iku ilang`](#pengecekan-nullundefined-iku-ono--iku-ilang)
   - [Tuple (Data Immutable)](#tuple-data-immutable)
+  - [Jeda / Tunggu: `ngenteni`](#jeda--tunggu-ngenteni)
 - [Tanda Kurung Opsional](#tanda-kurung-opsional)
 - [Kata Kunci Khusus](#kata-kunci-khusus)
   - [Kata Kunci Alternatif](#kata-kunci-alternatif)
@@ -878,6 +879,34 @@ iki iku infoPengguna yoiku tuple("Budi", 28, tenan)
 cetakno(infoPengguna[0])  // Output: Budi
 cetakno(infoPengguna[1])  // Output: 28
 ```
+
+### Jeda / Tunggu: `ngenteni`
+
+Menghentikan eksekusi program selama durasi tertentu. Mendukung beberapa satuan waktu untuk sintaks yang alami dan natural.
+
+| Sintaks | Keterangan |
+| :--- | :--- |
+| `ngenteni(ms)` | Tunggu selama `ms` milidetik |
+| `ngenteni n detik` | Tunggu selama `n` detik |
+| `ngenteni n menit` | Tunggu selama `n` menit |
+| `ngenteni n jam` | Tunggu selama `n` jam |
+| `ngenteni n dino` | Tunggu selama `n` hari |
+
+```jawascript
+cetakno("Miwiti...")
+ngenteni(1000)           // tunggu 1000 milidetik
+cetakno("Setelah 1 detik")
+
+ngenteni 3 detik         // tunggu 3 detik
+cetakno("Setelah 3 detik")
+
+// Dengan variabel dan ekspresi
+jarno waktu yoiku 2
+ngenteni waktu detik
+ngenteni (1 tambah 1) detik
+```
+
+> **Catatan:** `ngenteni` bersifat async — mengembalikan Promise. Gunakan di dalam fungsi `tenangan` dengan `enteni` untuk eksekusi berurutan, atau di top-level di mana interpreter menanganinya secara otomatis.
 
 ---
 

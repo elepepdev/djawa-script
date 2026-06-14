@@ -359,6 +359,16 @@ export class Mandek extends Stmt {
   accept(visitor) { return visitor.visitMandekStmt(this); }
 }
 
+export class Ngenteni extends Stmt {
+  constructor(keyword, amount, unit = null) {
+    super();
+    this.keyword = keyword;
+    this.amount = amount; // Expr - the amount of time
+    this.unit = unit; // Token - DETIK, MENIT, JAM, DINO, or null for milliseconds
+  }
+  accept(visitor) { return visitor.visitNgenteniStmt(this); }
+}
+
 export class Lanjutno extends Stmt {
   constructor(keyword, label = null) {
     super();

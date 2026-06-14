@@ -393,6 +393,7 @@ export class Parser {
       if (this.check(TokenType.IDENTIFIER)) label = this.advance();
       return new AST.Mandek(keyword, label);
     }
+    if (this.match(TokenType.NGENTENI)) return this.ngenteniStatement();
     if (this.match(TokenType.LANJUTNO)) {
       const keyword = this.previous();
       let label = null;
@@ -507,6 +508,23 @@ export class Parser {
     this.consume(TokenType.TERUS, "Kudune 'terus' sakwise 'rentang'.");
     const body = new AST.Block(this.block());
     return new AST.RentangStmt(start, end, body);
+  }
+
+  ngenteniStatement() {
+    const keyword = this.previous();
+    let amount = null;
+    let unit = null;
+    if (this.match(TokenType.LEFT_PAREN)) {
+      amount = this.expression();
+      this.consume(TokenType.RIGHT_PAREN, "Kudune ')' sakwise nilai ngenteni.");
+    } else {
+      amount = this.expression();
+    }
+    if (this.check(TokenType.DETIK) || this.check(TokenType.MENIT) || 
+        this.check(TokenType.JAM) || this.check(TokenType.DINO)) {
+      unit = this.advance();
+    }
+    return new AST.Ngenteni(keyword, amount, unit);
   }
 
   pilihStatement() {

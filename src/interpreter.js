@@ -676,6 +676,26 @@ export class Interpreter {
   visitMandekStmt(stmt) { throw new Break(stmt.label ? stmt.label.lexeme : null); }
   visitLanjutnoStmt(stmt) { throw new Continue(stmt.label ? stmt.label.lexeme : null); }
 
+  async visitNgenteniStmt(stmt) {
+    const amount = await this.evaluate(stmt.amount);
+    if (typeof amount !== 'number' || amount < 0) {
+      throw new Error("Error: Ngenteni kudu angka positif.");
+    }
+    
+    let ms = amount;
+    if (stmt.unit) {
+      const unit = stmt.unit.lexeme;
+      switch (unit) {
+        case 'detik': ms = amount * 1000; break;
+        case 'menit': ms = amount * 60 * 1000; break;
+        case 'jam': ms = amount * 60 * 60 * 1000; break;
+        case 'dino': ms = amount * 24 * 60 * 60 * 1000; break;
+      }
+    }
+    
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   async _callValue(fn, args) {
     if (typeof fn === 'function') return await fn(...args);
     if (fn instanceof JawaCallable) return await fn.call(this, args);

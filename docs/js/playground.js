@@ -10,7 +10,8 @@ const TokenType = {
   LEK_MISALE: 'LEK_MISALE', LIYANE: 'LIYANE', SELAGI: 'SELAGI', KANGGO: 'KANGGO',
   RENTANG: 'RENTANG', TERUS: 'TERUS', MBARI: 'MBARI', TENAN: 'TENAN', GAK: 'GAK',
   KOSONG: 'KOSONG', ORADIDEFINISIKAN: 'ORADIDEFINISIKAN', TAKON: 'TAKON', ANYAR: 'ANYAR',
-  MANDEK: 'MANDEK', LANJUTNO: 'LANJUTNO', PILIH: 'PILIH', KALO: 'KALO', YOWES: 'YOWES',
+  MANDEK: 'MANDEK', LANJUTNO: 'LANJUTNO', NGENTENI: 'NGENTENI', DETIK: 'DETIK',
+  MENIT: 'MENIT', JAM: 'JAM', DINO: 'DINO', PILIH: 'PILIH', KALO: 'KALO', YOWES: 'YOWES',
   COCOK: 'COCOK', COBAK: 'COBAK', NYEKEL: 'NYEKEL', PUNGKASAN: 'PUNGKASAN',
   UNCALEN: 'UNCALEN', TENANGAN: 'TENANGAN', ENTENI: 'ENTENI', ASILNO: 'ASILNO',
   LAKONI: 'LAKONI', KELAS: 'KELAS', ABSTRAK: 'ABSTRAK', KATUTUP: 'KATUTUP',
@@ -46,7 +47,9 @@ const Keywords = {
   'mbari': TokenType.MBARI, 'tenan': TokenType.TENAN, 'gak': TokenType.GAK,
   'kosong': TokenType.KOSONG, 'oraDidefinisikan': TokenType.ORADIDEFINISIKAN,
   'takon': TokenType.TAKON, 'anyar': TokenType.ANYAR, 'mandek': TokenType.MANDEK,
-  'lanjutno': TokenType.LANJUTNO, 'pilih': TokenType.PILIH, 'kalo': TokenType.KALO,
+  'lanjutno': TokenType.LANJUTNO, 'ngenteni': TokenType.NGENTENI, 'detik': TokenType.DETIK,
+  'menit': TokenType.MENIT, 'jam': TokenType.JAM, 'dino': TokenType.DINO,
+  'pilih': TokenType.PILIH, 'kalo': TokenType.KALO,
   'cocok': TokenType.COCOK, 'yowes': TokenType.YOWES, 'guduk': TokenType.GUDUK,
   'cobak': TokenType.COBAK, 'nyekel': TokenType.NYEKEL, 'pungkasan': TokenType.PUNGKASAN,
   'uncalen': TokenType.UNCALEN, 'tenangan': TokenType.TENANGAN, 'enteni': TokenType.ENTENI,
@@ -120,6 +123,7 @@ class Cobak extends Stmt { constructor(t,c,cb,fb){super();this.tryBlock=t;this.c
 class Uncalen extends Stmt { constructor(k,v){super();this.keyword=k;this.value=v;} accept(v){return v.visitUncalenStmt(this);} }
 class Mandek extends Stmt { constructor(k,l=null){super();this.keyword=k;this.label=l;} accept(v){return v.visitMandekStmt(this);} }
 class Lanjutno extends Stmt { constructor(k,l=null){super();this.keyword=k;this.label=l;} accept(v){return v.visitLanjutnoStmt(this);} }
+class Ngenteni extends Stmt { constructor(k,a,u=null){super();this.keyword=k;this.amount=a;this.unit=u;} accept(v){return v.visitNgenteniStmt(this);} }
 class LabeledStmt extends Stmt { constructor(n,s){super();this.name=n;this.stmt=s;} accept(v){return v.visitLabeledStmt(this);} }
 class Command extends Stmt { constructor(n){super();this.name=n;} accept(v){return v.visitCommandStmt(this);} }
 class Pilih extends Stmt { constructor(e,c,d){super();this.expression=e;this.cases=c;this.defaultBranch=d;} accept(v){return v.visitPilihStmt(this);} }
@@ -131,7 +135,7 @@ class WildcardPattern {}
 class ArrayPattern { constructor(e,r){this.elements=e;this.rest=r;} }
 class ObjectPattern { constructor(p,r){this.properties=p;this.rest=r;} }
 
-const AST = { Expr, Binary, Grouping, Literal, Unary, Postfix, Variable, Assign, Call, Get, Set, This, Ternary, Logical, Tuple: TupleExpr, ArrayLiteral, ObjectLiteral, RangeExpr, TemplateLiteral, TaggedTemplate, Stmt, Expression, Cetakno, Var, Block, Lek, Selagi, Kanggo, ForOf, RentangStmt, Gawe, Balekno, Kelas, Struktur, Cobak, Uncalen, Mandek, Lanjutno, LabeledStmt, Command, Pilih, EnumStmt, MatchStmt, LiteralPattern, BindingPattern, WildcardPattern, ArrayPattern, ObjectPattern };
+const AST = { Expr, Binary, Grouping, Literal, Unary, Postfix, Variable, Assign, Call, Get, Set, This, Ternary, Logical, Tuple: TupleExpr, ArrayLiteral, ObjectLiteral, RangeExpr, TemplateLiteral, TaggedTemplate, Stmt, Expression, Cetakno, Var, Block, Lek, Selagi, Kanggo, ForOf, RentangStmt, Gawe, Balekno, Kelas, Struktur, Cobak, Uncalen, Mandek, Lanjutno, Ngenteni, LabeledStmt, Command, Pilih, EnumStmt, MatchStmt, LiteralPattern, BindingPattern, WildcardPattern, ArrayPattern, ObjectPattern };
 
 // ============= ENVIRONMENT =============
 class Environment {
@@ -484,6 +488,7 @@ class Parser {
     if (this.match(TokenType.UNCALEN)) return this.uncalenStatement();
     if (this.match(TokenType.MANDEK)) { const keyword = this.previous(); let label = null; if (this.check(TokenType.IDENTIFIER)) label = this.advance(); return new AST.Mandek(keyword, label); }
     if (this.match(TokenType.LANJUTNO)) { const keyword = this.previous(); let label = null; if (this.check(TokenType.IDENTIFIER)) label = this.advance(); return new AST.Lanjutno(keyword, label); }
+    if (this.match(TokenType.NGENTENI)) return this.ngenteniStatement();
     if (this.match(TokenType.TERUS)) return new AST.Block(this.block());
     return this.expressionStatement();
   }
@@ -536,6 +541,22 @@ class Parser {
     this.consume(TokenType.TERUS, "Kudune 'terus' sakwise 'rentang'.");
     const body = new AST.Block(this.block());
     return new AST.RentangStmt(start, end, body);
+  }
+  ngenteniStatement() {
+    const keyword = this.previous();
+    let amount = null;
+    let unit = null;
+    if (this.match(TokenType.LEFT_PAREN)) {
+      amount = this.expression();
+      this.consume(TokenType.RIGHT_PAREN, "Kudune ')' sakwise nilai ngenteni.");
+    } else {
+      amount = this.expression();
+    }
+    if (this.check(TokenType.DETIK) || this.check(TokenType.MENIT) || 
+        this.check(TokenType.JAM) || this.check(TokenType.DINO)) {
+      unit = this.advance();
+    }
+    return new AST.Ngenteni(keyword, amount, unit);
   }
   pilihStatement() {
     this.match(TokenType.LEFT_PAREN); const expr = this.expression(); if (this.check(TokenType.RIGHT_PAREN)) this.advance();
@@ -900,6 +921,23 @@ class Interpreter {
   }
   visitMandekStmt(stmt) { throw new Break(stmt.label ? stmt.label.lexeme : null); }
   visitLanjutnoStmt(stmt) { throw new Continue(stmt.label ? stmt.label.lexeme : null); }
+  async visitNgenteniStmt(stmt) {
+    const amount = await this.evaluate(stmt.amount);
+    if (typeof amount !== 'number' || amount < 0) {
+      throw new Error("Error: Ngenteni kudu angka positif.");
+    }
+    let ms = amount;
+    if (stmt.unit) {
+      const unit = stmt.unit.lexeme;
+      switch (unit) {
+        case 'detik': ms = amount * 1000; break;
+        case 'menit': ms = amount * 60 * 1000; break;
+        case 'jam': ms = amount * 60 * 60 * 1000; break;
+        case 'dino': ms = amount * 24 * 60 * 60 * 1000; break;
+      }
+    }
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
   async _callValue(fn, args) { if (typeof fn === 'function') return await fn(...args); if (fn instanceof JawaCallable) return await fn.call(this, args); throw new Error("Error: dudu fungsi."); }
   async visitForOfStmt(stmt) {
     const iterable = await this.evaluate(stmt.iterable);
