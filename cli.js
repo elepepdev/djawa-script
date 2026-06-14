@@ -36,6 +36,11 @@ Example:
 }
 
 function showVersion() {
+  // In SEA builds, __djawa_version is embedded as a constant
+  if (typeof __djawa_version !== 'undefined') {
+    console.log(`JPL (Javanese Programming Language) v${__djawa_version}`);
+    return;
+  }
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
   const packageJsonPath = path.join(__dirname, 'package.json');

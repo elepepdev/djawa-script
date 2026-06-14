@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1781359981182" clover="3.2.0">
-  <project timestamp="1781359981182" name="All files">
+<coverage generated="1781410944259" clover="3.2.0">
+  <project timestamp="1781410944259" name="All files">
     <metrics statements="3604" coveredstatements="3232" conditionals="1171" coveredconditionals="1026" methods="331" coveredmethods="265" elements="5106" coveredelements="4523" complexity="0" loc="3604" ncloc="3604" packages="1" files="6" classes="6"/>
     <file name="ast.js" path="/home/fatih/Projects/djawa-script/src/ast.js">
       <metrics statements="450" coveredstatements="438" conditionals="90" coveredconditionals="90" methods="98" coveredmethods="89"/>

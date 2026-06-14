@@ -2,19 +2,25 @@
   "name": "@jawirhytam/djawascript",
   "version": "2.3.0",
   "description": "Jawascript is a programming language for someone who did'nt understand English very much.",
-  "homepage": "https://github.com/gegesteorngoding/djawa-script#readme",
+  "homepage": "https://github.com/elepepdev/djawa-script#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/gegesteorngoding/djawa-script.git"
+    "url": "git+https://github.com/elepepdev/djawa-script.git"
   },
   "bugs": {
-    "url": "https://github.com/gegesteorngoding/djawa-script/issues"
+    "url": "https://github.com/elepepdev/djawa-script/issues"
   },
   "bin": {
     "djawa": "./cli.js"
   },
   "scripts": {
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "build:bin": "node bin/build.js",
+    "build:bin:linux-x64": "node bin/build.js --platform linux --arch x64",
+    "build:bin:linux-arm64": "node bin/build.js --platform linux --arch arm64",
+    "build:bin:macos-x64": "node bin/build.js --platform macos --arch x64",
+    "build:bin:macos-arm64": "node bin/build.js --platform macos --arch arm64",
+    "build:bin:windows-x64": "node bin/build.js --platform windows --arch x64"
   },
   "keywords": [
     "jawascript",

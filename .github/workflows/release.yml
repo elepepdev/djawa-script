@@ -1,0 +1,108 @@
+name: Build Portable Binaries
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (e.g. v2.3.0)'
+        required: false
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            platform: linux
+            arch: x64
+          - os: macos-13
+            platform: macos
+            arch: x64
+          - os: macos-latest
+            platform: macos
+            arch: arm64
+          - os: windows-latest
+            platform: windows
+            arch: x64
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Install build dependencies
+        run: npm ci
+        working-directory: bin
+
+      - name: Build binary
+        run: node bin/build.js --platform ${{ matrix.platform }} --arch ${{ matrix.arch }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: djawa-${{ matrix.platform }}-${{ matrix.arch }}
+          path: bin/releases/
+
+  build-linux-arm64:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Build Linux ARM64 via Docker
+        run: |
+          docker run --rm \
+            --platform linux/arm64 \
+            -v "$PWD":/app \
+            -w /app \
+            node:22-bookworm \
+            bash -c "cd bin && npm ci && cd .. && node bin/build.js --platform linux --arch arm64"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: djawa-linux-arm64
+          path: bin/releases/
+
+  release:
+    needs: [build, build-linux-arm64]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts/
+          merge-multiple: true
+
+      - name: List artifacts
+        run: ls -la artifacts/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            artifacts/djawa-linux-x64/djawa-linux-x64
+            artifacts/djawa-linux-arm64/djawa-linux-arm64
+            artifacts/djawa-macos-x64/djawa-macos-x64
+            artifacts/djawa-macos-arm64/djawa-macos-arm64
+            artifacts/djawa-windows-x64/djawa-windows-x64.exe

@@ -28,7 +28,7 @@ Be respectful, inclusive, and constructive. No harassment, discrimination, or pe
 ## Development Setup
 
 ```bash
-git clone https://github.com/gegesteorngoding/djawa-script.git
+git clone https://github.com/elepepdev/djawa-script.git
 cd djawa-script
 npm install
 npm test

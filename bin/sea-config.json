@@ -1,0 +1,7 @@
+{
+  "main": "dist/djawa-bundled.cjs",
+  "output": "releases/djawa",
+  "disableExperimentalSEAWarning": true,
+  "useSnapshot": false,
+  "useCodeCache": false
+}

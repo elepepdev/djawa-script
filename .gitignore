@@ -32,3 +32,8 @@ Thumbs.db
 *.sw?
 
 ROADMAP.md
+
+# Build output
+bin/dist/
+bin/releases/
+bin/node_modules/

@@ -20,6 +20,8 @@
 ## Table of Contents
 
 - [Quick Start](#quick-start)
+  - [Download Portable Binary](#option-1-download-portable-binary-no-nodejs-required)
+  - [Install via npm](#option-2-install-via-npm-requires-nodejs)
 - [Core Concepts](#core-concepts)
   - [Code Blocks: `terus` & `mbari`](#code-blocks-terus--mbari)
   - [Comments](#comments)
@@ -88,6 +90,30 @@
 ---
 
 ## Quick Start
+
+### Option 1: Download Portable Binary (No Node.js Required)
+
+Download a pre-built binary for your operating system from [GitHub Releases](https://github.com/elepepdev/djawa-script/releases):
+
+| OS | Architecture | Download |
+|----|--------------|----------|
+| Linux | x64 | `djawa-linux-x64` |
+| Linux | ARM64 | `djawa-linux-arm64` |
+| macOS | Intel | `djawa-macos-x64` |
+| macOS | Apple Silicon | `djawa-macos-arm64` |
+| Windows | x64 | `djawa-windows-x64.exe` |
+
+After downloading, make it executable and run:
+```bash
+# Linux/macOS
+chmod +x djawa-linux-x64
+./djawa-linux-x64 hello.jawa
+
+# Windows
+djawa-windows-x64.exe hello.jawa
+```
+
+### Option 2: Install via npm (Requires Node.js)
 
 **1. Install via npm:**
 ```bash
