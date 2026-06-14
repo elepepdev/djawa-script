@@ -39,7 +39,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 25
 
       - name: Install root dependencies
         run: npm ci
@@ -72,7 +72,7 @@ jobs:
             --platform linux/arm64 \
             -v "$PWD":/app \
             -w /app \
-            node:22-bookworm \
+            node:25-bookworm \
             bash -c "cd bin && npm ci && cd .. && node bin/build.js --platform linux --arch arm64"
 
       - name: Upload artifact

@@ -3,6 +3,7 @@
   "private": true,
   "type": "commonjs",
   "devDependencies": {
-    "esbuild": "^0.25.0"
+    "esbuild": "^0.25.0",
+    "postject": "^1.0.0-alpha.6"
   }
 }

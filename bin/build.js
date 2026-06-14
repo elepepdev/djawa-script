@@ -10,6 +10,18 @@ const BIN_DIR = __dirname;
 const DIST_DIR = path.join(BIN_DIR, 'dist');
 const RELEASES_DIR = path.join(BIN_DIR, 'releases');
 
+const NODE_SEA_SENTINEL = 'NODE_SEA_FUSE_fce680ab2cc467b6e072b8b5df1996b2';
+
+function getNodeVersion() {
+  const v = process.version.replace('v', '').split('.').map(Number);
+  return { major: v[0], minor: v[1], patch: v[2] };
+}
+
+function supportsBuildSEA() {
+  const v = getNodeVersion();
+  return v.major > 25 || (v.major === 25 && v.minor >= 5);
+}
+
 function parseArgs() {
   const args = process.argv.slice(2);
   const opts = {
@@ -92,68 +104,114 @@ async function bundle() {
   console.log('Bundle complete: dist/djawa-bundled.cjs');
 }
 
-function generateSEA(platform, arch) {
+function generateSEA() {
   console.log('\nStep 2: Generating SEA blob...');
 
   fs.mkdirSync(RELEASES_DIR, { recursive: true });
 
-  const seaConfig = path.join(BIN_DIR, 'sea-config.json');
-  execSync(`node --build-sea ${seaConfig}`, {
-    cwd: BIN_DIR,
-    stdio: 'inherit',
-  });
+  if (supportsBuildSEA()) {
+    // Node.js 25.5+ : use --build-sea
+    console.log('Using --build-sea (Node.js >= 25.5)');
+    const seaConfig = path.join(BIN_DIR, 'sea-config.json');
+    execSync(`node --build-sea ${seaConfig}`, {
+      cwd: BIN_DIR,
+      stdio: 'inherit',
+    });
+  } else {
+    // Node.js 20-24 : use --experimental-sea-config + postject
+    console.log('Using --experimental-sea-config + postject (Node.js < 25.5)');
+
+    // Create a temporary sea-config for blob generation
+    const blobPath = path.join(RELEASES_DIR, 'sea-prep.blob');
+    const tempConfig = path.join(BIN_DIR, 'sea-config-temp.json');
+    const packageJson = JSON.parse(
+      fs.readFileSync(path.join(BIN_DIR, 'sea-config.json'), 'utf8')
+    );
+
+    // For --experimental-sea-config, output is the blob path
+    const tempConfigData = {
+      ...packageJson,
+      output: blobPath,
+    };
+    fs.writeFileSync(tempConfig, JSON.stringify(tempConfigData));
+
+    try {
+      // Generate the blob
+      execSync(`node --experimental-sea-config ${tempConfig}`, {
+        cwd: BIN_DIR,
+        stdio: 'inherit',
+      });
+
+      // Copy node binary
+      const nodePath = process.execPath;
+      const seaOutput = path.join(RELEASES_DIR, 'djawa');
+      fs.copyFileSync(nodePath, seaOutput);
+      fs.chmodSync(seaOutput, 0o755);
+
+      // Remove signature on macOS before injection
+      if (process.platform === 'darwin') {
+        try {
+          execSync(`codesign --remove-signature "${seaOutput}"`, { stdio: 'ignore' });
+        } catch (e) {
+          // Ignore errors on non-signed binaries
+        }
+      }
+
+      // Inject blob with postject
+      console.log('Injecting SEA blob with postject...');
+      execSync(
+        `npx postject "${seaOutput}" NODE_SEA_BLOB "${blobPath}" --sentinel-fuse ${NODE_SEA_SENTINEL}`,
+        { cwd: BIN_DIR, stdio: 'inherit' }
+      );
+
+      // Re-sign on macOS
+      if (process.platform === 'darwin') {
+        try {
+          execSync(`codesign --force --sign - "${seaOutput}"`, { stdio: 'inherit' });
+        } catch (e) {
+          // Ignore
+        }
+      }
+    } finally {
+      // Clean up temp config
+      if (fs.existsSync(tempConfig)) fs.unlinkSync(tempConfig);
+    }
+  }
 
   console.log('SEA blob generated.');
 }
 
-function copyAndRenameNode(platform, arch) {
-  console.log('\nStep 3: Creating executable...');
+function renameOutput(platform, arch) {
+  console.log('\nStep 3: Renaming output...');
 
   const binaryName = getBinaryName(platform, arch);
   const outputPath = path.join(RELEASES_DIR, binaryName);
   const seaOutput = path.join(RELEASES_DIR, 'djawa');
 
-  if (platform === 'windows') {
-    // On Windows, --build-sea already creates .exe
-    if (fs.existsSync(seaOutput + '.exe')) {
-      fs.renameSync(seaOutput + '.exe', outputPath);
-    } else {
-      // Fallback: copy node.exe
-      const nodePath = execSync('where node', { encoding: 'utf8' }).trim().split('\n')[0];
-      fs.copyFileSync(nodePath, outputPath);
+  // Check what file exists
+  const candidates = [seaOutput, seaOutput + '.exe'];
+  let found = null;
+  for (const c of candidates) {
+    if (fs.existsSync(c)) {
+      found = c;
+      break;
     }
-  } else {
-    // For Linux/macOS, the SEA output is already the executable
-    if (fs.existsSync(seaOutput)) {
-      fs.renameSync(seaOutput, outputPath);
-      fs.chmodSync(outputPath, 0o755);
-    } else {
-      // Fallback: copy node binary
-      const nodePath = execSync('which node', { encoding: 'utf8' }).trim();
-      fs.copyFileSync(nodePath, outputPath);
-      fs.chmodSync(outputPath, 0o755);
-    }
+  }
+
+  if (found && found !== outputPath) {
+    fs.renameSync(found, outputPath);
+  }
+
+  if (platform !== 'windows' && fs.existsSync(outputPath)) {
+    fs.chmodSync(outputPath, 0o755);
   }
 
   console.log(`Executable created: bin/releases/${binaryName}`);
   return outputPath;
 }
 
-function signMacOS(outputPath) {
-  if (process.platform !== 'darwin') return;
-
-  console.log('\nStep 4: Code signing (macOS)...');
-  try {
-    execSync(`codesign --force --sign - "${outputPath}"`, {
-      stdio: 'inherit',
-    });
-    console.log('Code signing complete.');
-  } catch (e) {
-    console.warn('Warning: Code signing failed. Binary may not work on macOS without it.');
-  }
-}
-
 function printSize(outputPath) {
+  if (!fs.existsSync(outputPath)) return;
   const stats = fs.statSync(outputPath);
   const sizeMB = (stats.size / 1024 / 1024).toFixed(1);
   console.log(`\nBuild complete!`);
@@ -164,12 +222,13 @@ function printSize(outputPath) {
 async function main() {
   const opts = parseArgs();
 
-  console.log(`Building Djawa Script for ${opts.platform}-${opts.arch}...\n`);
+  const v = getNodeVersion();
+  console.log(`Building Djawa Script for ${opts.platform}-${opts.arch}...`);
+  console.log(`Node.js v${v.major}.${v.minor}.${v.patch} (${supportsBuildSEA() ? '--build-sea' : '--experimental-sea-config + postject'})\n`);
 
   await bundle();
-  generateSEA(opts.platform, opts.arch);
-  const outputPath = copyAndRenameNode(opts.platform, opts.arch);
-  signMacOS(outputPath);
+  generateSEA();
+  const outputPath = renameOutput(opts.platform, opts.arch);
   printSize(outputPath);
 }
 
