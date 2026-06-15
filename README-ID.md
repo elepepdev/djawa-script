@@ -20,8 +20,6 @@
 ## Daftar Isi
 
 - [Mulai Cepat](#mulai-cepat)
-  - [Download Portable Binary](#opsi-1-download-portable-binary-tanpa-nodejs)
-  - [Install via npm](#opsi-2-install-via-npm-butuh-nodejs)
 - [Konsep Dasar](#konsep-dasar)
   - [Blok Kode: `terus` & `mbari`](#blok-kode-terus--mbari)
   - [Komentar](#komentar)
@@ -90,30 +88,6 @@
 ---
 
 ## Mulai Cepat
-
-### Opsi 1: Download Portable Binary (Tanpa Node.js)
-
-Download binary yang sudah jadi untuk sistem operasi Anda dari [GitHub Releases](https://github.com/elepepdev/djawa-script/releases):
-
-| OS | Arsitektur | Download |
-|----|------------|----------|
-| Linux | x64 | `djawa-linux-x64` |
-| Linux | ARM64 | `djawa-linux-arm64` |
-| macOS | Intel | `djawa-macos-x64` |
-| macOS | Apple Silicon | `djawa-macos-arm64` |
-| Windows | x64 | `djawa-windows-x64.exe` |
-
-Setelah download, buat executable dan jalankan:
-```bash
-# Linux/macOS
-chmod +x djawa-linux-x64
-./djawa-linux-x64 halo.jawa
-
-# Windows
-djawa-windows-x64.exe halo.jawa
-```
-
-### Opsi 2: Install via npm (Butuh Node.js)
 
 **1. Install via npm:**
 ```bash
