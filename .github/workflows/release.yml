@@ -88,7 +88,7 @@ jobs:
   release:
     needs: [build, build-linux-arm64]
     runs-on: ubuntu-latest
-    if: always() && startsWith(github.ref, 'refs/tags/')
+    if: startsWith(github.ref, 'refs/tags/')
 
     steps:
       - name: Download all artifacts
@@ -99,16 +99,16 @@ jobs:
           pattern: djawa-*
 
       - name: List downloaded files
-        run: find artifacts/ -type f 2>/dev/null || echo "No artifacts found"
+        run: ls -R artifacts/
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           generate_release_notes: true
-          fail_on_unmatched_files: false
+          fail_on_unmatched_files: true
           files: |
-            artifacts/djawa-linux-x64/djawa-linux-x64
-            artifacts/djawa-linux-arm64/djawa-linux-arm64
-            artifacts/djawa-macos-x64/djawa-macos-x64
-            artifacts/djawa-macos-arm64/djawa-macos-arm64
-            artifacts/djawa-windows-x64/djawa-windows-x64.exe
+            artifacts/djawa-linux-x64
+            artifacts/djawa-linux-arm64
+            artifacts/djawa-macos-x64
+            artifacts/djawa-macos-arm64
+            artifacts/djawa-windows-x64.exe

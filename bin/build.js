@@ -105,9 +105,10 @@ async function bundle() {
 }
 
 function generateSEA() {
-  console.log('\nStep 2: Generating SEA blob...');
+  console.log('\nStep 2: Generating SEA binary...');
 
   fs.mkdirSync(RELEASES_DIR, { recursive: true });
+  const seaOutput = path.join(RELEASES_DIR, 'djawa');
 
   if (supportsBuildSEA()) {
     // Node.js 25.5+ : use --build-sea
@@ -117,6 +118,16 @@ function generateSEA() {
       cwd: BIN_DIR,
       stdio: 'inherit',
     });
+
+    // On macOS, we still might need to re-sign even with --build-sea
+    if (process.platform === 'darwin') {
+      try {
+        console.log('Re-signing macOS binary...');
+        execSync(`codesign --force --sign - "${seaOutput}"`, { stdio: 'inherit' });
+      } catch (e) {
+        console.warn('Warning: Failed to re-sign macOS binary. It might not run without manual signing.');
+      }
+    }
   } else {
     // Node.js 20-24 : use --experimental-sea-config + postject
     console.log('Using --experimental-sea-config + postject (Node.js < 25.5)');
@@ -124,13 +135,13 @@ function generateSEA() {
     // Create a temporary sea-config for blob generation
     const blobPath = path.join(RELEASES_DIR, 'sea-prep.blob');
     const tempConfig = path.join(BIN_DIR, 'sea-config-temp.json');
-    const packageJson = JSON.parse(
+    const seaConfigBase = JSON.parse(
       fs.readFileSync(path.join(BIN_DIR, 'sea-config.json'), 'utf8')
     );
 
     // For --experimental-sea-config, output is the blob path
     const tempConfigData = {
-      ...packageJson,
+      ...seaConfigBase,
       output: blobPath,
     };
     fs.writeFileSync(tempConfig, JSON.stringify(tempConfigData));
@@ -144,7 +155,6 @@ function generateSEA() {
 
       // Copy node binary
       const nodePath = process.execPath;
-      const seaOutput = path.join(RELEASES_DIR, 'djawa');
       fs.copyFileSync(nodePath, seaOutput);
       fs.chmodSync(seaOutput, 0o755);
 
@@ -169,16 +179,17 @@ function generateSEA() {
         try {
           execSync(`codesign --force --sign - "${seaOutput}"`, { stdio: 'inherit' });
         } catch (e) {
-          // Ignore
+          console.warn('Warning: Failed to re-sign macOS binary.');
         }
       }
     } finally {
-      // Clean up temp config
+      // Clean up temp files
       if (fs.existsSync(tempConfig)) fs.unlinkSync(tempConfig);
+      if (fs.existsSync(blobPath)) fs.unlinkSync(blobPath);
     }
   }
 
-  console.log('SEA blob generated.');
+  console.log('SEA binary generation complete.');
 }
 
 function renameOutput(platform, arch) {
