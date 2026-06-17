@@ -129,6 +129,7 @@ async function runFile(fileName) {
   } catch (error) {
     console.error('Error nalika nglakokake kode:');
     console.error(error.message);
+    process.exit(1);
   }
 }
 
@@ -143,7 +144,7 @@ function formatFile(fileName, opts = {}) {
   try {
     const lexer = new Lexer(code);
     const tokens = lexer.scanTokens();
-    const parser = new Parser(tokens);
+    const parser = new Parser(tokens, { recover: true });
     const statements = parser.parse();
 
     const formatter = new Formatter();

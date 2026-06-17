@@ -3,9 +3,11 @@ import * as AST from './ast.js';
 import { Lexer } from './lexer.js';
 
 export class Parser {
-  constructor(tokens) {
+  constructor(tokens, { recover = false } = {}) {
     this.tokens = tokens;
     this.current = 0;
+    this.hadError = false;
+    this.recover = recover;
   }
 
   parse() {
@@ -13,6 +15,9 @@ export class Parser {
     while (!this.isAtEnd()) {
       const decl = this.declaration();
       if (decl !== null) statements.push(decl);
+    }
+    if (!this.recover && this.hadError) {
+      throw new Error("Ana kesalahan parsing. Monggo dibenerno sadurunge mbali.");
     }
     return statements;
   }
@@ -62,6 +67,7 @@ export class Parser {
       return result;
     } catch (error) {
       console.error(error.message);
+      this.hadError = true;
       this.synchronize();
       return null;
     }

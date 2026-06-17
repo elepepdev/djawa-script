@@ -24,7 +24,7 @@ describe('JawaScript Interpreter Feature Tests', () => {
       try {
         const lexer = new Lexer(jawaCode);
         const tokens = lexer.scanTokens();
-        const parser = new Parser(tokens);
+        const parser = new Parser(tokens, { recover: true });
         const statements = parser.parse();
         
         const interpreter = new Interpreter({

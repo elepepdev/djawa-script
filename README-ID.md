@@ -711,6 +711,7 @@ Gunakan ini di skrip uji atau sebagai penjaga runtime. `pastenPodo` adalah singk
 | `podo` | `==` | Persamaan longgar (nilai saja) |
 | `gakPlek` | `!==` | Ketidaksamaan ketat |
 | `gakPodo` | `!=` | Ketidaksamaan longgar |
+| `guduk` | `!=` | Alias untuk `gakPodo` (ketidaksamaan longgar) |
 | `luwihGedhe` | `>` | Lebih besar dari |
 | `luwihCilik` | `<` | Lebih kecil dari |
 | `luwihGedhePodo` | `>=` | Lebih besar dari atau sama dengan |

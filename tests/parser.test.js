@@ -6,7 +6,7 @@ import * as AST from '../src/ast.js';
 function parse(code) {
   const lexer = new Lexer(code);
   const tokens = lexer.scanTokens();
-  const parser = new Parser(tokens);
+  const parser = new Parser(tokens, { recover: true });
   return parser.parse();
 }
 

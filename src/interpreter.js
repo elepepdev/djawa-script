@@ -60,7 +60,7 @@ export class Interpreter {
     const code = fs.readFileSync(resolvedPath, 'utf8');
     const lexer = new (await import('./lexer.js')).Lexer(code);
     const tokens = lexer.scanTokens();
-    const parser = new (await import('./parser.js')).Parser(tokens);
+    const parser = new (await import('./parser.js')).Parser(tokens, { recover: true });
     const statements = parser.parse();
 
     const previousDir = this.currentDir;

@@ -713,6 +713,7 @@ Use these in test scripts or as runtime guards. `pastenPodo` is short for "paste
 | `podo` | `==` | Loose equality (value match only) |
 | `gakPlek` | `!==` | Strict inequality |
 | `gakPodo` | `!=` | Loose inequality |
+| `guduk` | `!=` | Alias for `gakPodo` (loose inequality) |
 | `luwihGedhe` | `>` | Greater than |
 | `luwihCilik` | `<` | Less than |
 | `luwihGedhePodo` | `>=` | Greater than or equal to |
