@@ -841,6 +841,8 @@ class Interpreter {
     this.environment = this.globals;
     this.printHandler = options.print || console.log;
     this.promptHandler = options.prompt || ((msg) => window.prompt(msg));
+    this._destroyed = false;
+    this._activeTimers = [];
 
     this.globals.define("saiki", { arity: () => 0, call: () => Date.now(), toString: () => "<native gawe saiki>" });
     this.globals.define("takon", { arity: () => 1, call: (interp, args) => this.promptHandler(args[0]), toString: () => "<native gawe takon>" });
@@ -858,7 +860,22 @@ class Interpreter {
     this.globals.define("HimpunanLemah", WeakSet); this.globals.define("PetaLemah", WeakMap);
     this.globals.define("pasten", (condition, message) => { if (!this.isTruthy(condition)) throw new Error(`Assertion failed: ${message !== undefined ? this.stringify(message) : 'kondisi palsu'}`); return true; });
     this.globals.define("pastenPodo", (actual, expected, message) => { if (actual !== expected) throw new Error(`Assertion failed: ngarep ${this.stringify(expected)} tapi oleh ${this.stringify(actual)}${message ? ' — ' + this.stringify(message) : ''}`); return true; });
-    this.globals.define("Wektu", { ngenteni: (fn, ms) => setTimeout(fn, ms), mbaleni: (fn, ms) => setInterval(fn, ms), mandek: (id) => { clearTimeout(id); clearInterval(id); }, toString: () => "<native Wektu>" });
+    const self = this;
+    this.globals.define("Wektu", {
+      ngenteni: (fn, ms) => { const id = setTimeout(fn, ms); self._activeTimers.push(id); return id; },
+      mbaleni: (fn, ms) => { const id = setInterval(fn, ms); self._activeTimers.push(id); return id; },
+      mandek: (id) => { clearTimeout(id); clearInterval(id); const idx = self._activeTimers.indexOf(id); if (idx > -1) self._activeTimers.splice(idx, 1); },
+      toString: () => "<native Wektu>"
+    });
+  }
+
+  destroy() {
+    this._destroyed = true;
+    for (const id of this._activeTimers) {
+      clearTimeout(id);
+      clearInterval(id);
+    }
+    this._activeTimers = [];
   }
   async interpret(statements) {
     try { for (const stmt of statements) await this.execute(stmt); }
@@ -898,7 +915,7 @@ class Interpreter {
     return null;
   }
   async visitSelagiStmt(stmt) {
-    try { while (this.isTruthy(await this.evaluate(stmt.condition))) { try { await this.execute(stmt.body); } catch (e) { if (e instanceof Break) { if (e.label === null || e.label === stmt._label) return null; throw e; } if (e instanceof Continue) { if (e.label === null || e.label === stmt._label) continue; throw e; } throw e; } } }
+    try { while (this.isTruthy(await this.evaluate(stmt.condition))) { if (this._destroyed) return null; try { await this.execute(stmt.body); } catch (e) { if (e instanceof Break) { if (e.label === null || e.label === stmt._label) return null; throw e; } if (e instanceof Continue) { if (e.label === null || e.label === stmt._label) continue; throw e; } throw e; } } }
     catch (e) { if (e instanceof Break) { if (e.label === null || e.label === stmt._label) return null; throw e; } throw e; }
     return null;
   }
@@ -907,6 +924,7 @@ class Interpreter {
     try {
       if (stmt.initializer !== null) await this.execute(stmt.initializer);
       while (stmt.condition === null || this.isTruthy(await this.evaluate(stmt.condition))) {
+        if (this._destroyed) return null;
         try { await this.execute(stmt.body); }
         catch (e) { if (e instanceof Break) { if (e.label === null || e.label === stmt._label) break; throw e; } if (e instanceof Continue) { if (e.label === null || e.label === stmt._label) { if (stmt.increment !== null) await this.evaluate(stmt.increment); continue; } throw e; } throw e; }
         if (stmt.increment !== null) await this.evaluate(stmt.increment);
@@ -936,14 +954,21 @@ class Interpreter {
         case 'dino': ms = amount * 24 * 60 * 60 * 1000; break;
       }
     }
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise(resolve => {
+      const id = setTimeout(() => {
+        const idx = this._activeTimers.indexOf(id);
+        if (idx > -1) this._activeTimers.splice(idx, 1);
+        resolve();
+      }, ms);
+      this._activeTimers.push(id);
+    });
   }
   async _callValue(fn, args) { if (typeof fn === 'function') return await fn(...args); if (fn instanceof JawaCallable) return await fn.call(this, args); throw new Error("Error: dudu fungsi."); }
   async visitForOfStmt(stmt) {
     const iterable = await this.evaluate(stmt.iterable);
     const items = this.toIterable(iterable);
     const prev = this.environment; this.environment = new Environment(this.environment);
-    try { for (const item of items) { try { if (stmt.isConst) this.environment.define(stmt.name.lexeme, item); else this.environment.values.set(stmt.name.lexeme, item); await this.execute(stmt.body); } catch (e) { if (e instanceof Break) { if (e.label === null || e.label === stmt._label) return null; throw e; } if (e instanceof Continue) { if (e.label === null || e.label === stmt._label) continue; throw e; } throw e; } } }
+    try { for (const item of items) { if (this._destroyed) return null; try { if (stmt.isConst) this.environment.define(stmt.name.lexeme, item); else this.environment.values.set(stmt.name.lexeme, item); await this.execute(stmt.body); } catch (e) { if (e instanceof Break) { if (e.label === null || e.label === stmt._label) return null; throw e; } if (e instanceof Continue) { if (e.label === null || e.label === stmt._label) continue; throw e; } throw e; } } }
     finally { this.environment = prev; }
     return null;
   }
@@ -952,8 +977,8 @@ class Interpreter {
     if (stmt.end !== null) end = await this.evaluate(stmt.end);
     const prev = this.environment; this.environment = new Environment(this.environment);
     try {
-      if (end === null) { const items = this.toIterable(start); for (const item of items) { try { this.environment.values.set("iki", item); await this.execute(stmt.body); } catch (e) { if (e instanceof Break) { if (e.label === null || e.label === stmt._label) return null; throw e; } if (e instanceof Continue) { if (e.label === null || e.label === stmt._label) continue; throw e; } throw e; } } }
-      else { for (let i = start; i <= end; i++) { try { this.environment.values.set("iki", i); await this.execute(stmt.body); } catch (e) { if (e instanceof Break) { if (e.label === null || e.label === stmt._label) return null; throw e; } if (e instanceof Continue) { if (e.label === null || e.label === stmt._label) continue; throw e; } throw e; } } }
+      if (end === null) { const items = this.toIterable(start); for (const item of items) { if (this._destroyed) return null; try { this.environment.values.set("iki", item); await this.execute(stmt.body); } catch (e) { if (e instanceof Break) { if (e.label === null || e.label === stmt._label) return null; throw e; } if (e instanceof Continue) { if (e.label === null || e.label === stmt._label) continue; throw e; } throw e; } } }
+      else { for (let i = start; i <= end; i++) { if (this._destroyed) return null; try { this.environment.values.set("iki", i); await this.execute(stmt.body); } catch (e) { if (e instanceof Break) { if (e.label === null || e.label === stmt._label) return null; throw e; } if (e instanceof Continue) { if (e.label === null || e.label === stmt._label) continue; throw e; } throw e; } } }
     } finally { this.environment = prev; }
     return null;
   }
@@ -1117,7 +1142,12 @@ class Interpreter {
 
 // ============= PUBLIC API =============
 window.JPL = {
+  _interpreter: null,
   run(code, outputCallback) {
+    if (this._interpreter) {
+      this._interpreter.destroy();
+      this._interpreter = null;
+    }
     const outputLines = [];
     const printFn = (msg) => { outputLines.push(msg); if (outputCallback) outputCallback(msg); };
     try {
@@ -1126,6 +1156,7 @@ window.JPL = {
       const parser = new Parser(tokens);
       const statements = parser.parse();
       const interpreter = new Interpreter({ print: printFn, prompt: (msg) => window.prompt(msg) || "" });
+      this._interpreter = interpreter;
       interpreter.interpret(statements);
       return { success: true, output: outputLines };
     } catch (error) {

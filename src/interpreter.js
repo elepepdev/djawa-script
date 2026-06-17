@@ -16,11 +16,22 @@ export class Interpreter {
     this.environment = this.globals;
     this.printHandler = options.print || console.log;
     this.promptHandler = options.prompt || promptSync;
+    this._destroyed = false;
+    this._activeTimers = [];
 
     createBuiltins(this);
 
     this.moduleCache = new Map();
     this.currentDir = process.cwd();
+  }
+
+  destroy() {
+    this._destroyed = true;
+    for (const id of this._activeTimers) {
+      clearTimeout(id);
+      clearInterval(id);
+    }
+    this._activeTimers = [];
   }
 
   async interpret(statements) {
@@ -287,6 +298,7 @@ export class Interpreter {
   async visitSelagiStmt(stmt) {
     try {
         while (isTruthy(await this.evaluate(stmt.condition))) {
+            if (this._destroyed) return null;
             try {
                 await this.execute(stmt.body);
             } catch (e) {
@@ -317,6 +329,7 @@ export class Interpreter {
       try {
           if (stmt.initializer !== null) await this.execute(stmt.initializer);
           while (stmt.condition === null || isTruthy(await this.evaluate(stmt.condition))) {
+              if (this._destroyed) return null;
               try {
                   await this.execute(stmt.body);
               } catch (e) {
@@ -379,7 +392,14 @@ export class Interpreter {
       ms = amount * 1000;
     }
     
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise(resolve => {
+      const id = setTimeout(() => {
+        const idx = this._activeTimers.indexOf(id);
+        if (idx > -1) this._activeTimers.splice(idx, 1);
+        resolve();
+      }, ms);
+      this._activeTimers.push(id);
+    });
   }
 
   async _callValue(fn, args) {
@@ -408,6 +428,7 @@ export class Interpreter {
         try {
           let result = await this._callValue(_next, []);
           while (!result.done) {
+            if (this._destroyed) return null;
             try {
               if (stmt.isConst) this.environment.define(stmt.name.lexeme, result.value);
               else { this.environment.values.set(stmt.name.lexeme, result.value); }
@@ -436,6 +457,7 @@ export class Interpreter {
       this.environment = new Environment(this.environment);
       try {
           for (const item of items) {
+              if (this._destroyed) return null;
               try {
                   if (stmt.isConst) this.environment.define(stmt.name.lexeme, item);
                   else { this.environment.values.set(stmt.name.lexeme, item); }
@@ -469,6 +491,7 @@ export class Interpreter {
               // Iterate from start (must be a range or array)
               const items = this.toIterable(start);
               for (const item of items) {
+                  if (this._destroyed) return null;
                   try {
                       this.environment.values.set("iki", item);
                       await this.execute(stmt.body);
@@ -489,6 +512,7 @@ export class Interpreter {
                   throw new Error("Error: 'rentang' butuh angka.");
               }
               for (let i = start; i <= end; i++) {
+                  if (this._destroyed) return null;
                   try {
                       this.environment.values.set("iki", i);
                       await this.execute(stmt.body);

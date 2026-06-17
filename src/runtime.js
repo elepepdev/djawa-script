@@ -390,9 +390,9 @@ export function createBuiltins(interpreter) {
     });
 
     globals.define("Wektu", {
-        ngenteni: (fn, ms) => setTimeout(fn, ms),
-        mbaleni: (fn, ms) => setInterval(fn, ms),
-        mandek: (id) => clearTimeout(id),
+        ngenteni: (fn, ms) => { const id = setTimeout(fn, ms); interpreter._activeTimers.push(id); return id; },
+        mbaleni: (fn, ms) => { const id = setInterval(fn, ms); interpreter._activeTimers.push(id); return id; },
+        mandek: (id) => { clearTimeout(id); clearInterval(id); const idx = interpreter._activeTimers.indexOf(id); if (idx > -1) interpreter._activeTimers.splice(idx, 1); },
         toString: () => "<native Wektu>"
     });
 }
