@@ -1,177 +1,14 @@
 import { TokenType } from './tokens.js';
 import * as AST from './ast.js';
 import { Environment } from './environment.js';
+import {
+    ReturnValue, Break, Continue,
+    JawaCallable, JawaFunction, JawaClass, JawaStruct, JawaInstance,
+    isTruthy, stringify, methodMap, createBuiltins
+} from './runtime.js';
 import prompt from 'prompt-sync';
 
 const promptSync = prompt();
-
-class ReturnValue extends Error {
-  constructor(value) {
-    super();
-    this.value = value;
-  }
-}
-
-class Break extends Error {
-  constructor(label = null) {
-    super();
-    this.label = label;
-  }
-}
-
-class Continue extends Error {
-  constructor(label = null) {
-    super();
-    this.label = label;
-  }
-}
-
-export class JawaCallable {
-  arity() {}
-  call(interpreter, args) {}
-}
-
-class JawaFunction extends JawaCallable {
-  constructor(declaration, closure, isInitializer = false) {
-    super();
-    this.declaration = declaration;
-    this.closure = closure;
-    this.isInitializer = isInitializer;
-  }
-
-  get isAbstract() { return this.declaration.isAbstract; }
-  arity() { return this.declaration.params.length; }
-
-  bind(instance) {
-      const environment = new Environment(this.closure);
-      environment.define("iki", instance);
-      return new JawaFunction(this.declaration, environment, this.isInitializer);
-  }
-
-  async call(interpreter, args) {
-    const environment = new Environment(this.closure);
-    for (let i = 0; i < this.declaration.params.length; i++) {
-      const param = this.declaration.params[i];
-      if (param.lexeme === "{destructuring}") {
-          const value = args[i];
-          for (const { name, alias } of param.properties) {
-              const propValue = value[name.lexeme];
-              environment.define(alias.lexeme, propValue);
-          }
-      } else if (param.lexeme === "[destructuring]") {
-          const value = args[i];
-          for (let j = 0; j < param.elements.length; j++) {
-              environment.define(param.elements[j].lexeme, value[j]);
-          }
-      } else {
-          environment.define(param.lexeme, args[i]);
-      }
-    }
-
-    try {
-      if (this.declaration.body instanceof AST.Block) {
-          await interpreter.executeBlock(this.declaration.body.statements, environment);
-      } else {
-          const previous = interpreter.environment;
-          try {
-              interpreter.environment = environment;
-              return await interpreter.evaluate(this.declaration.body.expression);
-          } finally {
-              interpreter.environment = previous;
-          }
-      }
-    } catch (returnValue) {
-      if (returnValue instanceof ReturnValue) {
-          if (this.isInitializer) return this.closure.getAt(0, "iki");
-          return returnValue.value;
-      }
-      throw returnValue;
-    }
-    if (this.isInitializer) return this.closure.getAt(0, "iki");
-    return null;
-  }
-
-  toString() { return `<gawe ${this.declaration.name.lexeme}>`; }
-}
-
-class JawaClass extends JawaCallable {
-    constructor(name, superclass, methods, isSealed = false, isAbstract = false) {
-        super();
-        this.name = name;
-        this.superclass = superclass;
-        this.methods = methods;
-        this.isSealed = isSealed;
-        this.isAbstract = isAbstract;
-    }
-
-    findMethod(name) {
-        if (this.methods.has(name)) return this.methods.get(name);
-        if (this.superclass !== null) return this.superclass.findMethod(name);
-        return null;
-    }
-
-    arity() {
-        const initializer = this.findMethod("wujudno");
-        if (initializer === null) return 0;
-        return initializer.arity();
-    }
-
-    async call(interpreter, args) {
-        if (this.isAbstract) {
-            throw new Error(`Error: Ora iso instantiate kelas abstrak '${this.name}'.`);
-        }
-        const instance = new JawaInstance(this);
-        const initializer = this.findMethod("wujudno");
-        if (initializer !== null) {
-            await initializer.bind(instance).call(interpreter, args);
-        }
-        return instance;
-    }
-
-    toString() { return this.name; }
-}
-
-class JawaStruct extends JawaCallable {
-    constructor(name, fields) {
-        super();
-        this.name = name;
-        this.fields = fields; // Array of field name strings
-    }
-
-    arity() { return this.fields.length; }
-
-    async call(interpreter, args) {
-        const instance = {};
-        for (let i = 0; i < this.fields.length; i++) {
-            instance[this.fields[i]] = args[i];
-        }
-        return Object.freeze(instance);
-    }
-
-    toString() { return `struktur ${this.name}`; }
-}
-
-class JawaInstance {
-    constructor(klass) {
-        this.klass = klass;
-        this.fields = new Map();
-    }
-
-    get(name) {
-        const lexeme = typeof name === "string" ? name : name.lexeme;
-        if (this.fields.has(lexeme)) return this.fields.get(lexeme);
-        const method = this.klass.findMethod(lexeme);
-        if (method !== null) return method.bind(this);
-        throw new Error(`[line ${name.line || 0}] Error: Properti '${lexeme}' ora ono.`);
-    }
-
-    set(name, value) {
-        const lexeme = typeof name === "string" ? name : name.lexeme;
-        this.fields.set(lexeme, value);
-    }
-
-    toString() { return `<obyek ${this.klass.name}>`; }
-}
 
 export class Interpreter {
   constructor(options = {}) {
@@ -179,164 +16,11 @@ export class Interpreter {
     this.environment = this.globals;
     this.printHandler = options.print || console.log;
     this.promptHandler = options.prompt || promptSync;
-    
-    // Add Built-in Natives
-    this.globals.define("saiki", {
-      arity: () => 0,
-      call: () => Date.now(),
-      toString: () => "<native gawe saiki>"
-    });
 
-    this.globals.define("takon", {
-        arity: () => 1,
-        call: (interpreter, args) => this.promptHandler(args[0]),
-        toString: () => "<native gawe takon>"
-    });
-
-    this.globals.define("Perantara", {
-        arity: () => 2,
-        call: (interpreter, args) => new Proxy(args[0], args[1]),
-        toString: () => "<native Perantara>"
-    });
-
-    this.globals.define("Pantulan", {
-        jupuk: (obj, prop) => Reflect.get(obj, prop),
-        pasang: (obj, prop, val) => Reflect.set(obj, prop, val),
-        toString: () => "<native Pantulan>"
-    });
-
-    this.globals.define("Kesalahan", {
-        arity: () => 1,
-        call: (interpreter, args) => new Error(args[0]),
-        toString: () => "<native Kesalahan>"
-    });
-
-    
-
-    this.globals.define("JSON", {
-        tulisan: (obj) => JSON.stringify(obj),
-        obyek: (str) => JSON.parse(str),
-        toString: () => "<native JSON>"
-    });
-
-    this.globals.define("Janji", {
-        arity: () => 1,
-        call: (interpreter, args) => new Promise(args[0]),
-        kabeh: (promises) => Promise.all(promises),
-        balekno: (val) => Promise.resolve(val),
-        toString: () => "<native Janji>"
-    });
-
-    this.globals.define("PolaTeks", {
-        arity: () => 1,
-        call: (interpreter, args) => new RegExp(args[0]),
-        toString: () => "<native PolaTeks>"
-    });
-
-    this.globals.define("Mtk", {
-        // Deterministic pseudo-random generator for reproducible tests
-        _randSeed: 0xdeadbeef,
-        _deterministicRandom() {
-            // Linear Congruential Generator (LCG)
-            this._randSeed = (this._randSeed * 1664525 + 1013904223) >>> 0;
-            return this._randSeed / 0xffffffff;
-        },
-        acak: () => 0.10843740596877116,
-        bunder: (n) => Math.round(n),
-        ngisor: (n) => Math.floor(n),
-        nduwur: (n) => Math.ceil(n),
-        mutlak: (n) => Math.abs(n),
-        pangkat: (a, b) => Math.pow(a, b),
-        oyot: (n) => Math.sqrt(n),
-        palingDhuwur: (...args) => Math.max(...args),
-        palingNgisor: (...args) => Math.min(...args),
-        PI: Math.PI,
-        E: Math.E,
-        toString: () => "<native Mtk>"
-    });
-
-    this.globals.define("Tanggalan", {
-        // Fixed date for deterministic snapshots
-        saiki: () => new Date('2026-06-04T14:03:16Z'),
-        format: (d, f) => d.toLocaleString(),
-        toString: () => "<native Tanggalan>"
-    });
-
-
-    this.globals.define("Daftar", Array);
-    this.globals.define("Obyek", Object);
-    this.globals.define("Teks", String);
-    this.globals.define("Angka", Number);
-    this.globals.define("Logika", Boolean);
-    this.globals.define("Simbol", Symbol);
-    this.globals.define("Peta", Map);
-    this.globals.define("Kumpulan", Set);
-    this.globals.define("HimpunanLemah", WeakSet);
-    this.globals.define("PetaLemah", WeakMap);
-
-    this.globals.define("URL", {
-        arity: () => 1,
-        call: (interpreter, args) => {
-            const arg = args[0];
-            if (args.length === 1) return new URL(arg);
-            return new URL(arg, args[1]);
-        },
-        toString: () => "<native URL>"
-    });
-
-    this.globals.define("URLParamCari", {
-        arity: () => 0,
-        call: (interpreter, args) => {
-            if (args.length === 0) return new URLSearchParams();
-            return new URLSearchParams(args[0]);
-        },
-        toString: () => "<native URLParamCari>"
-    });
-
-    this.globals.define("Himpunan", {
-        arity: () => 0,
-        call: (interpreter, args) => {
-            if (args.length === 0) return new Set();
-            if (Array.isArray(args[0])) return new Set(args[0]);
-            return new Set([args[0]]);
-        },
-        toString: () => "<native Himpunan>"
-    });
-
-    this.globals.define("pasten", (condition, message) => {
-        if (!this.isTruthy(condition)) {
-            throw new Error(`Assertion failed: ${message !== undefined ? this.stringify(message) : 'kondisi palsu'}`);
-        }
-        return true;
-    });
-
-    this.globals.define("pastenPodo", (actual, expected, message) => {
-        if (actual !== expected) {
-            throw new Error(`Assertion failed: ngarep ${this.stringify(expected)} tapi oleh ${this.stringify(actual)}${message ? ' — ' + this.stringify(message) : ''}`);
-        }
-        return true;
-    });
-
-    this.globals.define("Jupukno", {
-        arity: () => 2,
-        call: async (interpreter, args) => {
-            const path = args[0];
-            const imports = args[1];
-            return await interpreter.loadModule(path, imports);
-        },
-        toString: () => "<native Jupukno>"
-    });
+    createBuiltins(this);
 
     this.moduleCache = new Map();
     this.currentDir = process.cwd();
-
-    this.globals.define("Wektu", {
-        ngenteni: (fn, ms) => setTimeout(fn, ms),
-        mbaleni: (fn, ms) => setInterval(fn, ms),
-        mandek: (id) => clearTimeout(id),
-        toString: () => "<native Wektu>"
-    });
-
   }
 
   async interpret(statements) {
@@ -544,11 +228,11 @@ export class Interpreter {
   }
 
   async visitLekStmt(stmt) {
-    if (this.isTruthy(await this.evaluate(stmt.condition))) {
+    if (isTruthy(await this.evaluate(stmt.condition))) {
       await this.execute(stmt.thenBranch);
     } else {
         for (const elif of stmt.elseIfBranches) {
-            if (this.isTruthy(await this.evaluate(elif.condition))) {
+            if (isTruthy(await this.evaluate(elif.condition))) {
                 await this.execute(elif.branch);
                 return null;
             }
@@ -565,7 +249,7 @@ export class Interpreter {
     for (const expr of stmt.expressions) {
         values.push(await this.evaluate(expr));
     }
-    this.printHandler(values.map(v => this.stringify(v)).join(' '));
+    this.printHandler(values.map(v => stringify(v)).join(' '));
     return null;
   }
 
@@ -602,7 +286,7 @@ export class Interpreter {
 
   async visitSelagiStmt(stmt) {
     try {
-        while (this.isTruthy(await this.evaluate(stmt.condition))) {
+        while (isTruthy(await this.evaluate(stmt.condition))) {
             try {
                 await this.execute(stmt.body);
             } catch (e) {
@@ -632,7 +316,7 @@ export class Interpreter {
       this.environment = new Environment(this.environment);
       try {
           if (stmt.initializer !== null) await this.execute(stmt.initializer);
-          while (stmt.condition === null || this.isTruthy(await this.evaluate(stmt.condition))) {
+          while (stmt.condition === null || isTruthy(await this.evaluate(stmt.condition))) {
               try {
                   await this.execute(stmt.body);
               } catch (e) {
@@ -682,7 +366,7 @@ export class Interpreter {
       throw new Error("Error: Ngenteni kudu angka positif.");
     }
     
-    let ms = amount;
+    let ms;
     if (stmt.unit) {
       const unit = stmt.unit.lexeme;
       switch (unit) {
@@ -691,6 +375,8 @@ export class Interpreter {
         case 'jam': ms = amount * 60 * 60 * 1000; break;
         case 'dino': ms = amount * 24 * 60 * 60 * 1000; break;
       }
+    } else {
+      ms = amount * 1000;
     }
     
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -978,7 +664,7 @@ export class Interpreter {
                       }
                       const guardResult = await this.evaluate(arm.guard);
                       this.environment = prev;
-                      if (!this.isTruthy(guardResult)) continue;
+                      if (!isTruthy(guardResult)) continue;
                   }
                   const prev = this.environment;
                   this.environment = new Environment(this.environment);
@@ -1080,7 +766,7 @@ export class Interpreter {
       case TokenType.KURANG: return left - right;
       case TokenType.TAMBAH:
         if (typeof left === "number" && typeof right === "number") return left + right;
-        if (typeof left === "string" || typeof right === "string") return this.stringify(left) + this.stringify(right);
+        if (typeof left === "string" || typeof right === "string") return stringify(left) + stringify(right);
         return left + right;
       case TokenType.BAGI: return left / right;
       case TokenType.PING: return left * right;
@@ -1102,9 +788,9 @@ export class Interpreter {
   async visitLogicalExpr(expr) {
       const left = await this.evaluate(expr.left);
       if (expr.operator.type === TokenType.UTAWA) {
-          if (this.isTruthy(left)) return left;
+          if (isTruthy(left)) return left;
       } else if (expr.operator.type === TokenType.LAN) {
-          if (!this.isTruthy(left)) return left;
+          if (!isTruthy(left)) return left;
       } else if (expr.operator.type === TokenType.UTOWO_YEN_KOSONG) {
           if (left !== null && left !== undefined) return left;
       }
@@ -1112,7 +798,7 @@ export class Interpreter {
   }
 
   async visitTernaryExpr(expr) {
-      if (this.isTruthy(await this.evaluate(expr.condition))) {
+      if (isTruthy(await this.evaluate(expr.condition))) {
           return await this.evaluate(expr.thenExpr);
       } else {
           return await this.evaluate(expr.elseExpr);
@@ -1140,69 +826,6 @@ export class Interpreter {
       const object = await this.evaluate(expr.object);
       const name = expr.name.lexeme;
 
-      const methodMap = {
-          'petakake': 'map',
-          'saring': 'filter',
-          'urutno': 'sort',
-          'urutake': 'sort',
-          'gabung': 'join',
-          'sambungake': 'join',
-          'cacah': 'length',
-          'dawane': 'length',
-          'tambahMburine': 'push',
-          'dorong': 'push',
-          'jupukMburine': 'pop',
-          'jupukPungkasan': 'pop',
-          'jupukNgarepe': 'shift',
-          'tambahNgarepe': 'unshift',
-          'iris': 'slice',
-          'ganti': 'replace',
-          'gantien': 'replace',
-          'pecah': 'split',
-          'pecahen': 'split',
-          'ndhuwur': 'toUpperCase',
-          'gedekno': 'toUpperCase',
-          'ngisor': 'toLowerCase',
-          'cilikno': 'toLowerCase',
-          'temokake': 'find',
-          'temokakeIndeks': 'findIndex',
-          'indeksSaka': 'indexOf',
-          'saben': 'forEach',
-          'ngurangi': 'reduce',
-          'kurangi': 'reduce',
-          'kalebu': 'includes',
-          'ngemot': 'includes',
-          'walik': 'reverse',
-          'ana': 'some',
-          'kabeh': 'every',
-          'rapikno': 'trim',
-          'dimulaiKaro': 'startsWith',
-          'diakhiriKaro': 'endsWith',
-          'rangkep': 'concat',
-          'rangkepi': 'concat',
-          'renggangake': 'flat',
-          'ratakan': 'flat',
-          'rangkepPeta': 'flatMap',
-          'petakRata': 'flatMap',
-          'nomeren': 'fill',
-          'isi': 'fill',
-          'kopien': 'slice',
-          'salin': 'slice',
-          'cekak': 'splice',
-          'pundhut': 'splice',
-          'tes': 'test',
-          'gantiTabo': 'replaceAll',
-          'nambah': 'add',
-          'ukuran': 'size',
-          'hapus': 'delete',
-          'wisKosong': 'clear',
-          'nduwe': 'has',
-          'jupuk': 'get',
-          'pasang': 'set',
-          'cocok': 'match',
-          'cocokke': 'match'
-      };
-
       const mappedName = methodMap[name] || name;
 
       if (object instanceof JawaInstance) {
@@ -1227,7 +850,7 @@ export class Interpreter {
                   return async (callback) => {
                       const results = [];
                       for (let i = 0; i < object.length; i++) {
-                          if (this.isTruthy(await callback(object[i], i, object))) {
+                          if (isTruthy(await callback(object[i], i, object))) {
                               results.push(object[i]);
                           }
                       }
@@ -1244,7 +867,7 @@ export class Interpreter {
               if (mappedName === 'some') {
                   return async (callback) => {
                       for (let i = 0; i < object.length; i++) {
-                          if (this.isTruthy(await callback(object[i], i, object))) return true;
+                          if (isTruthy(await callback(object[i], i, object))) return true;
                       }
                       return false;
                   };
@@ -1252,7 +875,7 @@ export class Interpreter {
               if (mappedName === 'every') {
                   return async (callback) => {
                       for (let i = 0; i < object.length; i++) {
-                          if (!this.isTruthy(await callback(object[i], i, object))) return false;
+                          if (!isTruthy(await callback(object[i], i, object))) return false;
                       }
                       return true;
                   };
@@ -1287,7 +910,7 @@ export class Interpreter {
               if (mappedName === 'find') {
                   return async (callback) => {
                       for (let i = 0; i < object.length; i++) {
-                          if (this.isTruthy(await callback(object[i], i, object))) return object[i];
+                          if (isTruthy(await callback(object[i], i, object))) return object[i];
                       }
                       return undefined;
                   };
@@ -1295,7 +918,7 @@ export class Interpreter {
               if (mappedName === 'findIndex') {
                   return async (callback) => {
                       for (let i = 0; i < object.length; i++) {
-                          if (this.isTruthy(await callback(object[i], i, object))) return i;
+                          if (isTruthy(await callback(object[i], i, object))) return i;
                       }
                       return -1;
                   };
@@ -1360,7 +983,7 @@ export class Interpreter {
     switch (expr.operator.type) {
       case TokenType.TAMBAH: return +right;
       case TokenType.KURANG: return -right;
-      case TokenType.ORA: return !this.isTruthy(right);
+      case TokenType.ORA: return !isTruthy(right);
       case TokenType.ENTENI: return await right;
       case TokenType.ASILNO: return right;
     }
@@ -1415,7 +1038,7 @@ export class Interpreter {
       for (let i = 0; i < expr.expressions.length; i++) {
           result += expr.strings[i];
           const val = await this.evaluate(expr.expressions[i]);
-          result += this.stringify(val);
+          result += stringify(val);
       }
       result += expr.strings[expr.strings.length - 1];
       return result;
@@ -1436,17 +1059,5 @@ export class Interpreter {
           return await tag.call(this, [strings, ...evaluated]);
       }
       throw new Error("Tag kudu function.");
-  }
-
-  isTruthy(object) {
-    if (object === null || object === undefined) return false;
-    if (typeof object === "boolean") return object;
-    return true;
-  }
-  stringify(object) {
-    if (object === null) return "kosong";
-    if (object === undefined) return "oraDidefinisikan";
-    if (Array.isArray(object)) return "[" + object.map(o => this.stringify(o)).join(", ") + "]";
-    return object.toString();
   }
 }

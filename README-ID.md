@@ -1472,7 +1472,8 @@ janjiku
 | `.sudaTengen(fn, initial?)` | `.reduceRight(fn, initial?)` | Reduksi dari kanan ke kiri |
 | `.ratakan(depth?)` | `.flat(...)` | Ratakan array bersarang |
 | `.petakRata(fn)` | `.flatMap(...)` | Petakan lalu ratakan |
-| `.rangkep(n)` | `.fill(n)` | Isi array dengan nilai |
+| `.isi(n)` | `.fill(n)` | Isi array dengan nilai |
+| `.gabungno(...arr)` | `.concat(...arr)` | Gabung array |
 | `.ana(fn)` | `.some(fn)` | Cek apakah ada elemen yang cocok |
 | `.kabeh(fn)` | `.every(fn)` | Cek apakah semua elemen cocok |
 

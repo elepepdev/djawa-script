@@ -9,6 +9,24 @@ export class Token {
   }
 }
 
+const JS_RESERVED = new Set([
+  'let', 'const', 'var',
+  'function',
+  'if', 'else',
+  'for', 'while', 'do',
+  'class', 'extends',
+  'new', 'this',
+  'import', 'export',
+  'switch',
+  'typeof', 'instanceof', 'void',
+  'async', 'await', 'yield',
+  'true', 'false', 'null', 'undefined',
+  'debugger',
+  'interface', 'implements', 'package',
+  'private', 'protected', 'public',
+  'with',
+]);
+
 export class Lexer {
   constructor(source) {
     this.source = source;
@@ -170,7 +188,12 @@ export class Lexer {
     }
 
     let type = Keywords[text];
-    if (type === undefined) type = TokenType.IDENTIFIER;
+    if (type === undefined) {
+      if (JS_RESERVED.has(text)) {
+        throw new Error(`[line ${this.line}] Error: '${text}' iku JavaScript, dudu DjawaScript. Gunakake padanan DjawaScript.`);
+      }
+      type = TokenType.IDENTIFIER;
+    }
     this.addToken(type);
   }
 

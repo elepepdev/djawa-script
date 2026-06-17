@@ -379,14 +379,14 @@ describe('Parser', () => {
   });
 
   describe('ngenteni (sleep)', () => {
-    test('ngenteni with parens (milliseconds)', () => {
+    test('ngenteni with parens (seconds default)', () => {
       const stmt = first('ngenteni(1000)');
       expect(stmt).toBeInstanceOf(AST.Ngenteni);
       expect(stmt.amount).toBeInstanceOf(AST.Literal);
       expect(stmt.amount.value).toBe(1000);
       expect(stmt.unit).toBeNull();
     });
-    test('ngenteni without parens (milliseconds)', () => {
+    test('ngenteni without parens (seconds default)', () => {
       const stmt = first('ngenteni 500');
       expect(stmt).toBeInstanceOf(AST.Ngenteni);
       expect(stmt.amount).toBeInstanceOf(AST.Literal);

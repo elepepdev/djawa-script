@@ -1,21 +1,28 @@
 // Test ngenteni (sleep) feature
 
-// Test 1: milliseconds (default)
-cetakno("start")
-ngenteni(1)
-cetakno("after 1ms")
+// Test ngenteni (sleep) feature
 
-// Test 2: detik (seconds)
-ngenteni 1 detik
+// Test 1: seconds (default - without unit)
+cetakno("start")
+ngenteni(0.01)
+cetakno("after 1 detik (tanpa unit)")
+
+// Test 2: detik (seconds with unit)
+ngenteni 0.01 detik
 cetakno("after 1 detik")
 
-// Test 3: expression as amount
-jarno waktu yoiku 1
-ngenteni waktu detik
-cetakno("after variable")
+// Test 3: variable without unit (defaults to seconds)
+jarno interval yoiku 0.01
+ngenteni interval
+cetakno("after variable tanpa unit")
 
-// Test 4: computed expression
-ngenteni (1) detik
+// Test 4: variable with unit
+jarno waktu yoiku 0.01
+ngenteni waktu detik
+cetakno("after variable karo unit")
+
+// Test 5: computed expression
+ngenteni (0.01) detik
 cetakno("after expression")
 
 cetakno("done")

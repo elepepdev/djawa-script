@@ -51,7 +51,7 @@ All notable changes to this project will be documented in this file.
 - **Numeric separator**: `1_000_000`, `0xFF_FF`, `1_000.5` — underscores ignored in numeric literals.
 - **Raw string**: `r"C:\windows\system32"` — backslashes treated literally (no escape sequences).
 - **Range iterator**: `1..10`, `a..b` step ranges, and `rentang n` shorthand.
-- **Iterator helpers**: `.kurangi()`, `.temokake()`, `.temokakeIndeks()`, `.ratakan()`, `.petakRata()`, `.rangkep()` — Javanese aliases for array iteration methods.
+- **Iterator helpers**: `.kurangi()`, `.temokake()`, `.temokakeIndeks()`, `.ratakan()`, `.petakRata()`, `.gabungno()` — Javanese aliases for array iteration methods.
 - **RegExp literal**: `/.../flags` — direct regex syntax with flags.
 - **Stdlib additions**: `HimpunanLemah` (WeakSet), `PetaLemah` (WeakMap), `URL`, `URLParamCari` (URLSearchParams), `Himpunan` (callable Set).
 - **JS constructor aliases**: `Daftar`, `Peta`, `Himpunan`, `Tanggalan`, `EkspresiReguler` callable as constructors.

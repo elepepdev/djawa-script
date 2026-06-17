@@ -1474,7 +1474,8 @@ myPromise
 | `.sudaTengen(fn, initial?)` | `.reduceRight(fn, initial?)` | Reduce from right to left |
 | `.ratakan(depth?)` | `.flat(...)` | Flatten nested arrays |
 | `.petakRata(fn)` | `.flatMap(...)` | Map then flatten |
-| `.rangkep(n)` | `.fill(n)` | Fill with a value |
+| `.isi(n)` | `.fill(n)` | Fill with a value |
+| `.gabungno(...arr)` | `.concat(...arr)` | Merge arrays |
 | `.ana(fn)` | `.some(fn)` | Check if any element matches |
 | `.kabeh(fn)` | `.every(fn)` | Check if all elements match |
 

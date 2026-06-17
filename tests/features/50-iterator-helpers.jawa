@@ -21,7 +21,7 @@ cetakno([[1, 2], [3, 4], [5]].ratakan())
 cetakno("flatMap:")
 cetakno([1, 2, 3].petakRata(x lakoni [x, x * 10]))
 
-cetakno("rangkep (concat):")
-cetakno([1, 2].rangkep([3, 4]))
+cetakno("gabungno (concat):")
+cetakno([1, 2].gabungno([3, 4]))
 
 cetakno("--- Rampung ---")

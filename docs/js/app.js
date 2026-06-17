@@ -77,7 +77,7 @@
     { id: 'wektu', section: 'Standard Library', title: 'Wektu (Time)', keywords: 'wektu time timer setTimeout setInterval Wektu.ngenteni Wektu.mbaleni Wektu.mandek' },
     { id: 'builtin-objects', section: 'Standard Library', title: 'Objek Tambahan', keywords: 'objek built-in map set weakmap weakset Himpunan PetaLemah HimpunanLemah URL URLParamCari' },
     { id: 'promise-methods', section: 'Standard Library', title: 'Promise Methods', keywords: 'promise method all race resolve reject .banjur .nyekel' },
-    { id: 'array-methods', section: 'Standard Library', title: 'Method Array', keywords: 'array method map filter reduce find sort dorong jupukPungkasan geser tambahNgarep sambung sambungake walik urutake golek golekIndeks saring petakake kanggoSaben suda ratakan petakRata rangkep ana kabeh kurangi temokake temokakeIndeks' },
+    { id: 'array-methods', section: 'Standard Library', title: 'Method Array', keywords: 'array method map filter reduce find sort dorong jupukPungkasan geser tambahNgarep sambung sambungake walik urutake golek golekIndeks saring petakake kanggoSaben suda ratakan petakRata isi isien gabungno ana kabeh kurangi temokake temokakeIndeks' },
     { id: 'string-methods', section: 'Standard Library', title: 'Method String', keywords: 'string method upper lower trim split replace gedekno cilikno rapikno gantien gantienKabeh pecahan dimulaiKaro diakhiriKaro tambahiNgarep tambahiMburi potonganTeks karakterKe cocokno goleki' },
     { id: 'shared-methods', section: 'Standard Library', title: 'Method Bersama', keywords: 'shared method array string length includes slice dawane ngemot iris gabung indeksSaka' },
     { id: 'cli', section: 'CLI', title: 'Referensi CLI', keywords: 'cli command perintah djawa run fmt repl make version help' },

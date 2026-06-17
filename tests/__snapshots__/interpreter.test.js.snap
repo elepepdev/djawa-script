@@ -317,7 +317,7 @@ flat:
 [1, 2, 3, 4, 5]
 flatMap:
 [1, 10, 2, 20, 3, 30]
-rangkep (concat):
+gabungno (concat):
 [1, 2, 3, 4]
 --- Rampung ---"
 `;
@@ -523,9 +523,10 @@ p2.y: 2
 
 exports[`JawaScript Interpreter Feature Tests should correctly execute 66-ngenteni.jawa 1`] = `
 "start
-after 1ms
+after 1 detik (tanpa unit)
 after 1 detik
-after variable
+after variable tanpa unit
+after variable karo unit
 after expression
 done"
 `;

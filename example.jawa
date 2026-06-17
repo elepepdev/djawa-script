@@ -2,7 +2,10 @@
 
 jarno a yoiku 1
 jarno b yoiku 2
+iki iku interval yoiku 2
+let i yoiku 2
 
+console.log("halo")
 cetakno(a + b)
 
 lek (a luwihGedhe b) terus
@@ -10,3 +13,12 @@ lek (a luwihGedhe b) terus
 mbari liyane terus
   cetakno("Nggak le")
 mbari 
+
+jarno arr1 yoiku [1, 2, 3, 4, 5 ]
+jarno arr2 yoiku [6, 7, 8, 9, 10]
+
+iki iku arr3 yoiku arr1.gabungno(arr2)
+cetakno(arr3)
+
+ngenteni interval
+cetakno("done")
