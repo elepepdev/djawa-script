@@ -246,6 +246,8 @@ export const methodMap = {
     'cocokke': 'match'
 };
 
+import { Koneksi } from './lib/koneksi.js';
+
 export function createBuiltins(interpreter) {
     const globals = interpreter.globals;
 
@@ -394,5 +396,13 @@ export function createBuiltins(interpreter) {
         mbaleni: (fn, ms) => { const id = setInterval(fn, ms); interpreter._activeTimers.push(id); return id; },
         mandek: (id) => { clearTimeout(id); clearInterval(id); const idx = interpreter._activeTimers.indexOf(id); if (idx > -1) interpreter._activeTimers.splice(idx, 1); },
         toString: () => "<native Wektu>"
+    });
+
+    globals.define("Koneksi", {
+        jaluk: (url, opsi) => Koneksi.jaluk(url, opsi),
+        kirim: (url, data, opsi) => Koneksi.kirim(url, data, opsi),
+        dandani: (url, data, opsi) => Koneksi.dandani(url, data, opsi),
+        busak: (url, opsi) => Koneksi.busak(url, opsi),
+        toString: () => "<native Koneksi>"
     });
 }
