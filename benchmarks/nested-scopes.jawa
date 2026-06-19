@@ -1,0 +1,113 @@
+// Benchmark: Nested scope variable access performance
+// Tests: deep function nesting, closure access, lexical scoping
+
+cetakno("=== Nested Scope Access Benchmark ===")
+
+// Test 1: Deep function nesting (5 levels, 10k calls)
+cetakno("\n1. Deep nested function calls (5 levels, 10k)")
+
+gawe level1(x) terus
+  iki iku a yoiku x
+  gawe level2(y) terus
+    iki iku b yoiku y
+    gawe level3(z) terus
+      iki iku c yoiku z
+      gawe level4(w) terus
+        iki iku d yoiku w
+        gawe level5(v) terus
+          balekno a tambah b tambah c tambah d tambah v
+        mbari
+        balekno level5(5)
+      mbari
+      balekno level4(4)
+    mbari
+    balekno level3(3)
+  mbari
+  balekno level2(2)
+mbari
+
+jarno nestedSum yoiku 0
+kanggo (jarno i yoiku 0 banjur i luwihCilik 10000 banjur i yoiku i tambah 1) terus
+  nestedSum yoiku nestedSum tambah level1(1)
+mbari
+cetakno("Nested sum: " tambah nestedSum)
+
+// Test 2: Closure variable access (10k iterations)
+cetakno("\n2. Closure variable access (10k)")
+
+gawe makeCounter() terus
+  jarno count yoiku 0
+  balekno gawe() terus
+    count yoiku count tambah 1
+    balekno count
+  mbari
+mbari
+
+jarno counter yoiku makeCounter()
+kanggo (jarno i yoiku 0 banjur i luwihCilik 10000 banjur i yoiku i tambah 1) terus
+  counter()
+mbari
+cetakno("Final count: " tambah counter())
+
+// Test 3: Multiple closures accessing same outer variables
+cetakno("\n3. Multiple closures (5k iterations)")
+
+gawe makeCalculator() terus
+  jarno value yoiku 0
+
+  balekno terus
+    add: gawe(n) terus
+      value yoiku value tambah n
+      balekno value
+    mbari,
+    multiply: gawe(n) terus
+      value yoiku value ping n
+      balekno value
+    mbari,
+    getValue: gawe() terus
+      balekno value
+    mbari
+  mbari
+mbari
+
+jarno calc yoiku makeCalculator()
+calc.add(10)
+kanggo (jarno i yoiku 0 banjur i luwihCilik 5000 banjur i yoiku i tambah 1) terus
+  calc.add(1)
+mbari
+cetakno("Calculator value: " tambah calc.getValue())
+
+// Test 4: Nested loops with scope access
+cetakno("\n4. Nested loops with outer scope (100x100)")
+
+iki iku outerVar yoiku 100
+jarno result yoiku 0
+kanggo (jarno i yoiku 0 banjur i luwihCilik 100 banjur i yoiku i tambah 1) terus
+  jarno middleVar yoiku i
+  kanggo (jarno j yoiku 0 banjur j luwihCilik 100 banjur j yoiku j tambah 1) terus
+    result yoiku result tambah (outerVar tambah middleVar tambah j)
+  mbari
+mbari
+cetakno("Nested loop result: " tambah result)
+
+// Test 5: Function returning function with deep closure (1k iterations)
+cetakno("\n5. Deep closure chain (1k)")
+
+gawe makeAdder(a) terus
+  balekno gawe(b) terus
+    balekno gawe(c) terus
+      balekno gawe(d) terus
+        balekno a tambah b tambah c tambah d
+      mbari
+    mbari
+  mbari
+mbari
+
+jarno adderSum yoiku 0
+kanggo (jarno i yoiku 0 banjur i luwihCilik 1000 banjur i yoiku i tambah 1) terus
+  jarno adder yoiku makeAdder(1)(2)(3)
+  adderSum yoiku adderSum tambah adder(i)
+mbari
+cetakno("Adder sum: " tambah adderSum)
+
+cetakno("\n=== Nested Scope Benchmark Complete ===")

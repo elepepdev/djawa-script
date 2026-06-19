@@ -1,0 +1,91 @@
+// Benchmark: Recursive algorithm performance
+// Tests: fibonacci, factorial, tree traversal
+
+cetakno("=== Recursive Algorithm Benchmark ===")
+
+// Test 1: Fibonacci sequence
+cetakno("\n1. Fibonacci (recursive)")
+
+gawe fibonacci(n) terus
+  lek (n luwihCilikPodo 1) terus
+    balekno n
+  mbari
+  balekno fibonacci(n kurang 1) tambah fibonacci(n kurang 2)
+mbari
+
+jarno fibs yoiku []
+kanggo (jarno i yoiku 0 banjur i luwihCilikPodo 28 banjur i yoiku i tambah 1) terus
+  fibs.dorong(fibonacci(i))
+mbari
+cetakno("Fibonacci(0-28): " tambah fibs.sambungake(", "))
+
+// Test 2: Factorial
+cetakno("\n2. Factorial (recursive)")
+
+gawe factorial(n) terus
+  lek (n luwihCilikPodo 1) terus
+    balekno 1
+  mbari
+  balekno n ping factorial(n kurang 1)
+mbari
+
+jarno facts yoiku []
+kanggo (jarno i yoiku 0 banjur i luwihCilikPodo 20 banjur i yoiku i tambah 1) terus
+  facts.dorong(factorial(i))
+mbari
+cetakno("First 10 factorials: " tambah facts.iris(0, 10).sambungake(", "))
+
+// Test 3: Sum of digits (recursive)
+cetakno("\n3. Sum of digits (recursive)")
+
+gawe sumDigits(n) terus
+  lek (n plek 0) terus
+    balekno 0
+  mbari
+  balekno (n siso 10) tambah sumDigits(Mtk.ngisor(n bagi 10))
+mbari
+
+jarno digitSum yoiku sumDigits(123456789)
+cetakno("Sum of digits in 123456789: " tambah digitSum)
+
+// Test 4: Ackermann function (very recursive, limited input)
+cetakno("\n4. Ackermann function")
+
+gawe ackermann(m, n) terus
+  lek (m plek 0) terus
+    balekno n tambah 1
+  mbari
+  lek (n plek 0) terus
+    balekno ackermann(m kurang 1, 1)
+  mbari
+  balekno ackermann(m kurang 1, ackermann(m, n kurang 1))
+mbari
+
+jarno ackResults yoiku []
+kanggo (jarno i yoiku 0 banjur i luwihCilikPodo 3 banjur i yoiku i tambah 1) terus
+  kanggo (jarno j yoiku 0 banjur j luwihCilikPodo 4 banjur j yoiku j tambah 1) terus
+    ackResults.dorong(ackermann(i, j))
+  mbari
+mbari
+cetakno("Ackermann results: " tambah ackResults.sambungake(", "))
+
+// Test 5: Power function (recursive)
+cetakno("\n5. Power function (recursive)")
+
+gawe power(base, exp) terus
+  lek (exp plek 0) terus
+    balekno 1
+  mbari
+  lek (exp siso 2 plek 0) terus
+    jarno half yoiku power(base, Mtk.ngisor(exp bagi 2))
+    balekno half ping half
+  mbari liyane terus
+    balekno base ping power(base, exp kurang 1)
+  mbari
+mbari
+
+cetakno("2^10: " tambah power(2, 10))
+cetakno("3^8: " tambah power(3, 8))
+cetakno("5^7: " tambah power(5, 7))
+
+cetakno("\n=== Recursive Benchmark Complete ===")

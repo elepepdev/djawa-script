@@ -46,6 +46,11 @@ export class JawaFunction extends JawaCallable {
         this.declaration = declaration;
         this.closure = closure;
         this.isInitializer = isInitializer;
+
+        // Optimization: detect if function has complex parameters (destructuring)
+        this.hasComplexParams = declaration.params.some(p =>
+            p.lexeme === "{destructuring}" || p.lexeme === "[destructuring]"
+        );
     }
 
     get isAbstract() { return this.declaration.isAbstract; }
@@ -59,21 +64,30 @@ export class JawaFunction extends JawaCallable {
 
     async call(interpreter, args) {
         const environment = new Environment(this.closure);
-        for (let i = 0; i < this.declaration.params.length; i++) {
-            const param = this.declaration.params[i];
-            if (param.lexeme === "{destructuring}") {
-                const value = args[i];
-                for (const { name, alias } of param.properties) {
-                    const propValue = value[name.lexeme];
-                    environment.define(alias.lexeme, propValue);
+
+        // Fast path: simple parameters without destructuring
+        if (!this.hasComplexParams) {
+            for (let i = 0; i < this.declaration.params.length; i++) {
+                environment.define(this.declaration.params[i].lexeme, args[i]);
+            }
+        } else {
+            // Slow path: handle destructuring
+            for (let i = 0; i < this.declaration.params.length; i++) {
+                const param = this.declaration.params[i];
+                if (param.lexeme === "{destructuring}") {
+                    const value = args[i];
+                    for (const { name, alias } of param.properties) {
+                        const propValue = value[name.lexeme];
+                        environment.define(alias.lexeme, propValue);
+                    }
+                } else if (param.lexeme === "[destructuring]") {
+                    const value = args[i];
+                    for (let j = 0; j < param.elements.length; j++) {
+                        environment.define(param.elements[j].lexeme, value[j]);
+                    }
+                } else {
+                    environment.define(param.lexeme, args[i]);
                 }
-            } else if (param.lexeme === "[destructuring]") {
-                const value = args[i];
-                for (let j = 0; j < param.elements.length; j++) {
-                    environment.define(param.elements[j].lexeme, value[j]);
-                }
-            } else {
-                environment.define(param.lexeme, args[i]);
             }
         }
 
@@ -164,13 +178,24 @@ export class JawaInstance {
     constructor(klass) {
         this.klass = klass;
         this.fields = new Map();
+        this.methodCache = new Map(); // Cache bound methods for performance
     }
 
     get(name) {
         const lexeme = typeof name === "string" ? name : name.lexeme;
         if (this.fields.has(lexeme)) return this.fields.get(lexeme);
+
+        // Check method cache first
+        if (this.methodCache.has(lexeme)) {
+            return this.methodCache.get(lexeme);
+        }
+
         const method = this.klass.findMethod(lexeme);
-        if (method !== null) return method.bind(this);
+        if (method !== null) {
+            const boundMethod = method.bind(this);
+            this.methodCache.set(lexeme, boundMethod); // Cache for future use
+            return boundMethod;
+        }
         throw new Error(`[line ${name.line || 0}] Error: Properti '${lexeme}' ora ono.`);
     }
 

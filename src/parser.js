@@ -8,6 +8,9 @@ export class Parser {
     this.current = 0;
     this.hadError = false;
     this.recover = recover;
+
+    // Cache for parsed template expressions (optimization)
+    this.templateExprCache = new Map();
   }
 
   parse() {
@@ -885,10 +888,23 @@ export class Parser {
   buildTemplateLiteral(token) {
     const { strings, expressions } = token.literal;
     const parsedExpressions = expressions.map(code => {
+      // Check cache first
+      if (this.templateExprCache.has(code)) {
+        return this.templateExprCache.get(code);
+      }
+
+      // Parse and cache
       const lexer = new Lexer(code);
       const tokens = lexer.scanTokens();
       const parser = new Parser(tokens);
-      return parser.expression();
+      const expr = parser.expression();
+
+      // Cache only small expressions to prevent memory bloat
+      if (code.length < 500) {
+        this.templateExprCache.set(code, expr);
+      }
+
+      return expr;
     });
     return new AST.TemplateLiteral(strings, parsedExpressions);
   }

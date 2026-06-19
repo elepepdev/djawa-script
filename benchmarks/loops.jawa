@@ -1,0 +1,55 @@
+// Benchmark: Loop iteration performance
+// Tests: for loops, while loops, for-of loops
+
+cetakno("=== Loop Iteration Benchmark ===")
+
+// Test 1: Simple for loop (100k iterations)
+cetakno("\n1. Simple for loop (100k iterations)")
+jarno sum yoiku 0
+kanggo (jarno i yoiku 0 banjur i luwihCilik 100000 banjur i yoiku i tambah 1) terus
+  sum yoiku sum tambah i
+mbari
+cetakno("Sum: " tambah sum)
+
+// Test 2: While loop (50k iterations)
+cetakno("\n2. While loop (50k iterations)")
+jarno count yoiku 0
+jarno total yoiku 0
+selagi (count luwihCilik 50000) terus
+  total yoiku total tambah count
+  count yoiku count tambah 1
+mbari
+cetakno("Total: " tambah total)
+
+// Test 3: Range iteration (10k iterations)
+cetakno("\n3. Range iteration (10k iterations)")
+jarno rangeSum yoiku 0
+kanggo (iki iku i soko 1..10000) terus
+  rangeSum yoiku rangeSum tambah i
+mbari
+cetakno("Range sum: " tambah rangeSum)
+
+// Test 4: Array for-of loop (10k elements)
+cetakno("\n4. For-of loop (10k elements)")
+jarno arr yoiku []
+kanggo (jarno i yoiku 0 banjur i luwihCilik 10000 banjur i yoiku i tambah 1) terus
+  arr.dorong(i)
+mbari
+
+jarno forOfSum yoiku 0
+kanggo (iki iku val soko arr) terus
+  forOfSum yoiku forOfSum tambah val
+mbari
+cetakno("For-of sum: " tambah forOfSum)
+
+// Test 5: Nested loops
+cetakno("\n5. Nested loops (100x100)")
+jarno nested yoiku 0
+kanggo (jarno i yoiku 0 banjur i luwihCilik 100 banjur i yoiku i tambah 1) terus
+  kanggo (jarno j yoiku 0 banjur j luwihCilik 100 banjur j yoiku j tambah 1) terus
+    nested yoiku nested tambah 1
+  mbari
+mbari
+cetakno("Nested iterations: " tambah nested)
+
+cetakno("\n=== Loop Benchmark Complete ===")

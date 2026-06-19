@@ -6,6 +6,7 @@ import {
     JawaCallable, JawaFunction, JawaClass, JawaStruct, JawaInstance,
     isTruthy, stringify, methodMap, createBuiltins
 } from './runtime.js';
+import { createArrayMethodTable } from './array-methods.js';
 import prompt from 'prompt-sync';
 
 const promptSync = prompt();
@@ -23,6 +24,9 @@ export class Interpreter {
 
     this.moduleCache = new Map();
     this.currentDir = process.cwd();
+
+    // Initialize array method dispatch table for O(1) lookup
+    this.arrayMethodTable = createArrayMethodTable();
   }
 
   destroy() {
@@ -859,118 +863,11 @@ export class Interpreter {
       if (object !== null && object !== undefined) {
           if (name === "[]") return object[await this.evaluate(expr.name.index)];
           
-          // Special handling for async-aware array methods
+          // Optimized array method dispatch using Map lookup (O(1) instead of O(n))
           if (Array.isArray(object)) {
-              if (mappedName === 'map') {
-                  return async (callback) => {
-                      const results = [];
-                      for (let i = 0; i < object.length; i++) {
-                          results.push(await callback(object[i], i, object));
-                      }
-                      return results;
-                  };
-              }
-              if (mappedName === 'filter') {
-                  return async (callback) => {
-                      const results = [];
-                      for (let i = 0; i < object.length; i++) {
-                          if (isTruthy(await callback(object[i], i, object))) {
-                              results.push(object[i]);
-                          }
-                      }
-                      return results;
-                  };
-              }
-              if (mappedName === 'forEach') {
-                  return async (callback) => {
-                      for (let i = 0; i < object.length; i++) {
-                          await callback(object[i], i, object);
-                      }
-                  };
-              }
-              if (mappedName === 'some') {
-                  return async (callback) => {
-                      for (let i = 0; i < object.length; i++) {
-                          if (isTruthy(await callback(object[i], i, object))) return true;
-                      }
-                      return false;
-                  };
-              }
-              if (mappedName === 'every') {
-                  return async (callback) => {
-                      for (let i = 0; i < object.length; i++) {
-                          if (!isTruthy(await callback(object[i], i, object))) return false;
-                      }
-                      return true;
-                  };
-              }
-              if (mappedName === 'sort') {
-                  return async (callback) => {
-                      // Simple selection sort for ease of async implementation
-                      const arr = [...object];
-                      for (let i = 0; i < arr.length; i++) {
-                          for (let j = i + 1; j < arr.length; j++) {
-                              const cmp = callback ? await callback(arr[i], arr[j]) : (arr[i] > arr[j] ? 1 : -1);
-                              if (cmp > 0) {
-                                  [arr[i], arr[j]] = [arr[j], arr[i]];
-                              }
-                          }
-                      }
-                      return arr;
-                  };
-              }
-              if (mappedName === 'reduce') {
-                  return async (callback, initial) => {
-                      let acc;
-                      let start = 0;
-                      if (initial !== undefined) { acc = initial; }
-                      else { acc = object[0]; start = 1; }
-                      for (let i = start; i < object.length; i++) {
-                          acc = await callback(acc, object[i], i, object);
-                      }
-                      return acc;
-                  };
-              }
-              if (mappedName === 'find') {
-                  return async (callback) => {
-                      for (let i = 0; i < object.length; i++) {
-                          if (isTruthy(await callback(object[i], i, object))) return object[i];
-                      }
-                      return undefined;
-                  };
-              }
-              if (mappedName === 'findIndex') {
-                  return async (callback) => {
-                      for (let i = 0; i < object.length; i++) {
-                          if (isTruthy(await callback(object[i], i, object))) return i;
-                      }
-                      return -1;
-                  };
-              }
-              if (mappedName === 'flat') {
-                  return (depth) => {
-                      const d = depth === undefined ? 1 : depth;
-                      const result = [];
-                      const flatten = (arr, dd) => {
-                          for (const item of arr) {
-                              if (Array.isArray(item) && dd > 0) flatten(item, dd - 1);
-                              else result.push(item);
-                          }
-                      };
-                      flatten(object, d);
-                      return result;
-                  };
-              }
-              if (mappedName === 'flatMap') {
-                  return async (callback) => {
-                      const result = [];
-                      for (let i = 0; i < object.length; i++) {
-                          const r = await callback(object[i], i, object);
-                          if (Array.isArray(r)) result.push(...r);
-                          else result.push(r);
-                      }
-                      return result;
-                  };
+              const methodFactory = this.arrayMethodTable.get(mappedName);
+              if (methodFactory) {
+                  return methodFactory(object);
               }
           }
 

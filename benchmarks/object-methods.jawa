@@ -1,0 +1,98 @@
+// Benchmark: Object/Class method call performance
+// Tests: class instantiation, method calls, inheritance
+
+cetakno("=== Object Methods Benchmark ===")
+
+// Test 1: Class instantiation (10k objects)
+cetakno("\n1. Class instantiation (10k objects)")
+
+kelas Point terus
+  wujudno(x, y) terus
+    iki.x yoiku x
+    iki.y yoiku y
+  mbari
+
+  distance() terus
+    balekno Mtk.oyot((iki.x ping iki.x) tambah (iki.y ping iki.y))
+  mbari
+
+  add(other) terus
+    balekno Point anyar(iki.x tambah other.x, iki.y tambah other.y)
+  mbari
+mbari
+
+jarno points yoiku []
+kanggo (jarno i yoiku 0 banjur i luwihCilik 10000 banjur i yoiku i tambah 1) terus
+  points.dorong(Point anyar(i, i ping 2))
+mbari
+cetakno("Created " tambah points.dawane tambah " Point objects")
+
+// Test 2: Method calls (10k iterations)
+cetakno("\n2. Method calls on objects (10k)")
+jarno distances yoiku []
+kanggo (jarno i yoiku 0 banjur i luwihCilik 10000 banjur i yoiku i tambah 1) terus
+  distances.dorong(points[i].distance())
+mbari
+cetakno("Calculated " tambah distances.dawane tambah " distances")
+cetakno("First 5 distances: " tambah distances.iris(0, 5).sambungake(", "))
+
+// Test 3: Object method chaining (1k iterations)
+cetakno("\n3. Method chaining (1k)")
+jarno p1 yoiku Point anyar(10, 20)
+jarno accumulated yoiku p1
+kanggo (jarno i yoiku 0 banjur i luwihCilik 1000 banjur i yoiku i tambah 1) terus
+  jarno p2 yoiku Point anyar(i, i)
+  accumulated yoiku accumulated.add(p2)
+mbari
+cetakno("Final point: (" tambah accumulated.x tambah ", " tambah accumulated.y tambah ")")
+
+// Test 4: Inheritance and method calls
+cetakno("\n4. Inheritance (5k objects)")
+
+kelas Shape terus
+  wujudno(name) terus
+    iki.name yoiku name
+  mbari
+
+  describe() terus
+    balekno "Shape: " tambah iki.name
+  mbari
+mbari
+
+kelas Circle turunan soko Shape terus
+  wujudno(name, radius) terus
+    induk(name)
+    iki.radius yoiku radius
+  mbari
+
+  area() terus
+    balekno Mtk.PI ping iki.radius ping iki.radius
+  mbari
+
+  describe() terus
+    balekno "Circle " tambah iki.name tambah " with radius " tambah iki.radius
+  mbari
+mbari
+
+jarno circles yoiku []
+kanggo (jarno i yoiku 0 banjur i luwihCilik 5000 banjur i yoiku i tambah 1) terus
+  circles.dorong(Circle anyar("Circle" tambah i, i tambah 1))
+mbari
+cetakno("Created " tambah circles.dawane tambah " Circle objects")
+
+jarno areas yoiku []
+kanggo (jarno i yoiku 0 banjur i luwihCilik 5000 banjur i yoiku i tambah 1) terus
+  areas.dorong(circles[i].area())
+mbari
+cetakno("Calculated " tambah areas.dawane tambah " areas")
+
+// Test 5: Repeated method access
+cetakno("\n5. Repeated method access (50k calls)")
+jarno testCircle yoiku Circle anyar("Test", 5)
+jarno areaSum yoiku 0
+kanggo (jarno i yoiku 0 banjur i luwihCilik 50000 banjur i yoiku i tambah 1) terus
+  areaSum yoiku areaSum tambah testCircle.area()
+mbari
+cetakno("Total area sum: " tambah areaSum)
+
+cetakno("\n=== Object Methods Benchmark Complete ===")

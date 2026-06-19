@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-06-19T09:50:46.930Z",
+  "nodeVersion": "v26.1.0",
+  "results": [
+    {
+      "name": "Function Calls (1M)",
+      "iterations": 3,
+      "avg": "2633.00",
+      "min": "2529.28",
+      "max": "2717.44",
+      "median": "2652.29",
+      "memoryDelta": "16.68"
+    },
+    {
+      "name": "Array Operations (10k)",
+      "iterations": 3,
+      "avg": "96.71",
+      "min": "87.06",
+      "max": "108.78",
+      "median": "94.28",
+      "memoryDelta": "1.94"
+    },
+    {
+      "name": "Recursive Fibonacci",
+      "iterations": 3,
+      "avg": "18888.55",
+      "min": "16786.35",
+      "max": "20049.59",
+      "median": "19829.71",
+      "memoryDelta": "6.52"
+    }
+  ]
+}

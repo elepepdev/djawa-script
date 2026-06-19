@@ -1,0 +1,72 @@
+// Benchmark: Function call overhead
+// Tests: regular functions, arrow functions, recursive calls
+
+cetakno("=== Function Call Benchmark ===")
+
+// Test 1: Simple function calls (100k iterations)
+cetakno("\n1. Simple function calls (100k)")
+
+gawe add(a, b) terus
+  balekno a tambah b
+mbari
+
+jarno result yoiku 0
+kanggo (jarno i yoiku 0 banjur i luwihCilik 100000 banjur i yoiku i tambah 1) terus
+  result yoiku add(i, i tambah 1)
+mbari
+cetakno("Last result: " tambah result)
+
+// Test 2: Arrow function calls (100k iterations)
+cetakno("\n2. Arrow function calls (100k)")
+
+iki iku multiply yoiku (a, b) lakoni a ping b
+
+jarno product yoiku 1
+kanggo (jarno i yoiku 1 banjur i luwihCilikPodo 1000 banjur i yoiku i tambah 1) terus
+  product yoiku multiply(2, 3)
+mbari
+cetakno("Product: " tambah product)
+
+// Test 3: Function with multiple parameters (50k iterations)
+cetakno("\n3. Multi-parameter function (50k)")
+
+gawe calculate(a, b, c, d) terus
+  balekno (a tambah b) ping (c kurang d)
+mbari
+
+jarno calcResult yoiku 0
+kanggo (jarno i yoiku 0 banjur i luwihCilik 50000 banjur i yoiku i tambah 1) terus
+  calcResult yoiku calculate(i, i tambah 1, i tambah 2, i tambah 3)
+mbari
+cetakno("Calc result: " tambah calcResult)
+
+// Test 4: Recursive fibonacci (25 iterations - expensive)
+cetakno("\n4. Recursive fibonacci(25)")
+
+gawe fib(n) terus
+  lek (n luwihCilikPodo 2) terus
+    balekno n
+  mbari
+  balekno fib(n kurang 1) tambah fib(n kurang 2)
+mbari
+
+jarno fibResult yoiku fib(25)
+cetakno("Fibonacci(25): " tambah fibResult)
+
+// Test 5: Nested function calls (10k iterations)
+cetakno("\n5. Nested function calls (10k)")
+
+gawe outer(x) terus
+  gawe inner(y) terus
+    balekno y ping 2
+  mbari
+  balekno inner(x) tambah x
+mbari
+
+jarno nestedSum yoiku 0
+kanggo (jarno i yoiku 0 banjur i luwihCilik 10000 banjur i yoiku i tambah 1) terus
+  nestedSum yoiku nestedSum tambah outer(i)
+mbari
+cetakno("Nested sum: " tambah nestedSum)
+
+cetakno("\n=== Function Call Benchmark Complete ===")

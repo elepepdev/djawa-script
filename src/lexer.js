@@ -162,28 +162,31 @@ export class Lexer {
       return;
     }
 
-    // Check for multi-word keywords
+    // Check for multi-word keywords (bounded to 2 words max for JPL)
     const savedCurrent = this.current;
     const savedTokensLength = this.tokens.length;
 
     let tempCurrent = this.current;
     let combinedText = text;
+    let wordCount = 1;
+    const maxWords = 2; // JPL keywords max 2 words
 
-    // Greedily try to match longer multi-word keywords
-    while (this.source.charAt(tempCurrent) === ' ') {
+    // Greedily try to match longer multi-word keywords with bounded lookahead
+    while (wordCount < maxWords && this.source.charAt(tempCurrent) === ' ') {
         tempCurrent++;
         let nextWordStart = tempCurrent;
         while (this.isAlphaNumeric(this.source.charAt(tempCurrent))) tempCurrent++;
         let nextWord = this.source.substring(nextWordStart, tempCurrent);
         if (!nextWord) break;
 
-        combinedText += " " + nextWord;
-        if (Keywords[combinedText]) {
-            text = combinedText;
+        const candidate = combinedText + " " + nextWord;
+        if (Keywords[candidate]) {
+            text = candidate;
+            combinedText = candidate;
             this.current = tempCurrent;
+            wordCount++;
         } else {
-            // Keep looking if it might be part of a longer one?
-            // For JPL, 2 words is usually max, but let's be safe.
+            break; // Stop if not a valid keyword
         }
     }
 
@@ -248,36 +251,36 @@ export class Lexer {
 
   template() {
     const strings = [];
-    const expressions = []; // These will be strings of code to be parsed later
-    let currentString = "";
+    const expressions = [];
+    const stringBuffer = []; // Use array instead of string concatenation for performance
 
     while (this.peek() !== '`' && !this.isAtEnd()) {
       if (this.peek() === '$' && this.peekNext() === '{') {
-        strings.push(currentString);
-        currentString = "";
+        strings.push(stringBuffer.join('')); // Join buffer into string
+        stringBuffer.length = 0; // Reuse buffer
         this.advance(); // $
         this.advance(); // {
-        
-        let exprCode = "";
+
+        const exprBuffer = []; // Buffer for expression code
         let braceCount = 1;
         while (braceCount > 0 && !this.isAtEnd()) {
           if (this.peek() === '{') braceCount++;
           if (this.peek() === '}') braceCount--;
-          if (braceCount > 0) exprCode += this.advance();
+          if (braceCount > 0) exprBuffer.push(this.advance());
         }
         if (this.isAtEnd()) throw new Error("Unterminated template interpolation.");
         this.advance(); // }
-        expressions.push(exprCode);
+        expressions.push(exprBuffer.join(''));
       } else {
         if (this.peek() === '\n') this.line++;
-        currentString += this.advance();
+        stringBuffer.push(this.advance());
       }
     }
 
     if (this.isAtEnd()) throw new Error("Unterminated template literal.");
-    strings.push(currentString);
+    strings.push(stringBuffer.join('')); // Join buffer
     this.advance(); // `
-    
+
     this.addToken(TokenType.TEMPLATE, { strings, expressions });
   }
 

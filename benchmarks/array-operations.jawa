@@ -1,0 +1,73 @@
+// Benchmark: Array operation performance
+// Tests: map, filter, reduce, sort, forEach
+
+cetakno("=== Array Operations Benchmark ===")
+
+// Create test array (10k elements)
+cetakno("\nCreating 10k element array...")
+jarno arr yoiku []
+kanggo (jarno i yoiku 0 banjur i luwihCilik 10000 banjur i yoiku i tambah 1) terus
+  arr.dorong(i)
+mbari
+cetakno("Array created: " tambah arr.dawane tambah " elements")
+
+// Test 1: Array map (10k elements)
+cetakno("\n1. Array map (10k elements)")
+jarno doubled yoiku arr.petakake(x lakoni x ping 2)
+cetakno("Mapped length: " tambah doubled.dawane)
+cetakno("First 3: " tambah doubled.iris(0, 3).sambungake(", "))
+
+// Test 2: Array filter (10k elements)
+cetakno("\n2. Array filter (10k elements)")
+jarno evens yoiku arr.saring(x lakoni x siso 2 plek 0)
+cetakno("Filtered length: " tambah evens.dawane)
+cetakno("First 3: " tambah evens.iris(0, 3).sambungake(", "))
+
+// Test 3: Array reduce (10k elements)
+cetakno("\n3. Array reduce (10k elements)")
+jarno sum yoiku arr.kurangi((acc, x) lakoni acc tambah x, 0)
+cetakno("Sum: " tambah sum)
+
+// Test 4: Chained operations
+cetakno("\n4. Chained operations (map + filter + reduce)")
+jarno chainResult yoiku arr
+  .petakake(x lakoni x ping 3)
+  .saring(x lakoni x luwihCilik 15000)
+  .kurangi((acc, x) lakoni acc tambah x, 0)
+cetakno("Chain result: " tambah chainResult)
+
+// Test 5: Array sort (1k elements - expensive operation)
+cetakno("\n5. Array sort (1k elements)")
+jarno unsorted yoiku []
+kanggo (jarno i yoiku 0 banjur i luwihCilik 1000 banjur i yoiku i tambah 1) terus
+  unsorted.dorong(Mtk.ngisor(Mtk.acak() ping 1000))
+mbari
+jarno sorted yoiku unsorted.urutake((a, b) lakoni a luwihCilik b)
+cetakno("Sorted length: " tambah sorted.dawane)
+cetakno("First 5: " tambah sorted.iris(0, 5).sambungake(", "))
+cetakno("Last 5: " tambah sorted.iris(-5).sambungake(", "))
+
+// Test 6: Array forEach (10k elements)
+cetakno("\n6. Array forEach (10k elements)")
+jarno forEachSum yoiku 0
+arr.kanggoSaben(x lakoni terus
+  forEachSum yoiku forEachSum tambah x
+mbari)
+cetakno("ForEach sum: " tambah forEachSum)
+
+// Test 7: Array find (search operation)
+cetakno("\n7. Array find")
+jarno found yoiku arr.golek(x lakoni x plek 5000)
+cetakno("Found: " tambah found)
+
+// Test 8: Multiple array operations
+cetakno("\n8. Mixed operations (5 iterations)")
+kanggo (jarno iter yoiku 0 banjur iter luwihCilik 5 banjur iter yoiku iter tambah 1) terus
+  jarno temp yoiku arr.iris(0, 2000)
+  jarno mapped yoiku temp.petakake(x lakoni x tambah 1)
+  jarno filtered yoiku mapped.saring(x lakoni x siso 3 plek 0)
+  jarno reduced yoiku filtered.kurangi((a, b) lakoni a tambah b, 0)
+mbari
+cetakno("Mixed operations complete")
+
+cetakno("\n=== Array Operations Benchmark Complete ===")
