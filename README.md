@@ -1424,6 +1424,31 @@ jarno id yoiku Wektu.mbaleni(() dadi cetakno("every 2s"), 2000)
 Wektu.mandek(id)  // clear interval/timeout
 ```
 
+### `Koneksi` — HTTP Connection Library
+
+| Method | JavaScript Equivalent | Description |
+| :--- | :--- | :--- |
+| `Koneksi.jaluk(url, opsi?)` | `fetch(url, { method: 'GET' })` | Send a GET request |
+| `Koneksi.kirim(url, data, opsi?)` | `fetch(url, { method: 'POST', body })` | Send a POST request |
+| `Koneksi.dandani(url, data, opsi?)` | `fetch(url, { method: 'PUT', body })` | Send a PUT request |
+| `Koneksi.busak(url, opsi?)` | `fetch(url, { method: 'DELETE' })` | Send a DELETE request |
+
+The response object provides:
+
+| Property | Description |
+| :--- | :--- |
+| `.status` | HTTP status code |
+| `.header` | Response headers as an object |
+| `.json()` | Parse response body as JSON (async) |
+| `.teks()` | Parse response body as text (async) |
+
+```jawascript
+jarno response yoiku enteni Koneksi.jaluk('https://api.example.com/data')
+cetakno(response.status)
+jarno data yoiku enteni response.json()
+cetakno(data.jeneng)
+```
+
 ### Additional Built-in Objects
 
 | JPL | JavaScript | Description |

@@ -116,6 +116,7 @@
           <a href="#json" class="sidebar-link">JSON</a>
           <a href="#global-fns" class="sidebar-link">Fungsi Global</a>
           <a href="#wektu" class="sidebar-link">Wektu (Time)</a>
+          <a href="#koneksi" class="sidebar-link">Koneksi (Connection)</a>
           <a href="#builtin-objects" class="sidebar-link">Objek Tambahan</a>
           <a href="#promise-methods" class="sidebar-link">Promise Methods</a>
           <a href="#array-methods" class="sidebar-link">Method Array</a>
@@ -1338,6 +1339,33 @@ pengguna[uid] <span class="kw">yoiku</span> <span class="str">'987-xyz'</span>
         <div class="code-block"><pre><code>Wektu.<span class="fn">ngenteni</span>(() <span class="kw">dadi</span> <span class="fn">cetakno</span>(<span class="str">"after 1s"</span>), <span class="num">1000</span>)
 <span class="kw">jarno</span> id <span class="kw">yoiku</span> Wektu.<span class="fn">mbaleni</span>(() <span class="kw">dadi</span> <span class="fn">cetakno</span>(<span class="str">"every 2s"</span>), <span class="num">2000</span>)
 Wektu.<span class="fn">mandek</span>(id)  <span class="comment">// clear interval/timeout</span></code></pre></div>
+      </section>
+
+      <section id="koneksi">
+        <h2>Koneksi — Pustaka Koneksi HTTP</h2>
+        <table>
+          <thead><tr><th>Method</th><th>JS</th><th>Keterangan</th></tr></thead>
+          <tbody>
+            <tr><td><code>Koneksi.jaluk(url, opsi?)</code></td><td><code>fetch(url, {method:'GET'})</code></td><td>Permintaan GET</td></tr>
+            <tr><td><code>Koneksi.kirim(url, data, opsi?)</code></td><td><code>fetch(url, {method:'POST', body})</code></td><td>Permintaan POST</td></tr>
+            <tr><td><code>Koneksi.dandani(url, data, opsi?)</code></td><td><code>fetch(url, {method:'PUT', body})</code></td><td>Permintaan PUT</td></tr>
+            <tr><td><code>Koneksi.busak(url, opsi?)</code></td><td><code>fetch(url, {method:'DELETE'})</code></td><td>Permintaan DELETE</td></tr>
+          </tbody>
+        </table>
+        <h3>Obyek Tanggapan</h3>
+        <table>
+          <thead><tr><th>Properti</th><th>Keterangan</th></tr></thead>
+          <tbody>
+            <tr><td><code>.status</code></td><td>Kode status HTTP</td></tr>
+            <tr><td><code>.header</code></td><td>Header tanggapan sebagai obyek</td></tr>
+            <tr><td><code>.json()</code></td><td>Parse body sebagai JSON (async)</td></tr>
+            <tr><td><code>.teks()</code></td><td>Parse body sebagai teks (async)</td></tr>
+          </tbody>
+        </table>
+        <div class="code-block"><pre><code><span class="kw">jarno</span> response <span class="kw">yoiku enteni</span> Koneksi.<span class="fn">jaluk</span>(<span class="str">'https://api.example.com/data'</span>)
+<span class="fn">cetakno</span>(response.<span class="fn">status</span>)
+<span class="kw">jarno</span> data <span class="kw">yoiku enteni</span> response.<span class="fn">json</span>()
+<span class="fn">cetakno</span>(data.<span class="fn">jeneng</span>)</code></pre></div>
       </section>
 
       <section id="builtin-objects">

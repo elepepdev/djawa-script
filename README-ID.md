@@ -1422,6 +1422,31 @@ jarno id yoiku Wektu.mbaleni(() dadi cetakno("setiap 2 detik"), 2000)
 Wektu.mandek(id)  // batalkan interval/timeout
 ```
 
+### `Koneksi` — Pustaka Koneksi HTTP
+
+| Method | Ekuivalen JavaScript | Keterangan |
+| :--- | :--- | :--- |
+| `Koneksi.jaluk(url, opsi?)` | `fetch(url, { method: 'GET' })` | Kirim permintaan GET |
+| `Koneksi.kirim(url, data, opsi?)` | `fetch(url, { method: 'POST', body })` | Kirim permintaan POST |
+| `Koneksi.dandani(url, data, opsi?)` | `fetch(url, { method: 'PUT', body })` | Kirim permintaan PUT |
+| `Koneksi.busak(url, opsi?)` | `fetch(url, { method: 'DELETE' })` | Kirim permintaan DELETE |
+
+Obyek tanggapan menyediakan:
+
+| Properti | Keterangan |
+| :--- | :--- |
+| `.status` | Kode status HTTP |
+| `.header` | Header tanggapan sebagai obyek |
+| `.json()` | Parse body sebagai JSON (async) |
+| `.teks()` | Parse body sebagai teks (async) |
+
+```jawascript
+jarno response yoiku enteni Koneksi.jaluk('https://api.example.com/data')
+cetakno(response.status)
+jarno data yoiku enteni response.json()
+cetakno(data.jeneng)
+```
+
 ### Objek Bawaan Tambahan
 
 | JPL | JavaScript | Keterangan |
