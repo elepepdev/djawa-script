@@ -54,7 +54,7 @@ async function runRepl() {
   let buffer = "";
   let blockDepth = 0;
 
-  console.log("DjawaScript REPL v2.2.0");
+  console.log("DjawaScript REPL v2.3.0");
   console.log("Ketik 'metu' utowo pencet Ctrl+C kanggo metu.");
 
   rl.setPrompt('djawa> ');
@@ -168,7 +168,18 @@ function formatFile(fileName, opts = {}) {
   }
 }
 
-const args = process.argv.slice(2);
+const args = process.argv.slice(2); 
+
+if (args.includes('--niggaplsmakemycodeworks')) {
+  console.log('You stupid nigga.');
+  process.exit(0);
+}
+
+if (args.includes('--plsmakemycodeworks')) {
+  console.log('No.');
+  process.exit(0);
+}
+
 const command = args[0];
 
 function extractOpts(validFlags) {

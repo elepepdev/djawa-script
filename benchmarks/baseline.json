@@ -1,33 +1,33 @@
 {
-  "timestamp": "2026-06-19T09:50:46.930Z",
+  "timestamp": "2026-06-20T01:29:36.315Z",
   "nodeVersion": "v26.1.0",
   "results": [
     {
       "name": "Function Calls (1M)",
       "iterations": 3,
-      "avg": "2633.00",
-      "min": "2529.28",
-      "max": "2717.44",
-      "median": "2652.29",
-      "memoryDelta": "16.68"
+      "avg": "2785.32",
+      "min": "2734.20",
+      "max": "2871.70",
+      "median": "2750.04",
+      "memoryDelta": "15.65"
     },
     {
       "name": "Array Operations (10k)",
       "iterations": 3,
-      "avg": "96.71",
-      "min": "87.06",
-      "max": "108.78",
-      "median": "94.28",
-      "memoryDelta": "1.94"
+      "avg": "98.27",
+      "min": "79.29",
+      "max": "129.24",
+      "median": "86.28",
+      "memoryDelta": "2.80"
     },
     {
       "name": "Recursive Fibonacci",
       "iterations": 3,
-      "avg": "18888.55",
-      "min": "16786.35",
-      "max": "20049.59",
-      "median": "19829.71",
-      "memoryDelta": "6.52"
+      "avg": "21250.86",
+      "min": "19727.73",
+      "max": "22945.78",
+      "median": "21079.06",
+      "memoryDelta": "11.06"
     }
   ]
 }
