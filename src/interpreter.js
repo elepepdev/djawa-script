@@ -8,8 +8,12 @@ import {
 } from './runtime.js';
 import { createArrayMethodTable } from './array-methods.js';
 import prompt from 'prompt-sync';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 
 const promptSync = prompt();
+const __interpreterDir = path.dirname(fileURLToPath(import.meta.url));
 
 export class Interpreter {
   constructor(options = {}) {
@@ -24,6 +28,11 @@ export class Interpreter {
 
     this.moduleCache = new Map();
     this.currentDir = process.cwd();
+    this.searchPaths = [
+      '',                                      // current dir (for relative paths)
+      'lib',                                   // project-local lib/
+      path.join(__interpreterDir, 'lib'),      // bundled stdlib
+    ];
 
     // Initialize array method dispatch table for O(1) lookup
     this.arrayMethodTable = createArrayMethodTable();
@@ -52,34 +61,100 @@ export class Interpreter {
     }
   }
 
+  _resolveModuleFile(modulePath) {
+    if (fs.existsSync(modulePath)) return modulePath;
+    if (!modulePath.endsWith('.jawa') && !modulePath.endsWith('.js')) {
+      const withJawa = modulePath + '.jawa';
+      if (fs.existsSync(withJawa)) return withJawa;
+      const withJs = modulePath + '.js';
+      if (fs.existsSync(withJs)) return withJs;
+    }
+    return null;
+  }
+
+  _searchModule(modulePath) {
+    // If it's a path (has / \ or starts with .), resolve from current dir
+    if (modulePath.includes('/') || modulePath.includes('\\') || modulePath.startsWith('.')) {
+      const resolved = path.resolve(this.currentDir, modulePath);
+      const file = this._resolveModuleFile(resolved);
+      if (file) return file;
+    }
+
+    // Search in search paths
+    for (const base of this.searchPaths) {
+      const basePath = base ? path.resolve(this.currentDir, base) : this.currentDir;
+      const candidates = [
+        path.join(basePath, modulePath),
+        path.join(basePath, modulePath + '.jawa'),
+        path.join(basePath, modulePath + '.js'),
+        path.join(basePath, modulePath, 'index.jawa'),
+        path.join(basePath, modulePath, 'index.js'),
+      ];
+      for (const candidate of candidates) {
+        const file = this._resolveModuleFile(candidate);
+        if (file) return file;
+      }
+    }
+
+    return null;
+  }
+
   async loadModule(modulePath, imports) {
     if (typeof modulePath !== 'string') {
         throw new Error("Jupukno: path kudu string.");
     }
-    const fs = await import('fs');
-    const pathMod = await import('path');
 
-    let resolvedPath = modulePath;
-    if (!pathMod.isAbsolute(modulePath)) {
-      resolvedPath = pathMod.resolve(this.currentDir, modulePath);
+    const isBareName = !modulePath.includes('/') && !modulePath.includes('\\') && !modulePath.startsWith('.') && !modulePath.startsWith('#');
+
+    // Resolve the file
+    let resolvedPath = isBareName ? null : path.resolve(this.currentDir, modulePath);
+    if (!resolvedPath || !fs.existsSync(resolvedPath)) {
+      resolvedPath = this._searchModule(modulePath);
     }
-    if (!resolvedPath.endsWith('.jawa')) {
-      resolvedPath += '.jawa';
+    if (!resolvedPath) {
+      // Try as npm package via dynamic import
+      if (isBareName) {
+        try {
+          const mod = await import(modulePath);
+          this.moduleCache.set(modulePath, mod);
+          return imports && typeof imports === 'object'
+            ? Object.keys(imports).reduce((acc, k) => ({ ...acc, [imports[k] || k]: mod[k] }), {})
+            : mod;
+        } catch { /* not an npm package */ }
+      }
+      throw new Error(`Jupukno: '${modulePath}' ora ditemokake.`);
     }
+
     if (this.moduleCache.has(resolvedPath)) {
       return this.moduleCache.get(resolvedPath);
     }
-    if (!fs.existsSync(resolvedPath)) {
-      throw new Error(`Jupukno: File '${resolvedPath}' ora ditemokake.`);
+
+    // JS module (.js) — use native import()
+    if (resolvedPath.endsWith('.js')) {
+      try {
+        const mod = await import(resolvedPath);
+        const exports = mod.default || mod;
+        this.moduleCache.set(resolvedPath, exports);
+        if (imports && typeof imports === 'object') {
+          return Object.keys(imports).reduce((acc, k) => ({ ...acc, [imports[k] || k]: exports[k] }), {});
+        }
+        return exports;
+      } catch (e) {
+        throw new Error(`Jupukno: Gagal load JS module '${modulePath}': ${e.message}`);
+      }
     }
+
+    // .jawa module
     const code = fs.readFileSync(resolvedPath, 'utf8');
-    const lexer = new (await import('./lexer.js')).Lexer(code);
+    const { Lexer } = await import('./lexer.js');
+    const lexer = new Lexer(code);
     const tokens = lexer.scanTokens();
-    const parser = new (await import('./parser.js')).Parser(tokens, { recover: true });
+    const { Parser } = await import('./parser.js');
+    const parser = new Parser(tokens, { recover: true });
     const statements = parser.parse();
 
     const previousDir = this.currentDir;
-    this.currentDir = pathMod.dirname(resolvedPath);
+    this.currentDir = path.dirname(resolvedPath);
     const moduleEnv = new Environment(this.globals);
     const previousEnv = this.environment;
     this.environment = moduleEnv;
@@ -664,8 +739,11 @@ export class Interpreter {
       const mod = await this.loadModule(stmt.source, null);
       if (stmt.kind === 'named') {
           for (const { name, alias } of stmt.items) {
-              if (name.lexeme in mod) {
-                  this.environment.define(alias.lexeme, mod[name.lexeme]);
+              const key = name.lexeme;
+              if (key in mod) {
+                  this.environment.define(alias.lexeme, mod[key]);
+              } else if (mod[key] !== undefined) {
+                  this.environment.define(alias.lexeme, mod[key]);
               }
           }
       } else if (stmt.kind === 'default') {
@@ -673,7 +751,17 @@ export class Interpreter {
               this.environment.define(stmt.items[0].name.lexeme, mod.default);
           }
       } else if (stmt.kind === 'all') {
-          this.environment.define(stmt.items[0].alias.lexeme, mod);
+          if (stmt.items.length > 0 && stmt.items[0].alias) {
+              this.environment.define(stmt.items[0].alias.lexeme, mod);
+          } else {
+              // Wildcard without alias: import all into current scope
+              for (const key of Object.keys(mod)) {
+                  this.environment.define(key, mod[key]);
+              }
+          }
+      } else if (stmt.kind === 'simple') {
+          const item = stmt.items[0];
+          this.environment.define(item.alias.lexeme, mod);
       }
       return null;
   }
@@ -862,7 +950,7 @@ export class Interpreter {
       }
       if (object !== null && object !== undefined) {
           if (name === "[]") return object[await this.evaluate(expr.name.index)];
-          
+
           // Optimized array method dispatch using Map lookup (O(1) instead of O(n))
           if (Array.isArray(object)) {
               const methodFactory = this.arrayMethodTable.get(mappedName);

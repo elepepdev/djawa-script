@@ -1,0 +1,17 @@
+// Test module for jupukno MVP
+
+iki iku pi yoiku 3.14159
+
+gawe sapa(nama) terus
+  balekno "Sugeng rawuh, " + nama
+mbari
+
+gawe tambahake(a, b) terus
+  balekno a + b
+mbari
+
+metokno
+  pi,
+  sapa,
+  tambahake
+mbari

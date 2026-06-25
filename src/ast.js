@@ -442,7 +442,7 @@ export class MetoknoStmt extends Stmt {
 export class JupuknoStmt extends Stmt {
   constructor(kind, items, source) {
     super();
-    this.kind = kind; // 'named' | 'default' | 'all'
+    this.kind = kind; // 'named' | 'default' | 'all' | 'simple'
     this.items = items; // For 'named': [{name, alias}]; for 'default': [name]; for 'all': [alias]
     this.source = source; // string path
   }

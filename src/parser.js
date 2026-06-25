@@ -193,39 +193,92 @@ export class Parser {
   }
 
   jupuknoStatement() {
-    // 'terus' is optional
-    this.match(TokenType.TERUS);
-    if (this.match(TokenType.KABEH)) {
-      // jupukno * dadi Name soko 'path'
-      this.consume(TokenType.DADI, "Kudune 'dadi' sakwise '*' ing 'jupukno'.");
-      const alias = this.consumeNameLike("Kudune jeneng alias.");
-      this.consume(TokenType.SOKO, "Kudune 'soko' sakwise alias.");
-      const sourceTok = this.consume(TokenType.STRING, "Kudune path string.");
-      return new AST.JupuknoStmt('all', [{ alias }], sourceTok.literal);
+    // ===== OLD block form: jupukno terus ... mbari soko 'path' =====
+    if (this.check(TokenType.TERUS)) {
+      this.advance();
+      if (this.match(TokenType.KABEH)) {
+        this.consume(TokenType.DADI, "Kudune 'dadi' sakwise '*'.");
+        const alias = this.consumeNameLike("Kudune jeneng alias.");
+        this.match(TokenType.MBARI);
+        this.consume(TokenType.SOKO, "Kudune 'soko' sakwise alias.");
+        const src = this.consume(TokenType.STRING, "Kudune path string.");
+        return new AST.JupuknoStmt('all', [{ alias }], src.literal);
+      }
+      if (this.match(TokenType.BIASANE)) {
+        const name = this.consumeNameLike("Kudune jeneng default import.");
+        this.match(TokenType.MBARI);
+        this.consume(TokenType.SOKO, "Kudune 'soko' sakwise jeneng.");
+        const src = this.consume(TokenType.STRING, "Kudune path string.");
+        return new AST.JupuknoStmt('default', [{ name }], src.literal);
+      }
+      const items = [];
+      if (!this.check(TokenType.MBARI) && !this.isAtEnd()) {
+        do {
+          const name = this.consumeNameLike("Kudune jeneng sing arep di-jupukno.");
+          let alias = name;
+          if (this.match(TokenType.DADI)) {
+            alias = this.consumeNameLike("Kudune jeneng alias.");
+          }
+          items.push({ name, alias });
+        } while (this.match(TokenType.COMMA));
+      }
+      this.match(TokenType.MBARI);
+      this.consume(TokenType.SOKO, "Kudune 'soko' sakwise daftar import.");
+      const src = this.consume(TokenType.STRING, "Kudune path string.");
+      return new AST.JupuknoStmt('named', items, src.literal);
     }
+
+    // ===== OLD default form (without terus): jupukno biasane Name soko 'path' =====
     if (this.match(TokenType.BIASANE)) {
-      // jupukno biasane Name soko 'path'
       const name = this.consumeNameLike("Kudune jeneng default import.");
       this.consume(TokenType.SOKO, "Kudune 'soko' sakwise jeneng.");
-      const sourceTok = this.consume(TokenType.STRING, "Kudune path string.");
-      return new AST.JupuknoStmt('default', [{ name }], sourceTok.literal);
+      const src = this.consume(TokenType.STRING, "Kudune path string.");
+      return new AST.JupuknoStmt('default', [{ name }], src.literal);
     }
-    // Named imports — work with or without `terus { ... }`
+
+    // ===== NEW wildcard: jupukno *|kabeh [dadi Name] soko 'path' =====
+    if (this.match(TokenType.PING) || this.match(TokenType.KABEH)) {
+      let alias = null;
+      if (this.match(TokenType.DADI)) {
+        alias = this.consumeNameLike("Kudune jeneng alias.");
+      }
+      this.consume(TokenType.SOKO, "Kudune 'soko' sakwise '*'.");
+      const src = this.consume(TokenType.STRING, "Kudune path string.");
+      return new AST.JupuknoStmt('all', alias ? [{ alias }] : [], src.literal);
+    }
+
+    // ===== NEW Python-like syntax =====
+    // jupukno name                     → simple import
+    // jupukno name dadi alias          → simple import with alias
+    // jupukno name soko 'path'         → from-import
+    // jupukno name dadi alias soko 'path' → from-import with alias
+    // jupukno name, name2 soko 'path'  → multiple from-import
+
     const items = [];
-    if (!this.check(TokenType.MBARI) && !this.isAtEnd()) {
-      do {
-        const name = this.consumeNameLike("Kudune jeneng sing arep di-jupukno.");
-        let alias = name;
-        if (this.match(TokenType.DADI)) {
-          alias = this.consumeNameLike("Kudune jeneng alias.");
-        }
-        items.push({ name, alias });
-      } while (this.match(TokenType.COMMA));
-    }
+    do {
+      const name = this.consumeNameLike("Kudune jeneng sing arep di-jupukno.");
+      let alias = null;
+      if (this.match(TokenType.DADI)) {
+        alias = this.consumeNameLike("Kudune jeneng alias.");
+      }
+      items.push({ name, alias: alias || name });
+    } while (this.match(TokenType.COMMA));
+
+    // Optional mbari (backward compat with old syntax)
     this.match(TokenType.MBARI);
-    this.consume(TokenType.SOKO, "Kudune 'soko' sakwise daftar import.");
-    const sourceTok = this.consume(TokenType.STRING, "Kudune path string.");
-    return new AST.JupuknoStmt('named', items, sourceTok.literal);
+
+    // If soko follows → from-import
+    if (this.match(TokenType.SOKO)) {
+      const src = this.consume(TokenType.STRING, "Kudune path string.");
+      return new AST.JupuknoStmt('named', items, src.literal);
+    }
+
+    // No soko → simple import (single name only)
+    if (items.length === 1) {
+      return new AST.JupuknoStmt('simple', items, items[0].name.lexeme);
+    }
+
+    throw this.error(this.peek(), "Kudune 'soko' kanggo multi-import.");
   }
 
   consumeNameLike(message) {

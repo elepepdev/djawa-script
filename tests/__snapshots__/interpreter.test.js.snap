@@ -531,4 +531,19 @@ after expression
 done"
 `;
 
+exports[`JawaScript Interpreter Feature Tests should correctly execute 67-import-py-style.jawa 1`] = `
+"pi yoiku 3.14159
+tambahake(3, 4) yoiku 7
+tm.pi yoiku 3.14159
+pi langsung yoiku 3.14159
+salam('Doni') yoiku Sugeng rawuh, Doni
+pi tambah tambahake(1, 2) yoiku 6.14159
+pi soko wildcard yoiku 3.14159
+sapa('Jawa') soko wildcard yoiku Sugeng rawuh, Jawa
+pi soko kabeh yoiku 3.14159
+sapa saka 'path' yoiku Sugeng rawuh, Test"
+`;
+
 exports[`JawaScript Interpreter Feature Tests should correctly execute test-module.jawa 1`] = `""`;
+
+exports[`JawaScript Interpreter Feature Tests should correctly execute testmodule.jawa 1`] = `""`;

@@ -552,16 +552,28 @@ export class Formatter {
     let s = KEYWORD.jupukno + ' ';
     if (node.kind === 'named') {
       const items = node.items.map(i => {
-        if (i.alias) return i.name.lexeme + ' ' + KEYWORD.dadi + ' ' + i.alias.lexeme;
+        if (i.alias && i.alias !== i.name) return i.name.lexeme + ' ' + KEYWORD.dadi + ' ' + i.alias.lexeme;
         return i.name.lexeme;
       }).join(', ');
-      s += '{ ' + items + ' }';
+      s += items + ' ';
+      s += KEYWORD.soko + " '" + node.source + "'";
     } else if (node.kind === 'default') {
-      s += KEYWORD.biasane + ' ' + node.items[0].lexeme;
+      s += KEYWORD.biasane + ' ' + node.items[0].name.lexeme;
+      s += ' ' + KEYWORD.soko + " '" + node.source + "'";
     } else if (node.kind === 'all') {
-      s += KEYWORD.kabeh + ' ' + KEYWORD.dadi + ' ' + node.items[0].lexeme;
+      if (node.items.length > 0 && node.items[0].alias) {
+        s += KEYWORD.kabeh + ' ' + KEYWORD.dadi + ' ' + node.items[0].alias.lexeme;
+      } else {
+        s += KEYWORD.kabeh;
+      }
+      s += ' ' + KEYWORD.soko + " '" + node.source + "'";
+    } else if (node.kind === 'simple') {
+      const item = node.items[0];
+      s += item.name.lexeme;
+      if (item.alias && item.alias !== item.name) {
+        s += ' ' + KEYWORD.dadi + ' ' + item.alias.lexeme;
+      }
     }
-    s += ' ' + KEYWORD.soko + " '" + node.source + "'";
     this.line(s);
     this.nl();
   }

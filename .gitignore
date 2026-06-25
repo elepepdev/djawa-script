@@ -21,6 +21,12 @@ lerna-debug.log*
 .Trashes
 ehthumbs.db
 Thumbs.db
+.claude
+
+# Oders
+
+benchmarks/
+coverage/
 
 # Editor directories and files
 .vscode/

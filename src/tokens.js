@@ -259,4 +259,5 @@ export const Keywords = {
   'utowo': TokenType.LIYANE,
   'saksuwene': TokenType.SELAGI,
   'mbaleni': TokenType.KANGGO,
+  'saka': TokenType.SOKO,
 };

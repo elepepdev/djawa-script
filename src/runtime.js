@@ -272,6 +272,8 @@ export const methodMap = {
 };
 
 import { Koneksi } from './lib/koneksi.js';
+import { Sugih } from './lib/sugih.js';
+import { Berkas } from './lib/berkas.js';
 
 export function createBuiltins(interpreter) {
     const globals = interpreter.globals;
@@ -407,10 +409,10 @@ export function createBuiltins(interpreter) {
     });
 
     globals.define("Jupukno", {
-        arity: () => 2,
+        arity: () => 1,
         call: async (interpreter, args) => {
             const path = args[0];
-            const imports = args[1];
+            const imports = args.length > 1 ? args[1] : null;
             return await interpreter.loadModule(path, imports);
         },
         toString: () => "<native Jupukno>"
@@ -429,5 +431,70 @@ export function createBuiltins(interpreter) {
         dandani: (url, data, opsi) => Koneksi.dandani(url, data, opsi),
         busak: (url, opsi) => Koneksi.busak(url, opsi),
         toString: () => "<native Koneksi>"
+    });
+
+    globals.define("Sugih", {
+        tulis: (...args) => Sugih.tulis(...args),
+        abang: (teks) => Sugih.abang(teks),
+        ijo: (teks) => Sugih.ijo(teks),
+        biru: (teks) => Sugih.biru(teks),
+        kuning: (teks) => Sugih.kuning(teks),
+        ungu: (teks) => Sugih.ungu(teks),
+        cyan: (teks) => Sugih.cyan(teks),
+        putih: (teks) => Sugih.putih(teks),
+        ireng: (teks) => Sugih.ireng(teks),
+        abu: (teks) => Sugih.abu(teks),
+        kandel: (teks) => Sugih.kandel(teks),
+        miring: (teks) => Sugih.miring(teks),
+        garisNgisor: (teks) => Sugih.garisNgisor(teks),
+        nyabrang: (teks) => Sugih.nyabrang(teks),
+        remang: (teks) => Sugih.remang(teks),
+        latarAbang: (teks) => Sugih.latarAbang(teks),
+        latarIjo: (teks) => Sugih.latarIjo(teks),
+        latarBiru: (teks) => Sugih.latarBiru(teks),
+        latarKuning: (teks) => Sugih.latarKuning(teks),
+        latarUngu: (teks) => Sugih.latarUngu(teks),
+        latarCyan: (teks) => Sugih.latarCyan(teks),
+        latarPutih: (teks) => Sugih.latarPutih(teks),
+        pandu: (teks, gaya) => Sugih.pandu(teks, gaya),
+        info: (...args) => Sugih.info(...args),
+        sukses: (...args) => Sugih.sukses(...args),
+        wigati: (...args) => Sugih.wigati(...args),
+        galat: (...args) => Sugih.galat(...args),
+        judul: (teks, tingkat) => Sugih.judul(teks, tingkat),
+        gaweTabel: (headers) => Sugih.gaweTabel(headers),
+        gaweBar: (total, label) => Sugih.gaweBar(total, label),
+        gawePanel: (teks, judulPanel) => Sugih.gawePanel(teks, judulPanel),
+        coba: (obj) => Sugih.coba(obj),
+        JSONcantik: (obj) => Sugih.JSONcantik(obj),
+        kolom: (items, jumlahKolom) => Sugih.kolom(items, jumlahKolom),
+        pedhot: (teks, werna) => Sugih.pedhot(teks, werna),
+        toString: () => "<native Sugih>"
+    });
+
+    globals.define("Berkas", {
+        maca: (path, encoding) => Berkas.maca(path, encoding, interpreter.currentDir),
+        macaBuffer: (path) => Berkas.macaBuffer(path, interpreter.currentDir),
+        tulis: (path, data) => Berkas.tulis(path, data, interpreter.currentDir),
+        tambah: (path, data) => Berkas.tambah(path, data, interpreter.currentDir),
+        kopi: (sumber, tujuan) => Berkas.kopi(sumber, tujuan, interpreter.currentDir),
+        pindah: (sumber, tujuan) => Berkas.pindah(sumber, tujuan, interpreter.currentDir),
+        gantiJeneng: (asal, anyar) => Berkas.gantiJeneng(asal, anyar, interpreter.currentDir),
+        busak: (path) => Berkas.busak(path, interpreter.currentDir),
+        ono: (path) => Berkas.ono(path, interpreter.currentDir),
+        info: (path) => Berkas.info(path, interpreter.currentDir),
+        gaweFolder: (path) => Berkas.gaweFolder(path, interpreter.currentDir),
+        gaweFolderBertingkat: (path) => Berkas.gaweFolderBertingkat(path, interpreter.currentDir),
+        busakFolder: (path) => Berkas.busakFolder(path, interpreter.currentDir),
+        busakFolderKabeh: (path) => Berkas.busakFolderKabeh(path, interpreter.currentDir),
+        dhaptarFolder: (path) => Berkas.dhaptarFolder(path, interpreter.currentDir),
+        dhaptarFolderJero: (path) => Berkas.dhaptarFolderJero(path, interpreter.currentDir),
+        sambung: (...segments) => Berkas.sambung(...segments),
+        rampung: (...segments) => Berkas.rampung(...segments),
+        jeneng: (path) => Berkas.jeneng(path),
+        direktori: (path) => Berkas.direktori(path),
+        ekstensi: (path) => Berkas.ekstensi(path),
+        pisah: (path) => Berkas.pisah(path),
+        toString: () => "<native Berkas>"
     });
 }

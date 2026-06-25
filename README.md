@@ -78,6 +78,9 @@
   - [`JSON` — JSON Object](#json--json-object)
   - [Global Functions](#global-functions)
   - [`Wektu` — Time Utilities](#wektu--time-utilities)
+  - [`Koneksi` — HTTP Connection Library](#koneksi--http-connection-library)
+  - [`Sugih` — Rich Terminal Library](#sugih--rich-terminal-library)
+  - [`Berkas` — File I/O Library](#berkas--file-io-library)
   - [Additional Built-in Objects](#additional-built-in-objects)
   - [Promise Methods: `.banjur` & `.nyekel`](#promise-methods-banjur--nyekel)
   - [Array Methods](#array-methods)
@@ -91,7 +94,7 @@
 
 **1. Install via npm:**
 ```bash
-npm install -g @jawirhytam/jawirscript
+npm install -g @jawirhytam/djawascript
 ```
 
 Or install the latest version from GitHub:
@@ -1161,15 +1164,39 @@ cetakno(p.x)  // Output: 3
 
 ## Module System
 
-JPL supports ES-style modules for organizing code across multiple files.
+JPL has a Python-like import system for organizing code across multiple files, importing npm packages, and using built-in libraries.
 
-| Keyword | JavaScript Equivalent | Description |
+| JPL Syntax | Python Equivalent | Description |
 | :--- | :--- | :--- |
-| `metokno terus name mbari` | `export terus name mbari` | Export a named value |
+| `jupukno name` | `import name` | Simple import (searches paths) |
+| `jupukno name dadi alias` | `import name as alias` | Import with alias |
+| `jupukno name soko 'path'` | `from path import name` | From-import |
+| `jupukno name dadi alias soko 'path'` | `from path import name as alias` | From-import with alias |
+| `jupukno name, name2 soko 'path'` | `from path import name, name2` | Multiple from-import |
+| `jupukno * soko 'path'` | `from path import *` | Wildcard import |
+| `jupukno kabeh soko 'path'` | `from path import *` | Wildcard (keyword form) |
+
+Both `soko` and `saka` work — `jupukno name saka 'path'` is also valid.
+
+**How modules are found** (in order):
+1. Relative path (if path contains `/`, `\`, or starts with `.`)
+2. Current directory
+3. `lib/` directory
+4. Bundled JPL standard library (`src/lib/`)
+5. `node_modules/` (npm packages)
+
+This means you can import npm packages directly:
+```jawascript
+jupukno lodash           // import lodash from node_modules
+jupukno express          // import express from node_modules
+```
+
+### Exporting
+
+| Keyword | ES Equivalent | Description |
+| :--- | :--- | :--- |
+| `metokno terus name mbari` | `export { name }` | Export a named value |
 | `metokno biasane value` | `export default value` | Export a default value |
-| `jupukno ... soko '...'` | `import ... from '...'` | Import from a file |
-| `biasane` | `default` | Used for default import/export |
-| `dadi` | `as` | Rename an import |
 
 **`util.jawa`**
 ```jawascript
@@ -1185,19 +1212,22 @@ metokno biasane VERSION    // Default export
 
 **`app.jawa`**
 ```jawascript
-jupukno biasane appVersion, terus greet dadi sayHello mbari soko './util.js'
+jupukno greet, VERSION saka './util.jawa'
 
-cetakno("Version:", appVersion)   // Output: Version: 1.0
-cetakno(sayHello("Doni"))         // Output: Welcome, Doni
+cetakno("Version:", VERSION)       // Output: Version: 1.0
+cetakno(greet("Doni"))             // Output: Welcome, Doni
+```
+
+Or import the whole module by name (auto-searches paths):
+```jawascript
+jupukno util dadi u saka 'util'   // Searches lib/, current dir, etc.
+cetakno(u.greet("Doni"))
 ```
 
 ### Re-exporting as a Namespace
 
-Re-export all exports from another module under a single namespace object.
-
 ```jawascript
-// JS: export * as utils from './utils.js';
-metokno kabeh dadi util soko './util_export.js'
+metokno kabeh dadi util soko './util_export.jawa'
 ```
 
 ### Dynamic Imports
@@ -1205,13 +1235,10 @@ metokno kabeh dadi util soko './util_export.js'
 Load modules on demand at runtime.
 
 ```jawascript
-// JS: import('./module.js').then(module => ...)
 jupukno('./dynamic_module.js')
-  .banjur(module lakoni cetakno('Loaded:', module.message))
-  .nyekel(error lakoni cetakno('Error:', error))
+  .then(module lakoni cetakno('Loaded:', module.message))
+  .catch(error lakoni cetakno('Error:', error))
 ```
-
-> **Note:** The import path must point to the **compiled `.js` file**, not the source `.jawa` file.
 
 ---
 
@@ -1449,6 +1476,111 @@ jarno data yoiku enteni response.json()
 cetakno(data.jeneng)
 ```
 
+### `Sugih` — Rich Terminal Library
+
+`Sugih` (Javanese for "rich") provides styled terminal output — colors, tables, panels, progress bars, logging, and more.
+
+| Method | Description |
+| :--- | :--- |
+| `Sugih.tulis(...args)` | Print styled arguments to console (like `console.log`) |
+| `Sugih.abang(teks)` / `.ijo()` / `.biru()` / `.kuning()` | Foreground colors: red, green, blue, yellow |
+| `Sugih.ungu(teks)` / `.cyan()` / `.putih()` / `.ireng()` / `.abu()` | Foreground: magenta, cyan, white, black, gray |
+| `Sugih.kandel(teks)` / `.miring()` / `.garisNgisor()` | Bold, italic, underline |
+| `Sugih.nyabrang(teks)` / `.remang()` | Strikethrough, dim |
+| `Sugih.latarAbang(teks)` / `.latarIjo()` / `.latarBiru()` | Background: red, green, blue |
+| `Sugih.latarKuning(teks)` / `.latarUngu()` / `.latarCyan()` / `.latarPutih()` | Background: yellow, magenta, cyan, white |
+| `Sugih.pandu(teks, werna?)` | Bold colored text (default: blue) — colors: `abang`, `ijo`, `biru`, `kuning`, `ungu`, `cyan` |
+| `Sugih.info(...args)` / `.sukses()` / `.wigati()` / `.galat()` | Log with colored prefix: ℹ blue, ✓ green, ⚠ yellow, ✗ red |
+| `Sugih.judul(teks, tingkat?)` | Print heading (level 1-4) |
+| `Sugih.gawePanel(teks, judul?)` | Draw a bordered panel |
+| `Sugih.gaweTabel(headers)` | Create a table builder (chain `.tambahbaris(...)` then `.cetak()`) |
+| `Sugih.gaweBar(total, label?)` | Create a progress bar (chain `.maju()`, `.setel()`, `.rampung()`) |
+| `Sugih.kolom(items, jumlahKolom?)` | Display items in columns |
+| `Sugih.pedhot(teks, werna?)` | Print a colored horizontal rule |
+| `Sugih.coba(obj)` | Inspect an object with syntax-highlighted output |
+| `Sugih.JSONcantik(obj)` | Pretty-print JSON with colored keys |
+
+```jawascript
+// Colors & styles
+Sugih.tulis(Sugih.abang('ABANG'), Sugih.ijo('IJO'), Sugih.biru('BIRU'))
+Sugih.tulis(Sugih.kandel('BOLD'), Sugih.miring('ITALIC'))
+
+// Tables
+jarno tabel yoiku Sugih.gaweTabel(['Jeneng', 'Umur', 'Kutha'])
+tabel.tambahbaris('Fatih', 25, 'Solo').tambahbaris('Budi', 30, 'Jogja').cetak()
+
+// Panels
+Sugih.gawePanel('Isi panel ing kene', 'Judul Panel')
+
+// Logging
+Sugih.info('Iki info')
+Sugih.sukses('Iki sukses')
+Sugih.wigati('Iki peringatan')
+Sugih.galat('Iki error')
+
+// Progress bar
+jarno bar yoiku Sugih.gaweBar(100, 'Ngunduh...')
+bar.maju(50)
+bar.rampung()
+
+// Inspect & JSON
+Sugih.coba(terus jeneng: 'Fatih', umur: 25 mbari)
+Sugih.JSONcantik(terus produk: 'Buku', rega: 15000 mbari)
+```
+
+### `Berkas` — File I/O Library
+
+`Berkas` (Javanese for "file") provides synchronous file system operations — reading, writing, copying, deleting files, directory management, and path utilities.
+
+| Method | Description |
+| :--- | :--- |
+| `Berkas.maca(path, encoding?)` | Read file as text (default: UTF-8) |
+| `Berkas.macaBuffer(path)` | Read file as raw Buffer |
+| `Berkas.tulis(path, data)` | Write text to file (overwrite) |
+| `Berkas.tambah(path, data)` | Append text to file |
+| `Berkas.kopi(sumber, tujuan)` | Copy file or directory |
+| `Berkas.pindah(sumber, tujuan)` | Move/rename file |
+| `Berkas.gantiJeneng(asal, anyar)` | Rename file |
+| `Berkas.busak(path)` | Delete file |
+| `Berkas.ono(path)` | Check if path exists |
+| `Berkas.info(path)` | Get file stats `{ gede, ikuFile, ikuFolder, ikuLink, wektuGawe, wektuGanti, wektuAkses, mode }` |
+| `Berkas.gaweFolder(path)` | Create single directory |
+| `Berkas.gaweFolderBertingkat(path)` | Create directories recursively (mkdir -p) |
+| `Berkas.busakFolder(path)` | Remove empty directory |
+| `Berkas.busakFolderKabeh(path)` | Remove directory recursively (rm -rf) |
+| `Berkas.dhaptarFolder(path)` | List directory contents |
+| `Berkas.dhaptarFolderJero(path)` | List directory recursively |
+| `Berkas.sambung(...segments)` | Join path segments |
+| `Berkas.rampung(...segments)` | Resolve to absolute path |
+| `Berkas.jeneng(path)` | Get filename (basename) |
+| `Berkas.direktori(path)` | Get parent directory |
+| `Berkas.ekstensi(path)` | Get file extension |
+| `Berkas.pisah(path)` | Parse path into `{ oyot, folder, jeneng, ekstensi, jenengIso }` |
+
+```jawascript
+// File reading & writing
+jarno isi yoiku Berkas.maca('./catetan.txt')
+Berkas.tulis('./catetan.txt', 'tulisan anyar')
+Berkas.tambah('./catetan.txt', '\nlarik anyar')
+
+// File operations
+cetakno(Berkas.ono('./catetan.txt'))    // true
+Berkas.kopi('./catetan.txt', './cadangan.txt')
+Berkas.busak('./catetan.txt')
+
+// Directory operations
+Berkas.gaweFolder('./proyekku')
+Berkas.gaweFolderBertingkat('./a/b/c/d')
+jarno entri yoiku Berkas.dhaptarFolder('./proyekku')
+
+// Path utilities
+jarno path Lengkap yoiku Berkas.rampung('docs', 'en', 'index.html')
+jarno jeneng yoiku Berkas.jeneng('/home/user/file.txt')   // "file.txt"
+jarno ekstensi yoiku Berkas.ekstensi('foto.png')            // ".png"
+jarno diParse yoiku Berkas.pisah('/home/user/file.txt')
+cetakno(diParse.folder)   // "/home/user"
+```
+
 ### Additional Built-in Objects
 
 | JPL | JavaScript | Description |
@@ -1560,7 +1692,7 @@ These methods work on both `Daftar` (Array) and `Teks` (String).
 Make sure [Node.js](https://nodejs.org/) is installed, then run:
 
 ```bash
-npm install -g @jawirhytam/jawirscript
+npm install -g @jawirhytam/djawascript
 ```
 
 Or install directly from GitHub:

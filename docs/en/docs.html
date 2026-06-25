@@ -117,6 +117,8 @@
           <a href="#global-fns" class="sidebar-link">Global Functions</a>
           <a href="#wektu" class="sidebar-link">Time (Wektu)</a>
           <a href="#koneksi" class="sidebar-link">Koneksi (Connection)</a>
+          <a href="#sugih" class="sidebar-link">Sugih (Rich Terminal)</a>
+          <a href="#berkas" class="sidebar-link">Berkas (File I/O)</a>
           <a href="#builtin-objects" class="sidebar-link">Additional Objects</a>
           <a href="#promise-methods" class="sidebar-link">Promise Methods</a>
           <a href="#array-methods" class="sidebar-link">Array Methods</a>
@@ -140,7 +142,7 @@
         <h3>1. Install via npm</h3>
         <div class="code-block">
           <div class="code-header"><span class="code-dot red"></span><span class="code-dot yellow"></span><span class="code-dot green"></span><span class="code-filename">Terminal</span></div>
-          <pre><code>npm install -g @jawirhytam/jawirscript</code></pre>
+          <pre><code>npm install -g @jawirhytam/djawascript</code></pre>
         </div>
         <p>Or install the latest version from GitHub:</p>
         <div class="code-block">
@@ -1080,17 +1082,19 @@ myCat.<span class="fn">meow</span>()  <span class="comment">// Output: Tom says 
       <!-- ==================== MODULES ==================== -->
       <section id="modules">
         <h2>Module System</h2>
-        <p>JPL supports ES-style modules for organizing code across multiple files.</p>
+        <p>JPL has a Python-like import system. You can import other <code>.jawa</code> files, npm packages, and built-in libraries.</p>
         <table>
-          <thead><tr><th>JPL</th><th>JS Equivalent</th><th>Description</th></tr></thead>
+          <thead><tr><th>JPL Syntax</th><th>Python Equivalent</th><th>Description</th></tr></thead>
           <tbody>
-            <tr><td><code>metokno terus name mbari</code></td><td><code>export { name }</code></td><td>Named export</td></tr>
-            <tr><td><code>metokno biasane value</code></td><td><code>export default</code></td><td>Default export</td></tr>
-            <tr><td><code>jupukno ... soko '...'</code></td><td><code>import ... from</code></td><td>Import</td></tr>
-            <tr><td><code>biasane</code></td><td><code>default</code></td><td>Used for default import/export</td></tr>
-            <tr><td><code>dadi</code></td><td><code>as</code></td><td>Rename import</td></tr>
+            <tr><td><code>jupukno name</code></td><td><code>import name</code></td><td>Simple import (auto-search)</td></tr>
+            <tr><td><code>jupukno name dadi alias</code></td><td><code>import name as alias</code></td><td>Import with alias</td></tr>
+            <tr><td><code>jupukno name soko 'path'</code></td><td><code>from path import name</code></td><td>From-import</td></tr>
+            <tr><td><code>jupukno name dadi alias soko 'path'</code></td><td><code>from path import name as alias</code></td><td>From-import with alias</td></tr>
+            <tr><td><code>jupukno * soko 'path'</code></td><td><code>from path import *</code></td><td>Wildcard import</td></tr>
           </tbody>
         </table>
+        <p>Both <code>soko</code> and <code>saka</code> work interchangeably.</p>
+        <p><strong>Module search order:</strong> relative path &rarr; current dir &rarr; <code>lib/</code> &rarr; bundled stdlib &rarr; <code>node_modules/</code></p>
         <h3><code>util.jawa</code></h3>
         <div class="code-block"><pre><code><span class="kw">gawe</span> greet(name) <span class="kw">terus</span>
   <span class="kw">balekno</span> <span class="str">"Hello, "</span> <span class="op">tambah</span> name
@@ -1101,17 +1105,19 @@ myCat.<span class="fn">meow</span>()  <span class="comment">// Output: Tom says 
 <span class="kw">metokno terus</span> greet <span class="kw">mbari</span>          <span class="comment">// Named export</span>
 <span class="kw">metokno biasane</span> VERSION    <span class="comment">// Default export</span></code></pre></div>
         <h3><code>app.jawa</code></h3>
-        <div class="code-block"><pre><code><span class="kw">jupukno biasane</span> appVersion, <span class="kw">terus</span> greet <span class="kw">dadi</span> sayHello <span class="kw">mbari soko</span> <span class="str">'./util.js'</span>
+        <div class="code-block"><pre><code><span class="kw">jupukno</span> greet, VERSION <span class="kw">saka</span> <span class="str">'./util.jawa'</span>
 
-<span class="fn">cetakno</span>(<span class="str">"Version:"</span>, appVersion)   <span class="comment">// Output: Version: 1.0</span>
-<span class="fn">cetakno</span>(sayHello(<span class="str">"Doni"</span>))         <span class="comment">// Output: Hello, Doni</span></code></pre></div>
-        <div class="info-box"><strong>Note:</strong> Import paths must point to the <strong>compiled <code>.js</code> file</strong>, not the source <code>.jawa</code>.</div>
+<span class="fn">cetakno</span>(<span class="str">"Version:"</span>, VERSION)   <span class="comment">// Output: Version: 1.0</span>
+<span class="fn">cetakno</span>(greet(<span class="str">"Doni"</span>))         <span class="comment">// Output: Hello, Doni</span></code></pre></div>
+        <p>You can also import npm packages directly:</p>
+        <div class="code-block"><pre><code><span class="kw">jupukno</span> lodash           <span class="comment">// import lodash from node_modules</span>
+<span class="kw">jupukno</span> express          <span class="comment">// import express from node_modules</span></code></pre></div>
       </section>
 
       <section id="reexport">
         <h2>Re-export &amp; Dynamic Import</h2>
         <h3>Re-export as Namespace</h3>
-        <div class="code-block"><pre><code><span class="kw">metokno kabeh dadi</span> util <span class="kw">soko</span> <span class="str">'./util_export.js'</span></code></pre></div>
+        <div class="code-block"><pre><code><span class="kw">metokno kabeh dadi</span> util <span class="kw">soko</span> <span class="str">'./util_export.jawa'</span></code></pre></div>
         <h3>Dynamic Import</h3>
         <div class="code-block"><pre><code><span class="kw">jupukno</span>(<span class="str">'./dynamic_module.js'</span>)
   .<span class="fn">banjur</span>(module <span class="kw">lakoni</span> <span class="fn">cetakno</span>(<span class="str">'Loaded:'</span>, module.message))
@@ -1366,6 +1372,108 @@ Wektu.<span class="fn">mandek</span>(id)  <span class="comment">// clear interva
 <span class="fn">cetakno</span>(data.<span class="fn">jeneng</span>)</code></pre></div>
       </section>
 
+      <section id="sugih">
+        <h2>Sugih — Rich Terminal Library</h2>
+        <p><code>Sugih</code> provides styled terminal output — colors, tables, panels, progress bars, logging, and more.</p>
+        <table>
+          <thead><tr><th>Method</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>Sugih.tulis(...args)</code></td><td>Print styled arguments (like <code>console.log</code>)</td></tr>
+            <tr><td><code>Sugih.abang(teks)</code> / <code>.ijo()</code> / <code>.biru()</code> / <code>.kuning()</code></td><td>Foreground: red, green, blue, yellow</td></tr>
+            <tr><td><code>Sugih.ungu(teks)</code> / <code>.cyan()</code> / <code>.putih()</code> / <code>.ireng()</code> / <code>.abu()</code></td><td>Foreground: magenta, cyan, white, black, gray</td></tr>
+            <tr><td><code>Sugih.kandel(teks)</code> / <code>.miring()</code> / <code>.garisNgisor()</code></td><td>Bold, italic, underline</td></tr>
+            <tr><td><code>Sugih.nyabrang(teks)</code> / <code>.remang()</code></td><td>Strikethrough, dim</td></tr>
+            <tr><td><code>Sugih.latarAbang(teks)</code> / <code>.latarIjo()</code> / <code>.latarBiru()</code></td><td>Background: red, green, blue</td></tr>
+            <tr><td><code>Sugih.latarKuning(teks)</code> / <code>.latarUngu()</code> / <code>.latarCyan()</code> / <code>.latarPutih()</code></td><td>Background: yellow, magenta, cyan, white</td></tr>
+            <tr><td><code>Sugih.pandu(teks, werna?)</code></td><td>Bold colored text (default blue) — colors: <code>abang</code>, <code>ijo</code>, <code>biru</code>, <code>kuning</code>, <code>ungu</code>, <code>cyan</code></td></tr>
+            <tr><td><code>Sugih.info(...args)</code> / <code>.sukses()</code> / <code>.wigati()</code> / <code>.galat()</code></td><td>Log with colored prefix: ℹ blue, ✓ green, ⚠ yellow, ✗ red</td></tr>
+            <tr><td><code>Sugih.judul(teks, tingkat?)</code></td><td>Print heading (level 1-4)</td></tr>
+            <tr><td><code>Sugih.gawePanel(teks, judul?)</code></td><td>Draw a bordered panel</td></tr>
+            <tr><td><code>Sugih.gaweTabel(headers)</code></td><td>Create a table builder (chain <code>.tambahbaris()</code> then <code>.cetak()</code>)</td></tr>
+            <tr><td><code>Sugih.gaweBar(total, label?)</code></td><td>Create a progress bar (chain <code>.maju()</code>, <code>.setel()</code>, <code>.rampung()</code>)</td></tr>
+            <tr><td><code>Sugih.kolom(items, jumlahKolom?)</code></td><td>Display items in columns</td></tr>
+            <tr><td><code>Sugih.pedhot(teks, werna?)</code></td><td>Print a colored horizontal rule</td></tr>
+            <tr><td><code>Sugih.coba(obj)</code></td><td>Inspect an object with syntax-highlighted output</td></tr>
+            <tr><td><code>Sugih.JSONcantik(obj)</code></td><td>Pretty-print JSON with colored keys</td></tr>
+          </tbody>
+        </table>
+        <div class="code-block"><pre><code><span class="comment">// Colors &amp; styles</span>
+Sugih.<span class="fn">tulis</span>(Sugih.<span class="fn">abang</span>(<span class="str">'ABANG'</span>), Sugih.<span class="fn">ijo</span>(<span class="str">'IJO'</span>), Sugih.<span class="fn">biru</span>(<span class="str">'BIRU'</span>))
+Sugih.<span class="fn">tulis</span>(Sugih.<span class="fn">kandel</span>(<span class="str">'BOLD'</span>), Sugih.<span class="fn">miring</span>(<span class="str">'ITALIC'</span>))
+
+<span class="comment">// Tables</span>
+<span class="kw">jarno</span> tabel <span class="kw">yoiku</span> Sugih.<span class="fn">gaweTabel</span>([<span class="str">'Jeneng'</span>, <span class="str">'Umur'</span>, <span class="str">'Kutha'</span>])
+tabel.<span class="fn">tambahbaris</span>(<span class="str">'Fatih'</span>, <span class="num">25</span>, <span class="str">'Solo'</span>).<span class="fn">tambahbaris</span>(<span class="str">'Budi'</span>, <span class="num">30</span>, <span class="str">'Jogja'</span>).<span class="fn">cetak</span>()
+
+<span class="comment">// Panels</span>
+Sugih.<span class="fn">gawePanel</span>(<span class="str">'Isi panel ing kene'</span>, <span class="str">'Judul Panel'</span>)
+
+<span class="comment">// Logging</span>
+Sugih.<span class="fn">info</span>(<span class="str">'Iki info'</span>)
+Sugih.<span class="fn">sukses</span>(<span class="str">'Iki sukses'</span>)
+Sugih.<span class="fn">wigati</span>(<span class="str">'Iki peringatan'</span>)
+Sugih.<span class="fn">galat</span>(<span class="str">'Iki error'</span>)
+
+<span class="comment">// Progress bar</span>
+<span class="kw">jarno</span> bar <span class="kw">yoiku</span> Sugih.<span class="fn">gaweBar</span>(<span class="num">100</span>, <span class="str">'Ngunduh...'</span>)
+bar.<span class="fn">maju</span>(<span class="num">50</span>)
+bar.<span class="fn">rampung</span>()
+
+<span class="comment">// Inspect &amp; JSON</span>
+Sugih.<span class="fn">coba</span>(<span class="kw">terus</span> jeneng: <span class="str">'Fatih'</span>, umur: <span class="num">25</span> <span class="kw">mbari</span>)
+Sugih.<span class="fn">JSONcantik</span>(<span class="kw">terus</span> produk: <span class="str">'Buku'</span>, rega: <span class="num">15000</span> <span class="kw">mbari</span>)</code></pre></div>
+      </section>
+
+      <section id="berkas">
+        <h2>Berkas — File I/O Library</h2>
+        <p><code>Berkas</code> provides synchronous file operations — read, write, copy, delete, directory management, and path utilities.</p>
+        <table>
+          <thead><tr><th>Method</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>Berkas.maca(path, encoding?)</code></td><td>Read file as text (UTF-8)</td></tr>
+            <tr><td><code>Berkas.macaBuffer(path)</code></td><td>Read file as raw Buffer</td></tr>
+            <tr><td><code>Berkas.tulis(path, data)</code></td><td>Write text to file (overwrite)</td></tr>
+            <tr><td><code>Berkas.tambah(path, data)</code></td><td>Append text to file</td></tr>
+            <tr><td><code>Berkas.kopi(sumber, tujuan)</code></td><td>Copy file or directory</td></tr>
+            <tr><td><code>Berkas.pindah(sumber, tujuan)</code></td><td>Move/rename file</td></tr>
+            <tr><td><code>Berkas.gantiJeneng(asal, anyar)</code></td><td>Rename file</td></tr>
+            <tr><td><code>Berkas.busak(path)</code></td><td>Delete file</td></tr>
+            <tr><td><code>Berkas.ono(path)</code></td><td>Check if path exists</td></tr>
+            <tr><td><code>Berkas.info(path)</code></td><td>File stats: <code>{ gede, ikuFile, ikuFolder, ikuLink, wektuGawe, wektuGanti, wektuAkses, mode }</code></td></tr>
+            <tr><td><code>Berkas.gaweFolder(path)</code></td><td>Create directory</td></tr>
+            <tr><td><code>Berkas.gaweFolderBertingkat(path)</code></td><td>Create dirs recursively (mkdir -p)</td></tr>
+            <tr><td><code>Berkas.busakFolder(path)</code></td><td>Remove empty directory</td></tr>
+            <tr><td><code>Berkas.busakFolderKabeh(path)</code></td><td>Remove directory recursively (rm -rf)</td></tr>
+            <tr><td><code>Berkas.dhaptarFolder(path)</code></td><td>List directory contents</td></tr>
+            <tr><td><code>Berkas.dhaptarFolderJero(path)</code></td><td>List directory recursively</td></tr>
+            <tr><td><code>Berkas.sambung(...segments)</code></td><td>Join path segments</td></tr>
+            <tr><td><code>Berkas.rampung(...segments)</code></td><td>Resolve to absolute path</td></tr>
+            <tr><td><code>Berkas.jeneng(path)</code></td><td>Filename (basename)</td></tr>
+            <tr><td><code>Berkas.direktori(path)</code></td><td>Parent directory</td></tr>
+            <tr><td><code>Berkas.ekstensi(path)</code></td><td>File extension</td></tr>
+            <tr><td><code>Berkas.pisah(path)</code></td><td>Parse path: <code>{ oyot, folder, jeneng, ekstensi, jenengIso }</code></td></tr>
+          </tbody>
+        </table>
+        <div class="code-block"><pre><code><span class="comment">// Read &amp; write</span>
+<span class="kw">jarno</span> isi <span class="kw">yoiku</span> Berkas.<span class="fn">maca</span>(<span class="str">'./catetan.txt'</span>)
+Berkas.<span class="fn">tulis</span>(<span class="str">'./catetan.txt'</span>, <span class="str">'tulisan anyar'</span>)
+Berkas.<span class="fn">tambah</span>(<span class="str">'./catetan.txt'</span>, <span class="str">'\nlarik anyar'</span>)
+
+<span class="comment">// File operations</span>
+<span class="fn">cetakno</span>(Berkas.<span class="fn">ono</span>(<span class="str">'./catetan.txt'</span>))
+Berkas.<span class="fn">kopi</span>(<span class="str">'./catetan.txt'</span>, <span class="str">'./cadangan.txt'</span>)
+Berkas.<span class="fn">busak</span>(<span class="str">'./catetan.txt'</span>)
+
+<span class="comment">// Directory operations</span>
+Berkas.<span class="fn">gaweFolder</span>(<span class="str">'./proyekku'</span>)
+<span class="kw">jarno</span> entri <span class="kw">yoiku</span> Berkas.<span class="fn">dhaptarFolder</span>(<span class="str">'./proyekku'</span>)
+
+<span class="comment">// Path utilities</span>
+<span class="kw">jarno</span> jeneng <span class="kw">yoiku</span> Berkas.<span class="fn">jeneng</span>(<span class="str">'/home/user/file.txt'</span>)
+<span class="kw">jarno</span> diParse <span class="kw">yoiku</span> Berkas.<span class="fn">pisah</span>(<span class="str">'/home/user/file.txt'</span>)
+<span class="fn">cetakno</span>(diParse.<span class="fn">folder</span>)</code></pre></div>
+      </section>
+
       <section id="builtin-objects">
         <h2>Additional Built-in Objects</h2>
         <table>
@@ -1487,7 +1595,7 @@ myPromise
         <h2>CLI Reference</h2>
         <h3>Installation</h3>
         <p>Ensure <a href="https://nodejs.org/" target="_blank">Node.js</a> is installed, then run:</p>
-        <div class="code-block"><pre><code>npm install -g @jawirhytam/jawirscript</code></pre></div>
+        <div class="code-block"><pre><code>npm install -g @jawirhytam/djawascript</code></pre></div>
         <p>Or install directly from GitHub:</p>
         <div class="code-block"><pre><code>npm install -g https://github.com/elepepdev/djawa-script</code></pre></div>
         <h3>Commands</h3>

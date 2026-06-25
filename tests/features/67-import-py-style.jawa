@@ -1,0 +1,33 @@
+// Simple import (jupukno name) - auto-search in current dir
+jupukno testmodule
+cetakno("pi yoiku " + testmodule.pi)
+cetakno("tambahake(3, 4) yoiku " + testmodule.tambahake(3, 4))
+
+// Simple import with alias
+jupukno testmodule dadi tm
+cetakno("tm.pi yoiku " + tm.pi)
+
+// From-import: jupukno name soko 'path'
+jupukno pi soko "./test-module.jawa"
+cetakno("pi langsung yoiku " + pi)
+
+// From-import with alias: jupukno name dadi alias soko 'path'
+jupukno sapa dadi salam soko "./test-module.jawa"
+cetakno("salam('Doni') yoiku " + salam("Doni"))
+
+// Multi from-import: jupukno nama, nama2 soko 'path'
+jupukno tambahake, pi soko "./test-module.jawa"
+cetakno("pi tambah tambahake(1, 2) yoiku " + (pi + tambahake(1, 2)))
+
+// Wildcard import: jupukno * soko 'path'
+jupukno * soko "./test-module.jawa"
+cetakno("pi soko wildcard yoiku " + pi)
+cetakno("sapa('Jawa') soko wildcard yoiku " + sapa("Jawa"))
+
+// Wildcard import with kabeh keyword
+jupukno kabeh soko "./test-module.jawa"
+cetakno("pi soko kabeh yoiku " + pi)
+
+// Using saka as alias for soko
+jupukno sapa saka "./test-module.jawa"
+cetakno("sapa saka 'path' yoiku " + sapa("Test"))
